@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tau Gamma Phi – Triskelion Grand Fraternity</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #F0D080;
+    --gold-dark: #8B6914;
+    --dark: #0D0D0D;
+    --dark2: #1A1A1A;
+    --dark3: #252525;
+    --dark4: #333333;
+    --text: #F5F0E8;
+    --text-muted: #A89060;
+    --white: #FFFFFF;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Lato', sans-serif; background: var(--dark); color: var(--text); overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(13,13,13,0.95); border-bottom: 1px solid var(--gold-dark);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 64px;
+  }
+  .nav-brand { font-family: 'Cinzel', serif; font-size: 18px; color: var(--gold); letter-spacing: 2px; }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 100px 40px 60px;
+    background: radial-gradient(ellipse at center top, #2a1e00 0%, #0D0D0D 60%);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(201,168,76,0.02) 40px, rgba(201,168,76,0.02) 80px);
+  }
+  .triskelion {
+    width: 120px; height: 120px; margin-bottom: 32px;
+    filter: drop-shadow(0 0 24px rgba(201,168,76,0.4));
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{filter:drop-shadow(0 0 24px rgba(201,168,76,0.4))} 50%{filter:drop-shadow(0 0 40px rgba(201,168,76,0.7))} }
+  .hero-tag { font-size: 12px; letter-spacing: 6px; color: var(--gold); text-transform: uppercase; margin-bottom: 20px; }
+  .hero h1 { font-family: 'Cinzel', serif; font-size: clamp(36px, 7vw, 80px); font-weight: 900; line-height: 1.05;
+    color: var(--white); text-shadow: 0 2px 40px rgba(201,168,76,0.3); }
+  .hero h1 span { color: var(--gold); }
+  .hero-sub { font-family: 'Cinzel', serif; font-size: clamp(14px, 2vw, 20px); color: var(--gold-light); letter-spacing: 4px; margin-top: 12px; }
+  .hero-desc { max-width: 580px; margin: 32px auto 0; color: var(--text-muted); font-size: 16px; line-height: 1.8; }
+  .hero-cta { margin-top: 48px; display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  .btn-gold { background: var(--gold); color: var(--dark); padding: 14px 36px; font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 2px; border: none; cursor: pointer; text-decoration: none; transition: all 0.3s; clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%); }
+  .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-outline { border: 1px solid var(--gold); color: var(--gold); padding: 14px 36px; font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 2px; text-decoration: none; transition: all 0.3s; clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%); }
+  .btn-outline:hover { background: rgba(201,168,76,0.1); }
+  .scroll-hint { margin-top: 60px; color: var(--text-muted); font-size: 12px; letter-spacing: 3px; animation: bounce 2s infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+
+  /* SECTIONS */
+  section { padding: 100px 40px; }
+  .section-header { text-align: center; margin-bottom: 64px; }
+  .section-label { font-size: 11px; letter-spacing: 6px; color: var(--gold); text-transform: uppercase; margin-bottom: 12px; }
+  .section-title { font-family: 'Cinzel', serif; font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: var(--white); }
+  .gold-line { width: 60px; height: 2px; background: var(--gold); margin: 20px auto 0; }
+
+  /* ABOUT */
+  #about { background: var(--dark2); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1100px; margin: 0 auto; align-items: center; }
+  .about-text p { color: var(--text-muted); line-height: 1.9; font-size: 16px; margin-bottom: 20px; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .stat-card { background: var(--dark3); border: 1px solid var(--gold-dark); padding: 28px 24px; text-align: center; position: relative; }
+  .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background: var(--gold); }
+  .stat-num { font-family: 'Cinzel', serif; font-size: 40px; color: var(--gold); font-weight: 700; }
+  .stat-label { font-size: 12px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin-top: 6px; }
+
+  /* HISTORY */
+  #history { background: var(--dark); }
+  .timeline { max-width: 800px; margin: 0 auto; position: relative; }
+  .timeline::before { content:''; position:absolute; left:50%; top:0; bottom:0; width:1px; background: linear-gradient(to bottom, transparent, var(--gold-dark), transparent); transform:translateX(-50%); }
+  .tl-item { display: flex; justify-content: flex-end; padding-right: calc(50% + 40px); margin-bottom: 48px; position: relative; }
+  .tl-item:nth-child(even) { justify-content: flex-start; padding-right: 0; padding-left: calc(50% + 40px); }
+  .tl-dot { position: absolute; left: 50%; top: 16px; width: 14px; height: 14px; background: var(--gold); border: 3px solid var(--dark); border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 12px rgba(201,168,76,0.5); }
+  .tl-content { background: var(--dark3); border: 1px solid var(--dark4); padding: 24px; max-width: 340px; }
+  .tl-year { font-family: 'Cinzel', serif; color: var(--gold); font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .tl-content h3 { color: var(--white); font-size: 15px; margin-bottom: 8px; }
+  .tl-content p { color: var(--text-muted); font-size: 14px; line-height: 1.7; }
+
+  /* PROJECTS */
+  #projects { background: var(--dark2); }
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; max-width: 1100px; margin: 0 auto; }
+  .project-card { background: var(--dark3); border: 1px solid var(--dark4); overflow: hidden; transition: transform 0.3s, border-color 0.3s; }
+  .project-card:hover { transform: translateY(-6px); border-color: var(--gold-dark); }
+  .project-img { height: 200px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .project-img-cleanup { background: linear-gradient(135deg, #1a3a1a, #0d2b0d); }
+  .project-img-breakfast { background: linear-gradient(135deg, #3a2a0d, #1a1200); }
+  .project-img-scholar { background: linear-gradient(135deg, #1a1a3a, #0d0d2b); }
+  .project-icon { font-size: 64px; opacity: 0.8; }
+  .project-body { padding: 28px; }
+  .project-tag { display: inline-block; background: rgba(201,168,76,0.1); border: 1px solid var(--gold-dark); color: var(--gold); font-size: 11px; letter-spacing: 2px; padding: 4px 12px; text-transform: uppercase; margin-bottom: 14px; }
+  .project-body h3 { font-family: 'Cinzel', serif; color: var(--white); font-size: 20px; margin-bottom: 12px; }
+  .project-body p { color: var(--text-muted); font-size: 14px; line-height: 1.8; }
+
+  /* ORG CHART */
+  #orgchart { background: var(--dark); }
+  .org-wrapper { max-width: 900px; margin: 0 auto; overflow-x: auto; }
+  .org-tree { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .org-level { display: flex; justify-content: center; gap: 20px; position: relative; padding: 16px 0; flex-wrap: wrap; }
+  .org-node {
+    background: var(--dark3); border: 1px solid var(--gold-dark); padding: 14px 20px;
+    text-align: center; min-width: 150px; position: relative; transition: border-color 0.3s;
+  }
+  .org-node:hover { border-color: var(--gold); }
+  .org-node.top { background: linear-gradient(135deg, #2a1e00, #1a1200); border-color: var(--gold); border-width: 2px; min-width: 200px; }
+  .org-node .role { font-size: 11px; letter-spacing: 1.5px; color: var(--gold); text-transform: uppercase; margin-bottom: 4px; }
+  .org-node .name { font-family: 'Cinzel', serif; color: var(--white); font-size: 14px; font-weight: 600; }
+  .org-node .sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .org-connector { width: 1px; height: 32px; background: var(--gold-dark); margin: 0 auto; }
+  .org-h-line { height: 1px; background: var(--gold-dark); width: 80%; margin: 0 auto; }
+  .level-label { font-size: 11px; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; text-align: center; margin-bottom: 8px; }
+
+  /* MEMBERS */
+  #members { background: var(--dark2); }
+  .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; }
+  .member-card { background: var(--dark3); border: 1px solid var(--dark4); padding: 24px 16px; text-align: center; transition: all 0.3s; }
+  .member-card:hover { border-color: var(--gold-dark); transform: translateY(-4px); }
+  .member-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--dark4); border: 2px solid var(--gold-dark); margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; font-family: 'Cinzel', serif; font-size: 24px; color: var(--gold); overflow: hidden; }
+  .member-name { font-family: 'Cinzel', serif; color: var(--white); font-size: 13px; margin-bottom: 6px; }
+  .member-role { font-size: 11px; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; }
+  .member-batch { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .members-note { text-align: center; margin-top: 40px; color: var(--text-muted); font-size: 13px; font-style: italic; }
+
+  /* CONTACT */
+  #contact { background: var(--dark); }
+  .contact-wrapper { max-width: 660px; margin: 0 auto; }
+  .contact-form { background: var(--dark2); border: 1px solid var(--dark4); padding: 48px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .form-group { margin-bottom: 24px; }
+  .form-group label { display: block; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%; background: var(--dark3); border: 1px solid var(--dark4); color: var(--text);
+    padding: 14px 16px; font-family: 'Lato', sans-serif; font-size: 14px; outline: none;
+    transition: border-color 0.3s;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--gold-dark); }
+  .form-group textarea { resize: vertical; min-height: 140px; }
+  .form-group select option { background: var(--dark3); }
+  .form-submit { width: 100%; background: var(--gold); color: var(--dark); padding: 16px; font-family: 'Cinzel', serif; font-size: 14px; letter-spacing: 3px; border: none; cursor: pointer; text-transform: uppercase; transition: all 0.3s; }
+  .form-submit:hover { background: var(--gold-light); }
+  .form-note { text-align: center; margin-top: 16px; font-size: 12px; color: var(--text-muted); }
+  .success-msg { display: none; background: rgba(201,168,76,0.1); border: 1px solid var(--gold-dark); padding: 20px; text-align: center; color: var(--gold); font-family: 'Cinzel', serif; margin-top: 20px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark2); border-top: 1px solid var(--gold-dark);
+    padding: 48px 40px; text-align: center;
+  }
+  .footer-brand { font-family: 'Cinzel', serif; font-size: 22px; color: var(--gold); margin-bottom: 12px; }
+  .footer-sub { font-size: 12px; letter-spacing: 3px; color: var(--text-muted); margin-bottom: 24px; }
+  .footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-copy { font-size: 12px; color: var(--dark4); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    section { padding: 80px 20px; }
+    .about-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .contact-form { padding: 28px 20px; }
+    .timeline::before { left: 20px; }
+    .tl-item, .tl-item:nth-child(even) { padding-right: 0; padding-left: 52px; justify-content: flex-start; }
+    .tl-dot { left: 20px; }
+    .tl-content { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">TGP</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#history">History</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#orgchart">Leadership</a></li>
+    <li><a href="#members">Members</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <!-- Triskelion SVG Logo -->
+  <svg class="triskelion" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#F0D080"/>
+        <stop offset="100%" stop-color="#8B6914"/>
+      </radialGradient>
+    </defs>
+    <circle cx="60" cy="60" r="58" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+    <circle cx="60" cy="60" r="50" fill="none" stroke="#8B6914" stroke-width="0.5"/>
+    <!-- Triskelion Arms -->
+    <g transform="translate(60,60)">
+      <path d="M0,0 C0,-10 8,-20 4,-35 C2,-42 -4,-46 -4,-56 C-4,-60 0,-62 4,-60 C12,-55 14,-44 12,-34 C10,-24 6,-14 0,0Z" fill="url(#glow)" opacity="0.9"/>
+      <path d="M0,0 C0,-10 8,-20 4,-35 C2,-42 -4,-46 -4,-56 C-4,-60 0,-62 4,-60 C12,-55 14,-44 12,-34 C10,-24 6,-14 0,0Z" fill="url(#glow)" opacity="0.9" transform="rotate(120)"/>
+      <path d="M0,0 C0,-10 8,-20 4,-35 C2,-42 -4,-46 -4,-56 C-4,-60 0,-62 4,-60 C12,-55 14,-44 12,-34 C10,-24 6,-14 0,0Z" fill="url(#glow)" opacity="0.9" transform="rotate(240)"/>
+      <circle cx="0" cy="0" r="6" fill="#C9A84C"/>
+    </g>
+    <!-- Greek Letters -->
+    <text x="60" y="108" text-anchor="middle" font-family="serif" font-size="10" fill="#C9A84C" letter-spacing="2">ΤΓΦ</text>
+  </svg>
+
+  <p class="hero-tag">Est. 1968 · Philippines</p>
+  <h1>TAU GAMMA <span>PHI</span></h1>
+  <p class="hero-sub">Triskelion Grand Fraternity</p>
+  <p class="hero-desc">Brotherhood forged in honor, service, and unity. Standing at the forefront of community leadership and national pride.</p>
+  <div class="hero-cta">
+    <a href="#about" class="btn-gold">Discover Our Brotherhood</a>
+    <a href="#contact" class="btn-outline">Get In Touch</a>
+  </div>
+  <p class="scroll-hint">↓ Scroll to explore</p>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <p class="section-label">Who We Are</p>
+    <h2 class="section-title">About the Fraternity</h2>
+    <div class="gold-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>Tau Gamma Phi – Triskelion Grand Fraternity is one of the most respected and influential fraternities in the Philippines. Founded on the principles of brotherhood, loyalty, and service, we have shaped communities and produced leaders across all sectors of society.</p>
+      <p>Our fraternity is built on three pillars represented by our Triskelion symbol: <strong style="color:var(--gold)">Academic Excellence</strong>, <strong style="color:var(--gold)">Community Service</strong>, and <strong style="color:var(--gold)">Brotherhood</strong>. These values guide every Triskelion in their personal and professional lives.</p>
+      <p>Locally, our chapter is dedicated to uplifting the community through meaningful programs, outreach initiatives, and active civic participation — proving that true brotherhood extends beyond our ranks.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-card">
+        <div class="stat-num">1968</div>
+        <div class="stat-label">Year Founded</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">Active Members</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Community Projects</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Brotherhood</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY -->
+<section id="history">
+  <div class="section-header">
+    <p class="section-label">Our Legacy</p>
+    <h2 class="section-title">History &amp; Milestones</h2>
+    <div class="gold-line"></div>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-year">1968</div>
+        <h3>The Founding</h3>
+        <p>Tau Gamma Phi was established with a vision of brotherhood and national service. The Triskelion symbol was chosen to represent the three core values of the fraternity.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-year">1975</div>
+        <h3>National Expansion</h3>
+        <p>The fraternity expanded across major universities in the Philippines, establishing chapters that upheld the same founding principles of honor and service.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-year">1990</div>
+        <h3>Community Programs Launched</h3>
+        <p>The fraternity formalized its community outreach initiatives, beginning structured programs for education, livelihood, and social welfare in local communities.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-year">2005</div>
+        <h3>Local Chapter Established</h3>
+        <p>Our local chapter was officially founded, bringing the Triskelion spirit to our community. Charter members pledged to serve with honor and integrity.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-year">2015</div>
+        <h3>Free Breakfast Program</h3>
+        <p>Launched the community Free Breakfast Program to address hunger among underprivileged families, serving hundreds of meals monthly to those in need.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-year">2020</div>
+        <h3>Clean-Up Drive Initiative</h3>
+        <p>Initiated regular community clean-up drives promoting environmental responsibility and civic pride across our barangay and surrounding areas.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-year">2024</div>
+        <h3>Today & Beyond</h3>
+        <p>Our chapter continues to grow stronger, welcoming new brothers while deepening our roots in community service, academic excellence, and genuine brotherhood.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header">
+    <p class="section-label">Community Service</p>
+    <h2 class="section-title">Our Projects</h2>
+    <div class="gold-line"></div>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-img project-img-cleanup">
+        <div class="project-icon">🌿</div>
+      </div>
+      <div class="project-body">
+        <span class="project-tag">Environment</span>
+        <h3>Community Clean-Up Drive</h3>
+        <p>Every month, our brothers gather to clean our community's streets, esteros, and public spaces. We believe a clean community reflects a disciplined brotherhood. Participants also engage with residents to promote proper waste segregation and environmental awareness.</p>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-img project-img-breakfast">
+        <div class="project-icon">🍳</div>
+      </div>
+      <div class="project-body">
+        <span class="project-tag">Social Welfare</span>
+        <h3>Free Breakfast Program</h3>
+        <p>No child or family should start their day hungry. Our Free Breakfast Program provides hot, nutritious meals to underprivileged members of our community every week. Brothers personally prepare and serve the food, building genuine connections with those we serve.</p>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-img project-img-scholar">
+        <div class="project-icon">📚</div>
+      </div>
+      <div class="project-body">
+        <span class="project-tag">Education</span>
+        <h3>Youth Mentorship</h3>
+        <p>Our brothers serve as mentors and role models to the youth in our community, offering academic assistance, life skills coaching, and moral guidance. We invest in the next generation because they are the future of our nation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORG CHART -->
+<section id="orgchart">
+  <div class="section-header">
+    <p class="section-label">Leadership</p>
+    <h2 class="section-title">Organizational Chart</h2>
+    <div class="gold-line"></div>
+  </div>
+  <div class="org-wrapper">
+    <div class="org-tree">
+
+      <!-- Grand Triskelion -->
+      <div class="level-label">Supreme Leadership</div>
+      <div class="org-level">
+        <div class="org-node top">
+          <div class="role">Grand Triskelion</div>
+          <div class="name">Bro. Juan dela Cruz</div>
+          <div class="sub">Chapter President</div>
+        </div>
+      </div>
+      <div class="org-connector"></div>
+      <div class="org-h-line" style="width:60%;"></div>
+
+      <!-- Vice Presidents -->
+      <div class="level-label" style="margin-top:8px;">Vice Leadership</div>
+      <div class="org-level">
+        <div class="org-node">
+          <div class="role">Internal VP</div>
+          <div class="name">Bro. Pedro Santos</div>
+        </div>
+        <div class="org-node">
+          <div class="role">External VP</div>
+          <div class="name">Bro. Miguel Reyes</div>
+        </div>
+        <div class="org-node">
+          <div class="role">Exec. Secretary</div>
+          <div class="name">Bro. Carlo Bautista</div>
+        </div>
+      </div>
+      <div class="org-connector"></div>
+      <div class="org-h-line"></div>
+
+      <!-- Department Heads -->
+      <div class="level-label" style="margin-top:8px;">Department Officers</div>
+      <div class="org-level">
+        <div class="org-node">
+          <div class="role">Treasurer</div>
+          <div class="name">Bro. Rico Villanueva</div>
+        </div>
+        <div class="org-node">
+          <div class="role">Auditor</div>
+          <div class="name">Bro. Dennis Cruz</div>
+        </div>
+        <div class="org-node">
+          <div class="role">P.R.O.</div>
+          <div class="name">Bro. Allan Torres</div>
+        </div>
+        <div class="org-node">
+          <div class="role">Sgt.-at-Arms</div>
+          <div class="name">Bro. Ruel Garcia</div>
+        </div>
+      </div>
+      <div class="org-connector"></div>
+      <div class="org-h-line"></div>
+
+      <!-- Committee Heads -->
+      <div class="level-label" style="margin-top:8px;">Committee Heads</div>
+      <div class="org-level">
+        <div class="org-node">
+          <div class="role">Community Affairs</div>
+          <div class="name">Bro. Mario Lopez</div>
+        </div>
+        <div class="org-node">
+          <div class="role">Academic Affairs</div>
+          <div class="name">Bro. Jose Mendoza</div>
+        </div>
+        <div class="org-node">
+          <div class="role">Membership</div>
+          <div class="name">Bro. Ryan Aquino</div>
+        </div>
+      </div>
+      <div class="org-connector"></div>
+
+      <!-- General Brotherhood -->
+      <div class="org-level">
+        <div class="org-node" style="min-width:280px; border-color: var(--gold-dark);">
+          <div class="role">General Brotherhood</div>
+          <div class="name">Active Members</div>
+          <div class="sub">The Backbone of Our Fraternity</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <p style="text-align:center; margin-top:32px; color:var(--text-muted); font-size:13px; font-style:italic;">* Organizational structure shown with placeholder names. Final names to be updated.</p>
+</section>
+
+<!-- MEMBERS -->
+<section id="members">
+  <div class="section-header">
+    <p class="section-label">Brotherhood</p>
+    <h2 class="section-title">Our Members</h2>
+    <div class="gold-line"></div>
+  </div>
+  <div class="members-grid">
+    <!-- Generate 12 placeholder members -->
+    <div class="member-card"><div class="member-avatar">JD</div><div class="member-name">Bro. Juan D.</div><div class="member-role">Grand Triskelion</div><div class="member-batch">Batch 2005</div></div>
+    <div class="member-card"><div class="member-avatar">PS</div><div class="member-name">Bro. Pedro S.</div><div class="member-role">Internal VP</div><div class="member-batch">Batch 2007</div></div>
+    <div class="member-card"><div class="member-avatar">MR</div><div class="member-name">Bro. Miguel R.</div><div class="member-role">External VP</div><div class="member-batch">Batch 2008</div></div>
+    <div class="member-card"><div class="member-avatar">CB</div><div class="member-name">Bro. Carlo B.</div><div class="member-role">Secretary</div><div class="member-batch">Batch 2010</div></div>
+    <div class="member-card"><div class="member-avatar">RV</div><div class="member-name">Bro. Rico V.</div><div class="member-role">Treasurer</div><div class="member-batch">Batch 2010</div></div>
+    <div class="member-card"><div class="member-avatar">DC</div><div class="member-name">Bro. Dennis C.</div><div class="member-role">Auditor</div><div class="member-batch">Batch 2012</div></div>
+    <div class="member-card"><div class="member-avatar">AT</div><div class="member-name">Bro. Allan T.</div><div class="member-role">P.R.O.</div><div class="member-batch">Batch 2013</div></div>
+    <div class="member-card"><div class="member-avatar">RG</div><div class="member-name">Bro. Ruel G.</div><div class="member-role">Sgt.-at-Arms</div><div class="member-batch">Batch 2014</div></div>
+    <div class="member-card"><div class="member-avatar">ML</div><div class="member-name">Bro. Mario L.</div><div class="member-role">Active Member</div><div class="member-batch">Batch 2015</div></div>
+    <div class="member-card"><div class="member-avatar">JM</div><div class="member-name">Bro. Jose M.</div><div class="member-role">Active Member</div><div class="member-batch">Batch 2016</div></div>
+    <div class="member-card"><div class="member-avatar">RA</div><div class="member-name">Bro. Ryan A.</div><div class="member-role">Active Member</div><div class="member-batch">Batch 2018</div></div>
+    <div class="member-card"><div class="member-avatar">BX</div><div class="member-name">Bro. Name Here</div><div class="member-role">Active Member</div><div class="member-batch">Batch 2020</div></div>
+  </div>
+  <p class="members-note">📸 Photos and complete member profiles coming soon. Currently gathering information from all brothers.</p>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header">
+    <p class="section-label">Reach Out</p>
+    <h2 class="section-title">Send Us a Message</h2>
+    <div class="gold-line"></div>
+  </div>
+  <div class="contact-wrapper">
+    <div class="contact-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="sender-name" placeholder="Juan dela Cruz">
+        </div>
+        <div class="form-group">
+          <label>Your Email</label>
+          <input type="email" id="sender-email" placeholder="your@email.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <select id="msg-subject">
+          <option value="">Select a topic...</option>
+          <option value="Membership Inquiry">Membership Inquiry</option>
+          <option value="Community Partnership">Community Partnership</option>
+          <option value="Sponsorship / Donation">Sponsorship / Donation</option>
+          <option value="Event Collaboration">Event Collaboration</option>
+          <option value="General Inquiry">General Inquiry</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea id="msg-body" placeholder="Write your message here..."></textarea>
+      </div>
+      <button class="form-submit" onclick="sendMessage()">Send Message →</button>
+      <p class="form-note">Your message will be sent directly to our Chapter President's inbox.</p>
+      <div class="success-msg" id="success-msg">
+        ✦ Message sent successfully! We will get back to you shortly. ✦
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">TAU GAMMA PHI</div>
+  <div class="footer-sub">Triskelion Grand Fraternity · Local Chapter</div>
+  <div class="footer-links">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#history">History</a>
+    <a href="#projects">Projects</a>
+    <a href="#orgchart">Leadership</a>
+    <a href="#members">Members</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <p style="color:var(--gold-dark); font-size:13px; letter-spacing:2px; margin-bottom:16px;">ONCE A TRISKELION, ALWAYS A TRISKELION</p>
+  <p class="footer-copy">© 2025 Tau Gamma Phi – Triskelion Grand Fraternity. All rights reserved.</p>
+</footer>
+
+<script>
+  function sendMessage() {
+    const name = document.getElementById('sender-name').value.trim();
+    const email = document.getElementById('sender-email').value.trim();
+    const subject = document.getElementById('msg-subject').value;
+    const body = document.getElementById('msg-body').value.trim();
+
+    if (!name || !email || !subject || !body) {
+      alert('Please fill in all fields before sending.');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
+    const recipient = 'jemisa@sscrcan.edu.ph';
+    const mailSubject = encodeURIComponent('[TGP Website] ' + subject + ' - from ' + name);
+    const mailBody = encodeURIComponent(
+      'Name: ' + name + '\n' +
+      'Email: ' + email + '\n' +
+      'Subject: ' + subject + '\n\n' +
+      'Message:\n' + body + '\n\n' +
+      '---\nSent via Tau Gamma Phi Website'
+    );
+
+    const gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + recipient + '&su=' + mailSubject + '&body=' + mailBody;
+    window.open(gmailUrl, '_blank');
+
+    document.getElementById('success-msg').style.display = 'block';
+    document.getElementById('sender-name').value = '';
+    document.getElementById('sender-email').value = '';
+    document.getElementById('msg-subject').value = '';
+    document.getElementById('msg-body').value = '';
+  }
+
+  // Smooth active nav highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 100) current = sec.getAttribute('id');
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--gold)' : '';
+    });
+  });
+</script>
+</body>
+</html>

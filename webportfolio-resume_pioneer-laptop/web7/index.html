@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jerome Misa — Web Developer</title>
+  <meta name="description" content="Jerome Misa — Web Developer based in Calamba City, Laguna. Passionate about frontend, backend, and full-stack web development."/>
+  <meta name="theme-color" content="#02020e"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- SPACE CANVAS -->
+<canvas id="space-canvas"></canvas>
+<div class="space-nebula-1"></div>
+
+<!-- NOISE -->
+<div id="noise"></div>
+
+<!-- ══ PAGE LOADER ══ -->
+<div id="loader">
+  <svg class="loader-logo-svg" width="90" height="70" viewBox="0 0 90 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1" y="1" width="88" height="68" rx="3" fill="none" stroke="rgba(232,255,71,0.18)" stroke-width="1"/>
+    <rect x="4" y="4" width="82" height="62" rx="2" fill="#e8ff47"/>
+    <rect x="4" y="4" width="82" height="5" rx="2" fill="rgba(0,0,0,0.12)"/>
+    <circle cx="12" cy="6.5" r="1.2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="17" cy="6.5" r="1.2" fill="rgba(0,0,0,0.25)"/>
+    <circle cx="22" cy="6.5" r="1.2" fill="rgba(0,0,0,0.25)"/>
+    <text x="12" y="50" font-family="Space Mono, monospace" font-size="32" font-weight="700" fill="#02020e" letter-spacing="-1">JCM</text>
+    <rect x="12" y="57" width="66" height="2.5" rx="1" fill="rgba(0,0,0,0.2)"/>
+    <line x1="4" y1="4" x2="14" y2="4" stroke="#02020e" stroke-width="1.5" opacity="0.3"/>
+    <line x1="76" y1="4" x2="86" y2="4" stroke="#02020e" stroke-width="1.5" opacity="0.3"/>
+  </svg>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div class="loader-text">Loading portfolio<span class="loader-dots"><span></span><span></span><span></span></span></div>
+</div>
+
+<!-- ══════════ NAV ══════════ -->
+<nav>
+  <div class="nav-progress"></div>
+
+  <!--
+    Logo redesigned as a tight 44×34 box — no overflow, no glow filter bleed.
+    The glow is now a CSS box-shadow on the wrapper <a>, not a drop-shadow filter.
+  -->
+  <a href="#" class="nav-logo" aria-label="Jerome Misa">
+    <svg class="logo-svg" viewBox="0 0 44 34" xmlns="http://www.w3.org/2000/svg">
+      <!-- background block — fills exactly the viewBox -->
+      <rect width="44" height="34" rx="2" fill="#e8ff47"/>
+      <!-- top accent stripe -->
+      <rect width="44" height="3.5" rx="2" fill="rgba(0,0,0,0.1)"/>
+      <!-- left accent bar -->
+      <rect width="3" height="34" fill="rgba(0,0,0,0.1)"/>
+      <!-- dot trio -->
+      <circle cx="8"  cy="2" r="0.9" fill="rgba(0,0,0,0.22)"/>
+      <circle cx="11" cy="2" r="0.9" fill="rgba(0,0,0,0.22)"/>
+      <circle cx="14" cy="2" r="0.9" fill="rgba(0,0,0,0.22)"/>
+      <!-- JCM letters — fitted to 44×34 -->
+      <text x="5" y="24" font-family="Space Mono, monospace" font-size="14" font-weight="700" fill="#02020e" letter-spacing="-0.3">JCM</text>
+      <!-- underline -->
+      <rect x="5" y="28" width="34" height="1.5" rx="1" fill="rgba(0,0,0,0.18)"/>
+      <!-- top-right corner bracket -->
+      <polyline points="36,3 41,3 41,8" stroke="rgba(0,0,0,0.2)" stroke-width="1" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li>
+      <a href="https://drive.google.com/file/d/1S9NKXRCo9_BPJKUCw-F2o93Kf7qMlbwp/view?usp=sharing"
+         target="_blank" rel="noopener" class="nav-resume-btn"><span>Resume ↗</span></a>
+    </li>
+  </ul>
+
+  <button class="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- mobile menu -->
+<div class="nav-mobile">
+  <a href="#skills">Skills</a>
+  <a href="#contact">Contact</a>
+  <a href="https://drive.google.com/file/d/1S9NKXRCo9_BPJKUCw-F2o93Kf7qMlbwp/view?usp=sharing" target="_blank" rel="noopener">Resume ↗</a>
+  <a href="https://www.facebook.com/jeromemisa2020/" target="_blank" rel="noopener">Facebook</a>
+</div>
+
+<!-- ══════════ HERO ══════════ -->
+<div class="hero">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-blob hero-blob-3"></div>
+
+  <div class="hero-content">
+    <div class="hero-tag">
+      <span class="hero-tag-dot"></span>
+      <span id="typing-text">Web Developer</span>
+    </div>
+
+    <h1 class="hero-name">
+      <span class="line1">Jerome</span>
+      <span class="line2">Misa</span>
+    </h1>
+
+    <p class="hero-bio">
+      I'm a <strong>web development enthusiast</strong> who enjoys crafting clean,
+      functional, and visually engaging experiences for the web. I work across the full
+      stack — from building structured layouts and polished UIs to writing server-side
+      logic and managing databases. My goal is to grow into a
+      <strong>professional Full Stack Web Developer</strong>, continuously improving
+      and taking on real-world challenges.
+    </p>
+
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-primary">Get In Touch →</a>
+      <a href="https://drive.google.com/file/d/1S9NKXRCo9_BPJKUCw-F2o93Kf7qMlbwp/view?usp=sharing"
+         target="_blank" rel="noopener" class="btn btn-resume">
+        <span class="btn-inner">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          View Resume
+        </span>
+      </a>
+      <a href="https://www.facebook.com/jeromemisa2020/" target="_blank" rel="noopener" class="btn btn-fb">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.413c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.884v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+        Facebook
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num" data-count="15" data-suffix="+">0+</span>
+        <span class="hero-stat-label">Technologies</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num" data-count="4" data-suffix="yr">0yr</span>
+        <span class="hero-stat-label">Of Study</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num" data-count="1" data-suffix="×">0×</span>
+        <span class="hero-stat-label">Best Prototype</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHOTO — zero filters, zero overlays -->
+  <div class="hero-photo">
+    <div class="photo-wrapper">
+
+      <!-- Floating tech badges with correct, clear logos -->
+      <div class="photo-tech photo-tech-1">
+        <!-- HTML5 orange shield mark -->
+        <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.955-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z" fill="#E44D26"/>
+        </svg>
+        HTML / CSS
+      </div>
+
+      <div class="photo-tech photo-tech-2">
+        <!-- PHP pill mark — full ellipse with "php" text -->
+        <svg width="16" height="10" viewBox="0 0 32 14" aria-hidden="true">
+          <ellipse cx="16" cy="7" rx="16" ry="7" fill="#8892BF"/>
+          <ellipse cx="16" cy="7" rx="13.5" ry="5.5" fill="#4F5B93"/>
+          <text x="7" y="10.5" font-family="Arial,sans-serif" font-size="8" font-weight="900" fill="#ffffff" letter-spacing="0">php</text>
+        </svg>
+        PHP / MySQL
+      </div>
+
+      <div class="photo-tech photo-tech-3">
+        <!-- Git branching mark -->
+        <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M23.546 10.93L13.067.452a1.55 1.55 0 0 0-2.188 0L8.708 2.627l2.76 2.76a1.838 1.838 0 0 1 2.327 2.341l2.658 2.66a1.838 1.838 0 1 1-1.101 1.102l-2.48-2.48v6.511a1.84 1.84 0 1 1-1.512-.021V9.367a1.839 1.839 0 0 1-.996-2.41L7.614 4.196.45 11.36a1.55 1.55 0 0 0 0 2.187l10.48 10.478a1.55 1.55 0 0 0 2.186 0l10.43-10.43a1.548 1.548 0 0 0 0-2.184" fill="#F05032"/>
+        </svg>
+        Git / GitHub
+      </div>
+
+      <div class="photo-frame">
+        <div class="photo-corner photo-corner--tl"></div>
+        <div class="photo-corner photo-corner--tr"></div>
+        <div class="photo-corner photo-corner--bl"></div>
+        <div class="photo-corner photo-corner--br"></div>
+        <!-- Full quality image — no filters, no overlays -->
+        <img src="jeromemisa.jpg" alt="Jerome Misa — Web Developer" loading="eager" decoding="sync"/>
+      </div>
+      <div class="photo-badge">🏆 Best Prototype</div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</div>
+
+<!-- ══════════ SKILLS ══════════ -->
+<section id="skills">
+<div class="section-wrap">
+  <p class="section-label reveal"><span class="section-accent-dot"></span>Technical Skills</p>
+  <h2 class="section-title reveal">What I Work With</h2>
+  <p class="section-sub reveal">A curated set of technologies, tools, and concepts I've developed hands-on experience with throughout my studies and projects.</p>
+
+  <div class="skills-grid">
+
+    <!-- ── FRONTEND ── -->
+    <div class="skill-card reveal-scale">
+      <div class="skill-header"><span class="skill-header-icon">🖥️</span><span class="skill-category">Frontend</span></div>
+      <div class="skill-title">UI Development</div>
+      <p class="skill-desc">Technologies used to build and style what users see and interact with directly in the browser.</p>
+      <div class="skill-items">
+
+        <div class="skill-item" data-tip="HyperText Markup Language">
+          <div class="skill-item-logo-wrap">
+            <!-- HTML5 full shield mark -->
+            <svg viewBox="0 0 24 24" aria-label="HTML5">
+              <path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.955-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z" fill="#E44D26"/>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">HTML5</span><span class="skill-item-desc">Standard markup language for creating and structuring web page content.</span></div>
+        </div>
+
+        <div class="skill-item" data-tip="Cascading Style Sheets">
+          <div class="skill-item-logo-wrap">
+            <!-- CSS3 shield mark -->
+            <svg viewBox="0 0 24 24" aria-label="CSS3">
+              <path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.565-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11h-2.61l.29 3.855L12 19.288l5.373-1.53L18.59 4.414z" fill="#1572B6"/>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">CSS3</span><span class="skill-item-desc">Stylesheet language controlling visual presentation, layout, and animations.</span></div>
+        </div>
+
+        <div class="skill-item" data-tip="The language of the web">
+          <div class="skill-item-logo-wrap">
+            <!-- JS yellow square mark -->
+            <svg viewBox="0 0 24 24" aria-label="JavaScript">
+              <rect width="24" height="24" fill="#F7DF1E"/>
+              <path d="M6.235 17.932c.313.53.728.92 1.455.92.727 0 1.19-.363 1.19-.866 0-.601-.476-.815-1.276-1.164l-.439-.189c-1.264-.538-2.104-1.214-2.104-2.64 0-1.314 1.002-2.314 2.566-2.314 1.114 0 1.915.388 2.491 1.402l-1.364.875c-.301-.538-.626-.751-1.127-.751-.513 0-.839.325-.839.751 0 .526.325.739 1.077 1.064l.44.188c1.49.638 2.329 1.29 2.329 2.754 0 1.578-1.239 2.44-2.905 2.44-1.626 0-2.678-.775-3.192-1.79l1.498-.88zm7.41.138c.363.65.688.9 1.19.9.5 0 .788-.2.788-.965v-5.21h1.726v5.235c0 1.59-.938 2.315-2.303 2.315-1.239 0-1.953-.64-2.317-1.415l.915-.86z" fill="#000"/>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">JavaScript</span><span class="skill-item-desc">Programming language adding interactivity and dynamic behaviour to websites.</span></div>
+        </div>
+
+        <div class="skill-item" data-tip="CSS component framework">
+          <div class="skill-item-logo-wrap">
+            <!-- Bootstrap circle B mark -->
+            <svg viewBox="0 0 24 24" aria-label="Bootstrap">
+              <path d="M11.77 11.24H9.956V8.202h2.174c1.174 0 1.809.574 1.809 1.496 0 .967-.68 1.542-2.169 1.542zm.324 1.206H9.956v3.348h2.231c1.467 0 2.137-.6 2.137-1.694 0-1.099-.738-1.654-2.23-1.654zM24 12c0 6.627-5.373 12-12 12S0 18.627 0 12 5.373 0 12 0s12 5.373 12 12zm-5.34-2.716c0-1.648-1.262-2.666-3.312-2.666H8.464V16.78h4.658c2.393 0 3.786-1.022 3.786-2.83 0-1.306-.774-2.271-2.001-2.588v-.043c.948-.423 1.524-1.334 1.524-2.433l-.771-.602z" fill="#7952B3"/>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">Bootstrap</span><span class="skill-item-desc">CSS framework providing ready-made responsive components and a grid system.</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── BACKEND ── -->
+    <div class="skill-card reveal-scale">
+      <div class="skill-header"><span class="skill-header-icon">🔧</span><span class="skill-category">Backend</span></div>
+      <div class="skill-title">Server-Side Logic</div>
+      <p class="skill-desc">Languages used to build data processing, routing, and APIs that power web applications.</p>
+      <div class="skill-items">
+
+        <div class="skill-item" data-tip="Server-side scripting">
+          <div class="skill-item-logo-wrap">
+            <!-- PHP pill — full ellipse with white "php" text, clearly readable -->
+            <svg viewBox="0 0 48 20" aria-label="PHP">
+              <ellipse cx="24" cy="10" rx="24" ry="10" fill="#8892BF"/>
+              <ellipse cx="24" cy="10" rx="21" ry="8" fill="#4F5B93"/>
+              <text x="11" y="14" font-family="Arial, sans-serif" font-size="11" font-weight="900" fill="#ffffff" letter-spacing="0.5">php</text>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">PHP</span><span class="skill-item-desc">Server-side scripting language widely used for building dynamic web pages and apps.</span></div>
+        </div>
+
+        <div class="skill-item" data-tip="General-purpose language">
+          <div class="skill-item-logo-wrap">
+            <!-- Python snake-bite mark -->
+            <svg viewBox="0 0 24 24" aria-label="Python">
+              <path d="M11.914 0C5.82 0 6.2 2.656 6.2 2.656l.007 2.752h5.814v.826H3.9S0 5.789 0 11.969c0 6.18 3.403 5.963 3.403 5.963h2.03v-2.867s-.109-3.402 3.35-3.402h5.77s3.24.052 3.24-3.13V3.19S18.28 0 11.914 0zm-3.21 1.839a1.046 1.046 0 1 1 0 2.091 1.046 1.046 0 0 1 0-2.09z" fill="#3776AB"/>
+              <path d="M12.086 24c6.094 0 5.714-2.656 5.714-2.656l-.007-2.752h-5.814v-.826h8.121S24 18.211 24 12.031c0-6.18-3.403-5.963-3.403-5.963h-2.03v2.867s.109 3.402-3.35 3.402h-5.77s-3.24-.052-3.24 3.13v5.313S5.72 24 12.086 24zm3.21-1.839a1.046 1.046 0 1 1 0-2.091 1.046 1.046 0 0 1 0 2.09z" fill="#FFD43B"/>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">Python</span><span class="skill-item-desc">Versatile and readable language used for scripting, automation, and backend logic.</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── DATABASE ── -->
+    <div class="skill-card reveal-scale">
+      <div class="skill-header"><span class="skill-header-icon">🗄️</span><span class="skill-category">Database</span></div>
+      <div class="skill-title">Data Management</div>
+      <p class="skill-desc">Systems for storing, organising, and efficiently querying application data.</p>
+      <div class="skill-items">
+
+        <div class="skill-item" data-tip="Relational database">
+          <div class="skill-item-logo-wrap">
+            <!-- MySQL — clean wordmark-style teal circle with MY text -->
+            <svg viewBox="0 0 24 24" aria-label="MySQL">
+              <circle cx="12" cy="12" r="12" fill="#00758F"/>
+              <text x="3.5" y="15.5" font-family="Arial, sans-serif" font-size="8.5" font-weight="900" fill="#ffffff" letter-spacing="-0.2">MY</text>
+              <text x="3.5" y="21" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" fill="rgba(255,255,255,0.8)">SQL</text>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">MySQL</span><span class="skill-item-desc">Popular open-source relational database management system using structured query language.</span></div>
+        </div>
+
+        <div class="skill-item" data-tip="MySQL-compatible fork">
+          <div class="skill-item-logo-wrap">
+            <!-- MariaDB — brown/red circle with M mark -->
+            <svg viewBox="0 0 24 24" aria-label="MariaDB">
+              <circle cx="12" cy="12" r="12" fill="#c0392b"/>
+              <text x="4.5" y="15.5" font-family="Arial, sans-serif" font-size="10" font-weight="900" fill="#ffffff" letter-spacing="-0.5">Mdb</text>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">MariaDB</span><span class="skill-item-desc">Community-developed MySQL fork — compatible, open-source, and often faster.</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── TOOLS ── -->
+    <div class="skill-card reveal-scale">
+      <div class="skill-header"><span class="skill-header-icon">🛠️</span><span class="skill-category">Tools & Environment</span></div>
+      <div class="skill-title">Dev Toolchain</div>
+      <p class="skill-desc">Platforms and software that support the development workflow from writing code to deployment.</p>
+      <div class="skill-items">
+
+        <div class="skill-item" data-tip="Version control">
+          <div class="skill-item-logo-wrap">
+            <!-- Git diamond mark -->
+            <svg viewBox="0 0 24 24" aria-label="Git">
+              <path d="M23.546 10.93L13.067.452a1.55 1.55 0 0 0-2.188 0L8.708 2.627l2.76 2.76a1.838 1.838 0 0 1 2.327 2.341l2.658 2.66a1.838 1.838 0 1 1-1.101 1.102l-2.48-2.48v6.511a1.84 1.84 0 1 1-1.512-.021V9.367a1.839 1.839 0 0 1-.996-2.41L7.614 4.196.45 11.36a1.55 1.55 0 0 0 0 2.187l10.48 10.478a1.55 1.55 0 0 0 2.186 0l10.43-10.43a1.548 1.548 0 0 0 0-2.184" fill="#F05032"/>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">Git</span><span class="skill-item-desc">Version control system for tracking code changes and collaborating with teams.</span></div>
+        </div>
+
+        <div class="skill-item" data-tip="Code hosting & collaboration">
+          <div class="skill-item-logo-wrap">
+            <!-- GitHub octocat mark -->
+            <svg viewBox="0 0 24 24" aria-label="GitHub">
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" fill="#eeeeff"/>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">GitHub</span><span class="skill-item-desc">Cloud platform for hosting repositories, reviewing code, and collaborating on projects.</span></div>
+        </div>
+
+        <div class="skill-item" data-tip="API testing tool">
+          <div class="skill-item-logo-wrap">
+            <!-- Postman: orange circle with white P letter -->
+            <svg viewBox="0 0 24 24" aria-label="Postman">
+              <circle cx="12" cy="12" r="12" fill="#FF6C37"/>
+              <path d="M8.4 7h3.4c2.2 0 3.6 1.2 3.6 3.2 0 2-1.5 3.3-3.6 3.3h-1.8V17H8.4V7zm3.3 5.2c1.3 0 2-.7 2-2s-.7-1.9-2-1.9H10v3.9h1.7z" fill="#ffffff"/>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">Postman</span><span class="skill-item-desc">API testing tool for sending HTTP requests and inspecting server responses.</span></div>
+        </div>
+
+        <div class="skill-item" data-tip="Local dev server stack">
+          <div class="skill-item-logo-wrap">
+            <!-- XAMPP: orange rect with bold X -->
+            <svg viewBox="0 0 24 24" aria-label="XAMPP">
+              <rect width="24" height="24" rx="3" fill="#FB7A24"/>
+              <path d="M5 6l4.5 6L5 18h2.8l2.9-4 2.9 4H16.4l-4.6-6L16.2 6H13.4l-2.7 3.7L8 6H5z" fill="#ffffff"/>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">XAMPP</span><span class="skill-item-desc">Local Apache/MySQL/PHP stack for developing and testing web apps offline.</span></div>
+        </div>
+
+        <div class="skill-item" data-tip="Code editor">
+          <div class="skill-item-logo-wrap">
+            <!-- VS Code angular mark -->
+            <svg viewBox="0 0 24 24" aria-label="VS Code">
+              <path d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.146 14.861L10.826 12l7.178-5.448v10.896z" fill="#007ACC"/>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">VS Code</span><span class="skill-item-desc">Lightweight, extensible code editor with rich language support and debugging tools.</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── OTHERS — full width ── -->
+    <div class="skill-card skill-card--others reveal" data-delay="0.05">
+      <div class="skill-header"><span class="skill-header-icon">📦</span><span class="skill-category">Others</span></div>
+      <div class="skill-title">Concepts, Practices & Tools</div>
+      <p class="skill-desc">Architectural patterns, security principles, project management tools, and IT knowledge that round out the skill set.</p>
+      <div class="skill-items">
+
+        <div class="skill-item" data-tip="User state persistence">
+          <div class="skill-item-badge" style="color:#8892BF;">$_S</div>
+          <div class="skill-item-info"><span class="skill-item-name">PHP Sessions</span><span class="skill-item-desc">Mechanism for persisting user data (e.g. login state) across multiple PHP pages.</span></div>
+        </div>
+
+        <div class="skill-item" data-tip="Agile project tracking">
+          <div class="skill-item-logo-wrap">
+            <!-- JIRA blue gradient triangles -->
+            <svg viewBox="0 0 24 24" aria-label="JIRA">
+              <path d="M11.571 11.513H0a5.218 5.218 0 0 0 5.232 5.215h2.13v2.057A5.215 5.215 0 0 0 12.575 24V12.518a1.005 1.005 0 0 0-1.005-1.005zm5.723-5.756H5.736a5.215 5.215 0 0 0 5.215 5.214h2.129v2.058a5.218 5.218 0 0 0 5.215 5.214V6.762a1.005 1.005 0 0 0-1.001-1.005zM23.013 0H11.455a5.215 5.215 0 0 0 5.215 5.215h2.129v2.057A5.215 5.215 0 0 0 24.018 12.49V1.005A1.001 1.001 0 0 0 23.013 0z" fill="#0052CC"/>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">JIRA</span><span class="skill-item-desc">Project management tool for tracking tasks, bugs, and sprints in agile workflows.</span></div>
+        </div>
+
+        <div class="skill-item" data-tip="Docs & notes">
+          <div class="skill-item-logo-wrap">
+            <!-- Notion — N mark in light fill -->
+            <svg viewBox="0 0 24 24" aria-label="Notion">
+              <path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.047.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.139c-.093-.514.28-.887.747-.933zM1.936 1.035l13.31-.98c1.634-.14 2.055-.047 3.082.7l4.249 2.986c.7.513.934.653.934 1.213v16.378c0 1.026-.373 1.634-1.68 1.726l-15.458.934c-.98.047-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.447-1.632z" fill="#eeeeff"/>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">Notion / OneNote</span><span class="skill-item-desc">Documentation tools for organising notes, project plans, and technical references.</span></div>
+        </div>
+
+        <div class="skill-item" data-tip="Separation of concerns"><div class="skill-item-badge" style="color:#e8ff47;">MVC</div><div class="skill-item-info"><span class="skill-item-name">MVC Architecture</span><span class="skill-item-desc">Design pattern separating an app into Model, View, and Controller for maintainable code.</span></div></div>
+        <div class="skill-item" data-tip="Core DB operations"><div class="skill-item-badge" style="color:#47ffb4;">CRUD</div><div class="skill-item-info"><span class="skill-item-name">CRUD Operations</span><span class="skill-item-desc">The four core database actions — Create, Read, Update, Delete — fundamental to web apps.</span></div></div>
+        <div class="skill-item" data-tip="Schema & relations"><div class="skill-item-badge" style="color:#47a0ff;">DB</div><div class="skill-item-info"><span class="skill-item-name">Database Design & Integration</span><span class="skill-item-desc">Planning schemas, table relationships, and connecting databases to applications.</span></div></div>
+        <div class="skill-item" data-tip="Performance tuning"><div class="skill-item-badge" style="color:#47ffb4;">OPT</div><div class="skill-item-info"><span class="skill-item-name">Database Optimisation</span><span class="skill-item-desc">Indexing and query tuning to improve database speed and performance.</span></div></div>
+        <div class="skill-item" data-tip="Input sanitisation"><div class="skill-item-badge" style="color:#ff5c5c;">SQL</div><div class="skill-item-info"><span class="skill-item-name">SQL Injection Prevention</span><span class="skill-item-desc">Blocking attackers from injecting malicious SQL into database queries.</span></div></div>
+        <div class="skill-item" data-tip="Safe parameterised queries"><div class="skill-item-badge" style="color:#47ffb4;">PREP</div><div class="skill-item-info"><span class="skill-item-name">Prepared Statements</span><span class="skill-item-desc">Pre-compiled SQL with parameterised inputs that safely prevent injection attacks.</span></div></div>
+        <div class="skill-item" data-tip="User permissions"><div class="skill-item-badge" style="color:#47a0ff;">ACL</div><div class="skill-item-info"><span class="skill-item-name">Access Control</span><span class="skill-item-desc">Restricting what different users can view or modify within an application.</span></div></div>
+        <div class="skill-item" data-tip="HTTP-based APIs"><div class="skill-item-badge" style="color:#FF6C37;">REST</div><div class="skill-item-info"><span class="skill-item-name">REST API Dev & Integration</span><span class="skill-item-desc">Building and consuming APIs using HTTP methods (GET, POST, PUT, DELETE) with JSON.</span></div></div>
+        <div class="skill-item" data-tip="Network fundamentals"><div class="skill-item-badge" style="color:#e8ff47;">IP</div><div class="skill-item-info"><span class="skill-item-name">IP Addressing, DNS & DHCP</span><span class="skill-item-desc">Core networking: address assignment, domain resolution, and host configuration.</span></div></div>
+        <div class="skill-item" data-tip="Windows identity management"><div class="skill-item-badge" style="color:#0078d4;">AD</div><div class="skill-item-info"><span class="skill-item-name">Active Directory</span><span class="skill-item-desc">Microsoft service for managing users, permissions, and resources across a Windows network.</span></div></div>
+
+        <div class="skill-item" data-tip="OS support">
+          <div class="skill-item-logo-wrap">
+            <!-- Windows four-square flag -->
+            <svg viewBox="0 0 24 24" aria-label="Windows">
+              <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801" fill="#00ADEF"/>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">Windows OS Troubleshooting</span><span class="skill-item-desc">Diagnosing and resolving common Windows system, driver, and software issues.</span></div>
+        </div>
+
+        <div class="skill-item" data-tip="Productivity suite">
+          <div class="skill-item-logo-wrap">
+            <!-- Microsoft 365 house mark -->
+            <svg viewBox="0 0 24 24" aria-label="Microsoft 365">
+              <path d="M23.04 9.26L13.35.57A2.25 2.25 0 0 0 12 0a2.27 2.27 0 0 0-1.35.57L.96 9.26A3.47 3.47 0 0 0 0 11.62V22.5A1.5 1.5 0 0 0 1.5 24H9v-7.5h6V24h7.5A1.5 1.5 0 0 0 24 22.5V11.62a3.47 3.47 0 0 0-.96-2.36z" fill="#0078D4"/>
+            </svg>
+          </div>
+          <div class="skill-item-info"><span class="skill-item-name">Microsoft 365</span><span class="skill-item-desc">Productivity suite — Outlook, OneDrive, and Excel — for professional environments.</span></div>
+        </div>
+
+        <div class="skill-item" data-tip="IT support tools"><div class="skill-item-badge" style="color:#f97316;">HLP</div><div class="skill-item-info"><span class="skill-item-name">Spiceworks / AnyDesk / Zoom</span><span class="skill-item-desc">Help desk ticketing, remote desktop support, and video conferencing for IT assistance.</span></div></div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════ CONTACT ══════════ -->
+<section id="contact">
+<div class="section-wrap">
+  <p class="section-label reveal"><span class="section-accent-dot"></span>Contact</p>
+  <h2 class="section-title reveal">Let's Work Together</h2>
+
+  <div class="contact-layout">
+
+    <div class="contact-info-panel reveal-left">
+      <div>
+        <div class="contact-panel-title">Open to <span>opportunities</span> &amp; collaborations.</div>
+        <p class="contact-panel-sub" style="margin-top:0.5rem">Got a project in mind or a role to fill? Send me a message and let's talk.</p>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">📍</div>
+        <span>Brgy. Canlubang, Calamba City, Laguna</span>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">📞</div>
+        <a href="tel:+639614975156">0961-497-5156</a>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">✉️</div>
+        <a href="mailto:jemisa@sscrcan.edu.ph">jemisa@sscrcan.edu.ph</a>
+      </div>
+      <div class="contact-socials">
+        <a href="https://www.facebook.com/jeromemisa2020/" target="_blank" rel="noopener" class="btn btn-fb">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.413c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.884v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+          Facebook
+        </a>
+        <a href="https://drive.google.com/file/d/1S9NKXRCo9_BPJKUCw-F2o93Kf7qMlbwp/view?usp=sharing"
+           target="_blank" rel="noopener" class="btn btn-resume">
+          <span class="btn-inner">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            View Resume
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <div class="contact-form-panel reveal">
+      <p class="form-title">Send a Message</p>
+      <form id="contact-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="f-name">Your Name *</label>
+            <input class="form-input" type="text" id="f-name" name="name" placeholder="Juan dela Cruz" autocomplete="name" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-email">Email Address *</label>
+            <input class="form-input" type="email" id="f-email" name="email" placeholder="you@example.com" autocomplete="email" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-subject">Subject</label>
+          <input class="form-input" type="text" id="f-subject" name="subject" placeholder="Job opportunity / Collaboration / Just saying hi"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-message">Message *</label>
+          <textarea class="form-textarea" id="f-message" name="message" placeholder="Tell me a bit about yourself and what you'd like to discuss…" required></textarea>
+        </div>
+        <button class="form-submit" type="submit" id="form-submit">Send Message →</button>
+        <p class="form-status" id="form-status"></p>
+      </form>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="footer-left">
+    <span>© 2026 Jerome Misa</span>
+    <span style="color:var(--border2)">·</span>
+    <span>Web Developer · Calamba City, Laguna</span>
+  </div>
+  <a href="#" class="footer-back-top" aria-label="Back to top">
+    ↑ <span>Back to top</span>
+  </a>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
