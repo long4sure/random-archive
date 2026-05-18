@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☕ Coffee Shop Manager</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f5f0eb; color: #3d2b1f; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        
+        /* Login Styles */
+        .login-container {
+            background: white; padding: 40px; border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px;
+        }
+        .login-container .logo { text-align: center; font-size: 50px; margin-bottom: 10px; }
+        .login-container h1 { text-align: center; color: #5d3a1a; margin-bottom: 5px; font-size: 24px; }
+        .login-container p { text-align: center; color: #8b7355; margin-bottom: 25px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #5d3a1a; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; }
+        input:focus, select:focus { outline: none; border-color: #c49a6c; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; }
+        .btn-coffee { background: #6f4e37; color: white; }
+        .btn-coffee:hover { background: #5d3a1a; }
+        .btn-danger { background: #c0392b; color: white; }
+        .btn-danger:hover { background: #a93226; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-warning { background: #f39c12; color: white; }
+        .btn-sm { padding: 8px 16px; border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: 600; }
+        .error-message { color: #c0392b; text-align: center; margin-top: 15px; display: none; }
+        
+        /* Dashboard */
+        .dashboard { display: none; width: 100%; }
+        .container { max-width: 1300px; margin: 0 auto; padding: 20px; }
+        header { background: #4a2c17; color: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        header .logo-area { display: flex; align-items: center; gap: 12px; }
+        header .logo-area span { font-size: 35px; }
+        header h1 { font-size: 22px; }
+        .nav-tabs { display: flex; gap: 5px; margin-bottom: 20px; background: white; padding: 5px; border-radius: 10px; }
+        .nav-tab { padding: 10px 20px; background: none; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #8b7355; }
+        .nav-tab.active { background: #6f4e37; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Stats */
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .stat-card h3 { color: #8b7355; font-size: 12px; text-transform: uppercase; margin-bottom: 8px; }
+        .stat-card .value { font-size: 28px; font-weight: bold; color: #4a2c17; }
+        
+        /* Tables */
+        .table-container { background: white; border-radius: 10px; overflow-x: auto; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #4a2c17; color: white; padding: 12px 15px; text-align: left; font-size: 13px; }
+        td { padding: 10px 15px; border-bottom: 1px solid #f0ebe3; font-size: 14px; }
+        tr:hover { background: #fdf9f5; }
+        .actions-bar { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .badge-pending { background: #ffeaa7; color: #d68910; }
+        .badge-preparing { background: #81ecec; color: #006266; }
+        .badge-ready { background: #55efc4; color: #006266; }
+        .badge-served { background: #74b9ff; color: #003d80; }
+        .badge-cancelled { background: #fab1a0; color: #c0392b; }
+        .low-stock { color: #c0392b; font-weight: bold; }
+        
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; overflow-y: auto; }
+        .modal-content { background: white; width: 90%; max-width: 600px; margin: 30px auto; padding: 25px; border-radius: 12px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .close { font-size: 28px; cursor: pointer; color: #8b7355; }
+        .order-items-list { margin: 15px 0; }
+        .order-item-row { display: flex; gap: 10px; align-items: end; margin-bottom: 10px; padding: 10px; background: #fdf9f5; border-radius: 8px; }
+        .order-item-row select { width: 40%; }
+        .order-item-row input { width: 20%; }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="logo">☕</div>
+        <h1>Brew & Bean</h1>
+        <p>Coffee Shop Manager</p>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" required placeholder="you@example.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" required placeholder="Your password">
+            </div>
+            <button type="submit" class="btn btn-coffee">Log In</button>
+        </form>
+        <p class="error-message" id="loginError">Invalid email or password</p>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard">
+        <div class="container">
+            <div id="lowStockAlert" style="display:none; background:#ffeaa7; color:#d68910; padding:12px 20px; border-radius:8px; margin-bottom:15px; font-weight:bold;">
+    ⚠️ Low Stock Alert: <span id="lowStockItems"></span>
+</div>
+
+            <header>
+                <div class="logo-area"><span>☕</span><div><h1>Brew & Bean</h1><small>Coffee Shop Manager</small></div></div>
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <span id="userRole" style="background:#c49a6c; color:white; padding:3px 12px; border-radius:12px; font-size:12px; font-weight:bold;"></span>
+                    <span id="userEmail"></span>
+                    <button class="btn-sm btn-danger" id="logoutBtn">Logout</button>
+                </div>
+            </header>
+
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="pos">🛒 Point of Sale</button>
+                <button class="nav-tab" data-tab="orders">📋 Orders</button>
+                <button class="nav-tab" data-tab="menu">📝 Menu</button>
+                <button class="nav-tab" data-tab="reports">📊 Reports</button>
+            </div>
+
+            <!-- POS Tab -->
+            <div id="tab-pos" class="tab-content active">
+                <div style="display:grid; grid-template-columns: 1fr 350px; gap:20px;">
+                    <div>
+                        <div class="actions-bar">
+                            <input type="text" id="menuSearch" placeholder="🔍 Search menu..." style="flex:1; padding:10px; border:2px solid #ddd; border-radius:8px;">
+                            <select id="categoryFilter" style="padding:10px; border:2px solid #ddd; border-radius:8px;">
+                                <option value="">All Categories</option>
+                                <option>Hot Coffee</option><option>Iced Coffee</option><option>Tea</option><option>Pastry</option><option>Sandwich</option><option>Other</option>
+                            </select>
+                        </div>
+                        <div id="menuGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap:10px;"></div>
+                    </div>
+                    <div style="background:white; padding:20px; border-radius:10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        <h3 style="margin-bottom:15px;">Current Order</h3>
+                        <div id="currentOrderItems" style="max-height:400px; overflow-y:auto;"></div>
+                        <div style="border-top:2px solid #f0ebe3; padding-top:10px; margin-top:10px;">
+                            <strong>Total: ₱<span id="currentOrderTotal">0.00</span></strong>
+                        </div>
+                        <div class="form-group" style="margin-top:10px;">
+                            <select id="orderType"><option>Dine-in</option><option>Take-out</option><option>Delivery</option></select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="customerName" placeholder="Customer name (optional)">
+                        </div>
+                        <div class="form-group">
+                            <select id="paymentMethod"><option>Cash</option><option>Card</option><option>GCash</option><option>Maya</option></select>
+                        </div>
+                        <button class="btn btn-success" id="placeOrderBtn" style="width:100%;">Place Order</button>
+                        <button class="btn btn-sm" style="width:100%; margin-top:5px; background:#ddd;" id="clearOrderBtn">Clear</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Tab -->
+            <div id="tab-orders" class="tab-content">
+                <div class="actions-bar">
+                    <select id="orderStatusFilter" style="padding:10px; border:2px solid #ddd; border-radius:8px;">
+                        <option value="">All Status</option>
+                        <option>Pending</option><option>Preparing</option><option>Ready</option><option>Served</option><option>Cancelled</option>
+                    </select>
+                    <button class="btn-sm btn-coffee" id="refreshOrdersBtn">🔄 Refresh</button>
+                </div>
+                <div class="table-container">
+                    <table><thead><tr><th>Order #</th><th>Customer</th><th>Type</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Time</th><th>Action</th></tr></thead>
+                    <tbody id="ordersTableBody"></tbody></table>
+                </div>
+            </div>
+
+            <!-- Menu Tab -->
+            <div id="tab-menu" class="tab-content">
+                <div class="actions-bar">
+                    <button class="btn-sm btn-coffee" id="addMenuItemBtn" style="display:none;">➕ Add Item</button>
+                </div>
+                <div class="table-container">
+                    <table><thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Cost</th><th>Stock</th><th>Margin</th><th>Status</th><th id="menuActionsCol" style="display:none;">Actions</th></tr></thead>
+                    <tbody id="menuTableBody"></tbody></table>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div id="tab-reports" class="tab-content">
+                <div class="stats">
+                    <div class="stat-card"><h3>Today's Revenue</h3><div class="value" id="todayRevenue">₱0</div></div>
+                    <div class="stat-card"><h3>Today's Orders</h3><div class="value" id="todayOrders">0</div></div>
+                    <div class="stat-card"><h3>Avg Order Value</h3><div class="value" id="avgOrderValue">₱0</div></div>
+                    <div class="stat-card"><h3>Profit Margin</h3><div class="value" id="profitMargin">0%</div></div>
+                </div>
+
+                <button class="btn-sm btn-coffee" id="refreshSalesBtn" style="margin-bottom:10px;">🔄 Calculate Today's Sales</button>
+
+                <div class="table-container" style="margin-top:15px;">
+                    <table><thead><tr><th>Date</th><th>Orders</th><th>Revenue</th><th>Cost</th><th>Profit</th><th>Cash</th><th>Card</th><th>GCash</th><th>Maya</th></tr></thead>
+                    <tbody id="salesTableBody"></tbody></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var SUPABASE_URL = 'https://hvynsxclqslsdonzavaj.supabase.co'
+        var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh2eW5zeGNscXNsc2RvbnphdmFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1NjkyODYsImV4cCI6MjA5NDE0NTI4Nn0.kVtQxMuEJji-r7bwTeZvXV7RQ9vkE0cvve8fbR05-78'
+
+        var client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+        var currentUser = null
+        var currentOrder = []
+        var menuItems = []
+
+        // ============ AUTH ============
+        async function checkSession() {
+            var result = await client.auth.getSession()
+            if (result.data.session) {
+                currentUser = result.data.session.user
+                showDashboard()
+            }
+        }
+
+        document.getElementById('loginForm').onsubmit = async function(e) {
+            e.preventDefault()
+            var errorEl = document.getElementById('loginError')
+            errorEl.style.display = 'none'
+            
+            var result = await client.auth.signInWithPassword({
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            })
+            
+            if (result.error) {
+                errorEl.textContent = result.error.message
+                errorEl.style.display = 'block'
+            } else {
+                currentUser = result.data.user
+                showDashboard()
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('loginScreen').style.display = 'none'
+            document.getElementById('dashboard').style.display = 'block'
+            document.body.style.display = 'block'
+            document.getElementById('userEmail').textContent = currentUser.email
+            
+            var role = currentUser.user_metadata?.role || 'staff'
+            document.getElementById('userRole').textContent = role.toUpperCase()
+            
+            if (role === 'admin') {
+                document.getElementById('addMenuItemBtn').style.display = 'inline-block'
+                document.getElementById('menuActionsCol').style.display = ''
+            }
+            
+            loadMenuItems()
+            loadOrders()
+            loadReports()
+        }
+
+        document.getElementById('logoutBtn').onclick = async function() {
+            await client.auth.signOut()
+            location.reload()
+        }
+
+        // ============ NAVIGATION ============
+        document.querySelectorAll('.nav-tab').forEach(function(tab) {
+            tab.onclick = function() {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'))
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'))
+                this.classList.add('active')
+                document.getElementById('tab-' + this.dataset.tab).classList.add('active')
+            }
+        })
+
+        // ============ MENU FUNCTIONS ============
+        async function loadMenuItems() {
+            var result = await client.from('menu_items').select('*').order('category')
+            if (result.error) { console.error(result.error); return }
+            menuItems = result.data
+            displayMenuGrid(menuItems)
+            displayMenuTable(menuItems)
+            checkLowStock() 
+        }
+
+        function displayMenuGrid(items) {
+            var grid = document.getElementById('menuGrid')
+            grid.innerHTML = items.filter(function(i) { return i.is_available && i.stock > 0 }).map(function(item) {
+                return '<div onclick="addToOrder(' + item.id + ')" style="background:white; padding:15px; border-radius:8px; cursor:pointer; text-align:center; box-shadow:0 2px 4px rgba(0,0,0,0.05); transition: transform 0.2s;" onmouseover="this.style.transform=\'scale(1.03)\'" onmouseout="this.style.transform=\'scale(1)\'">' +
+                    '<div style="font-size:30px; margin-bottom:5px;">' + getIcon(item.category) + '</div>' +
+                    '<strong>' + item.name + '</strong><br>' +
+                    '<span style="color:#6f4e37; font-weight:bold;">₱' + parseFloat(item.price).toFixed(2) + '</span>' +
+                '</div>'
+            }).join('')
+            
+            if (grid.innerHTML === '') grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; padding:20px;">No items available</p>'
+        }
+
+        function displayMenuTable(items) {
+            var tbody = document.getElementById('menuTableBody')
+            tbody.innerHTML = items.map(function(item) {
+                var margin = item.price > 0 ? ((item.price - item.cost) / item.price * 100).toFixed(1) : 0
+                return '<tr>' +
+                    '<td>' + item.name + '</td>' +
+                    '<td>' + item.category + '</td>' +
+                    '<td>₱' + parseFloat(item.price).toFixed(2) + '</td>' +
+                    '<td>₱' + parseFloat(item.cost).toFixed(2) + '</td>' +
+                    '<td class="' + (item.stock < 5 ? 'low-stock' : '') + '">' + item.stock + '</td>' +
+                    '<td>' + margin + '%</td>' +
+                    '<td>' + (item.is_available ? '✅' : '❌') + '</td>' +
+                    '<td id="menuActionsCol">' + (isAdmin() ? '<button class="btn-sm" onclick="editMenuItem(' + item.id + ')">Edit</button>' : '') + '</td>' +
+                '</tr>'
+            }).join('')
+        }
+
+        function getIcon(category) {
+            var icons = { 'Hot Coffee': '☕', 'Iced Coffee': '🧊', 'Tea': '🍵', 'Pastry': '🥐', 'Sandwich': '🥪' }
+            return icons[category] || '🍽️'
+        }
+
+        function isAdmin() { return currentUser?.user_metadata?.role === 'admin' }
+
+        // ============ ORDER FUNCTIONS ============
+        function addToOrder(menuItemId) {
+            var item = menuItems.find(function(i) { return i.id === menuItemId })
+            if (!item) return
+            
+            var existing = currentOrder.find(function(o) { return o.menu_item_id === menuItemId })
+            if (existing) {
+                existing.quantity++
+            } else {
+                currentOrder.push({ menu_item_id: item.id, name: item.name, price: item.price, quantity: 1 })
+            }
+            refreshCurrentOrder()
+        }
+
+        function refreshCurrentOrder() {
+            var container = document.getElementById('currentOrderItems')
+            var total = 0
+            
+            container.innerHTML = currentOrder.map(function(item, index) {
+                total += item.price * item.quantity
+                return '<div class="order-item-row">' +
+                    '<strong>' + item.name + '</strong>' +
+                    '<input type="number" min="1" value="' + item.quantity + '" onchange="updateQuantity(' + index + ', this.value)" style="width:60px;">' +
+                    '<span>₱' + (item.price * item.quantity).toFixed(2) + '</span>' +
+                    '<button class="btn-sm" style="background:#c0392b; color:white;" onclick="removeFromOrder(' + index + ')">×</button>' +
+                '</div>'
+            }).join('')
+            
+            document.getElementById('currentOrderTotal').textContent = total.toFixed(2)
+        }
+
+        function updateQuantity(index, qty) {
+            currentOrder[index].quantity = parseInt(qty) || 1
+            refreshCurrentOrder()
+        }
+
+        function removeFromOrder(index) {
+            currentOrder.splice(index, 1)
+            refreshCurrentOrder()
+        }
+
+        document.getElementById('clearOrderBtn').onclick = function() {
+            currentOrder = []
+            refreshCurrentOrder()
+        }
+
+        document.getElementById('placeOrderBtn').onclick = async function() {
+            if (currentOrder.length === 0) { alert('Add items to order first'); return }
+            
+            var total = currentOrder.reduce(function(s, i) { return s + (i.price * i.quantity) }, 0)
+            
+            var orderResult = await client.from('orders').insert([{
+                customer_name: document.getElementById('customerName').value || 'Walk-in',
+                order_type: document.getElementById('orderType').value,
+                total_amount: total,
+                payment_method: document.getElementById('paymentMethod').value,
+                status: 'Pending',
+                created_by: currentUser.id
+            }]).select()
+            
+            if (orderResult.error) { alert('Error: ' + orderResult.error.message); return }
+            
+            var orderId = orderResult.data[0].id
+            var items = currentOrder.map(function(i) {
+                return { order_id: orderId, menu_item_id: i.menu_item_id, quantity: i.quantity, price_at_time: i.price }
+            })
+            
+            var itemsResult = await client.from('order_items').insert(items)
+            if (itemsResult.error) { alert('Error: ' + itemsResult.error.message); return }
+            
+            // Update stock
+            for (var i = 0; i < currentOrder.length; i++) {
+                var item = menuItems.find(function(m) { return m.id === currentOrder[i].menu_item_id })
+                if (item) {
+                    await client.from('menu_items').update({ stock: item.stock - currentOrder[i].quantity }).eq('id', item.id)
+                }
+            }
+            
+            currentOrder = []
+            refreshCurrentOrder()
+            document.getElementById('customerName').value = ''
+            loadMenuItems()
+            loadOrders()
+            alert('Order #' + orderId + ' placed!')
+        }
+
+        // ============ ORDERS TABLE ============
+        async function loadOrders() {
+            var query = client.from('orders').select('*, order_items(*, menu_items(name))').order('created_at', { ascending: false }).limit(50)
+            var result = await query
+            
+            if (result.error) { console.error(result.error); return }
+            
+            var tbody = document.getElementById('ordersTableBody')
+            tbody.innerHTML = result.data.map(function(order) {
+                var items = order.order_items.map(function(oi) { return oi.quantity + 'x ' + (oi.menu_items?.name || 'Item') }).join(', ')
+                var statusClass = 'badge-' + order.status.toLowerCase()
+                return '<tr>' +
+                    '<td>#' + order.id + '</td>' +
+                    '<td>' + order.customer_name + '</td>' +
+                    '<td>' + order.order_type + '</td>' +
+                    '<td>' + items + '</td>' +
+                    '<td>₱' + parseFloat(order.total_amount).toFixed(2) + '</td>' +
+                    '<td>' + order.payment_method + '</td>' +
+                    '<td><span class="badge ' + statusClass + '">' + order.status + '</span></td>' +
+                    '<td>' +
+    '<select onchange="updateOrderStatus(' + order.id + ', this.value)" style="padding:5px; margin-bottom:3px;">' +
+        '<option ' + (order.status === 'Pending' ? 'selected' : '') + '>Pending</option>' +
+        '<option ' + (order.status === 'Preparing' ? 'selected' : '') + '>Preparing</option>' +
+        '<option ' + (order.status === 'Ready' ? 'selected' : '') + '>Ready</option>' +
+        '<option ' + (order.status === 'Served' ? 'selected' : '') + '>Served</option>' +
+        '<option ' + (order.status === 'Cancelled' ? 'selected' : '') + '>Cancelled</option>' +
+    '</select>' +
+    '<button class="btn-sm" style="background:#6f4e37; color:white; padding:3px 8px; font-size:11px;" onclick="printReceipt(' + order.id + ')">🖨️ Print</button>' +
+'</td>' +
+                '</tr>'
+            }).join('')
+        }
+
+        async function updateOrderStatus(orderId, status) {
+            await client.from('orders').update({ status: status }).eq('id', orderId)
+            loadOrders()
+            loadReports()
+        }
+
+        // ============ REPORTS ============
+        async function loadReports() {
+            document.getElementById('refreshSalesBtn').onclick = async function() {
+    var result = await client.rpc('update_daily_sales')
+    if (result.error) { alert('Error: ' + result.error.message) }
+    else { loadReports(); alert('Daily sales updated!') }
+}
+            var today = new Date().toISOString().split('T')[0]
+            
+            var todayResult = await client.from('orders').select('*').gte('created_at', today).eq('status', 'Served')
+            var todayOrders = todayResult.data || []
+            
+            var revenue = todayOrders.reduce(function(s, o) { return s + parseFloat(o.total_amount) }, 0)
+            document.getElementById('todayRevenue').textContent = '₱' + revenue.toFixed(2)
+            document.getElementById('todayOrders').textContent = todayOrders.length
+            document.getElementById('avgOrderValue').textContent = todayOrders.length > 0 ? '₱' + (revenue / todayOrders.length).toFixed(2) : '₱0'
+            
+            var salesResult = await client.from('daily_sales').select('*').order('sale_date', { ascending: false }).limit(30)
+            var tbody = document.getElementById('salesTableBody')
+            if (salesResult.data) {
+                tbody.innerHTML = salesResult.data.map(function(s) {
+                    return '<tr><td>' + s.sale_date + '</td><td>' + s.total_orders + '</td><td>₱' + s.total_revenue + '</td><td>₱' + s.total_cost + '</td><td>₱' + (s.total_revenue - s.total_cost) + '</td><td>₱' + s.cash_amount + '</td><td>₱' + s.card_amount + '</td><td>₱' + s.gcash_amount + '</td><td>₱' + s.maya_amount + '</td></tr>'
+                }).join('')
+            }
+        }
+
+        // ============ MENU SEARCH/FILTER ============
+        document.getElementById('menuSearch').oninput = function() {
+            var term = this.value.toLowerCase()
+            var filtered = menuItems.filter(function(i) { return i.name.toLowerCase().includes(term) })
+            displayMenuGrid(filtered)
+        }
+        document.getElementById('categoryFilter').onchange = function() {
+            var cat = this.value
+            var filtered = cat ? menuItems.filter(function(i) { return i.category === cat }) : menuItems
+            displayMenuGrid(filtered)
+        }
+
+        // ============ STARTUP ============
+        checkSession()
+
+        // ============ RECEIPT PRINTING ============
+function printReceipt(orderId) {
+    client.from('orders').select('*, order_items(*, menu_items(name))').eq('id', orderId).single().then(function(result) {
+        if (result.error) { alert('Error loading order'); return }
+        
+        var order = result.data
+        var now = new Date()
+        var receipt = ''
+        receipt += '══════════════════════════\n'
+        receipt += '     ☕ BREW & BEAN ☕     \n'
+        receipt += '   Coffee Shop Manager    \n'
+        receipt += '══════════════════════════\n\n'
+        receipt += 'Order #: ' + order.id + '\n'
+        receipt += 'Date: ' + now.toLocaleDateString() + '\n'
+        receipt += 'Time: ' + now.toLocaleTimeString() + '\n'
+        receipt += 'Customer: ' + order.customer_name + '\n'
+        receipt += 'Type: ' + order.order_type + '\n'
+        receipt += 'Payment: ' + order.payment_method + '\n'
+        receipt += '──────────────────────────\n\n'
+        
+        order.order_items.forEach(function(item) {
+            var name = item.menu_items?.name || 'Item'
+            var line = item.quantity + 'x ' + name
+            var price = '₱' + (item.price_at_time * item.quantity).toFixed(2)
+            var dots = '.'.repeat(26 - line.length - price.length)
+            receipt += line + ' ' + dots + ' ' + price + '\n'
+        })
+        
+        receipt += '\n──────────────────────────\n'
+        receipt += 'TOTAL: ₱' + parseFloat(order.total_amount).toFixed(2) + '\n'
+        receipt += '──────────────────────────\n'
+        receipt += 'Status: ' + order.status + '\n'
+        receipt += 'Served by: ' + (currentUser.email) + '\n\n'
+        receipt += '     Thank you! Come again!    \n'
+        receipt += '══════════════════════════\n'
+        
+        var printWindow = window.open('', '_blank', 'width=300,height=400')
+        printWindow.document.write('<pre style="font-family: monospace; font-size: 12px; white-space: pre;">' + receipt + '</pre>')
+        printWindow.document.close()
+        setTimeout(function() { printWindow.print(); printWindow.close() }, 500)
+    })
+}
+
+// ============ LOW STOCK ALERTS ============
+function checkLowStock() {
+    var lowItems = menuItems.filter(function(item) { return item.stock < 5 && item.is_available })
+    var alertDiv = document.getElementById('lowStockAlert')
+    var alertText = document.getElementById('lowStockItems')
+    
+    if (lowItems.length > 0) {
+        alertDiv.style.display = 'block'
+        alertText.textContent = lowItems.map(function(i) { 
+            return i.name + ' (' + i.stock + ' left)' 
+        }).join(', ')
+    } else {
+        alertDiv.style.display = 'none'
+    }
+}
+
+    </script>
+</body>
+</html>

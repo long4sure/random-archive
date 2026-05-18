@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Email Generator</title>
+    <style>
+        :root {
+            --bg: #f4f7f6;
+            --card: #ffffff;
+            --text: #333333;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --border: #e5e7eb;
+        }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--card);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        h2 { margin-top: 0; color: #111827; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        textarea { resize: vertical; min-height: 80px; }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        button:hover { background-color: var(--primary-hover); }
+        button:disabled { background-color: #9ca3af; cursor: not-allowed; }
+        .output-box {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f9fafb;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            white-space: pre-wrap;
+            display: none;
+        }
+        .loading { display: none; text-align: center; color: var(--primary); font-weight: 600; margin: 15px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>AI Email Generator</h2>
+    
+    <div class="form-group">
+        <label for="apiKey">Gemini API Key:</label>
+        <input type="password" id="apiKey" placeholder="AIzaSy...">
+    </div>
+
+    <div class="form-group">
+        <label for="recipient">Who is this email for?</label>
+        <input type="text" id="recipient" placeholder="e.g., My Manager, Customer Support, Team">
+    </div>
+
+    <div class="form-group">
+        <label for="tone">Email Tone:</label>
+        <select id="tone">
+            <option value="Professional">Professional</option>
+            <option value="Casual & Friendly">Casual & Friendly</option>
+            <option value="Urgent">Urgent</option>
+            <option value="Persuasive">Persuasive</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="context">What is the core message / context?</label>
+        <textarea id="context" placeholder="e.g., Asking for a sick leave tomorrow due to a fever. Also mention I handed over urgent tasks to Sarah."></textarea>
+    </div>
+
+    <button id="generateBtn" onclick="generateEmail()">Generate Email</button>
+    
+    <div id="loading" class="loading">Writing your email...</div>
+    <div id="output" class="output-box"></div>
+</div>
+
+<script>
+async function generateEmail() {
+    const apiKey = document.getElementById('apiKey').value.trim();
+    const recipient = document.getElementById('recipient').value.trim();
+    const tone = document.getElementById('tone').value;
+    const context = document.getElementById('context').value.trim();
+    
+    const outputBox = document.getElementById('output');
+    const loadingDiv = document.getElementById('loading');
+    const btn = document.getElementById('generateBtn');
+
+    if (!apiKey) { alert('Please enter your Gemini API Key first.'); return; }
+    if (!context) { alert('Please provide the email context.'); return; }
+
+    // UI Loading State
+    loadingDiv.style.display = 'block';
+    outputBox.style.display = 'none';
+    btn.disabled = true;
+
+    // Construct the structured prompt instruction for the LLM
+    const prompt = `Write a professional email based on the following details. Do not include any conversational filler, meta-commentary, or introductory remarks outside of the email content itself. Start directly with the subject line, followed by the email body.
+    Recipient: ${recipient}
+    Tone: ${tone}
+    Core Context: ${context}`;
+
+    // Target API endpoint for Google Gemini 2.5 Flash
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-goog-api-key': apiKey // Header verification strategy
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: prompt }]
+                }]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`API Error: ${response.status} - Ensure your API Key is correct.`);
+        }
+
+        const data = await response.json();
+        // Traverse the Gemini JSON payload tree to grab the text response
+        const emailResult = data.candidates[0].content.parts[0].text;
+        
+        outputBox.textContent = emailResult;
+        outputBox.style.display = 'block';
+    } catch (error) {
+        alert(error.message);
+    } finally {
+        loadingDiv.style.display = 'none';
+        btn.disabled = false;
+    }
+}
+</script>
+
+</body>
+</html>

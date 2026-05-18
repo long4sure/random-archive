@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tailwind Todo App</title>
+  <!-- 1. Tailwind Play CDN -->
+  <script src="https://tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 flex min-h-screen items-center justify-center p-4">
+
+  <!-- Card Container -->
+  <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl transition-all duration-300">
+    
+    <!-- Header -->
+    <h1 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+      <span>📝</span> Tasks App
+    </h1>
+
+    <!-- Input Form -->
+    <form id="todo-form" class="flex gap-2 mb-6">
+      <input 
+        id="todo-input"
+        type="text" 
+        placeholder="Add a new task..." 
+        required
+        class="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-700 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+      />
+      <button 
+        type="submit"
+        class="rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition-all hover:bg-blue-700 active:scale-95 shadow-lg shadow-blue-100"
+      >
+        Add
+      </button>
+    </form>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="text-center py-8 text-slate-400 text-sm">
+      No tasks yet. Add one above!
+    </div>
+
+    <!-- Todo List Items -->
+    <ul id="todo-list" class="space-y-3 max-h-80 overflow-y-auto pr-1 hidden">
+      <!-- JavaScript will inject list items here -->
+    </ul>
+
+  </div>
+
+  <!-- 2. Interactive JavaScript Logic -->
+  <script>
+    const form = document.getElementById('todo-form');
+    const input = document.getElementById('todo-input');
+    const list = document.getElementById('todo-list');
+    const emptyState = document.getElementById('empty-state');
+
+    function toggleView() {
+      if (list.children.length === 0) {
+        list.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+      } else {
+        list.classList.remove('hidden');
+        emptyState.classList.add('hidden');
+      }
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const taskText = input.value.trim();
+      if (!taskText) return;
+
+      // Create Task Element with Tailwind Classes
+      const li = document.createElement('li');
+      li.className = "flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50/50 p-4 transition-all hover:bg-slate-50 group animate-fadeIn";
+      
+      li.innerHTML = `
+        <div class="flex items-center gap-3">
+          <input 
+            type="checkbox" 
+            class="h-5 w-5 rounded border-slate-300 text-blue-600 transition focus:ring-blue-500"
+            onclick="this.nextElementSibling.classList.toggle('line-through'); this.nextElementSibling.classList.toggle('text-slate-400')"
+          >
+          <span class="text-slate-700 font-medium break-all transition-all">${taskText}</span>
+        </div>
+        <button 
+          class="text-slate-400 opacity-0 transition-all hover:text-red-500 group-hover:opacity-100 focus:opacity-100"
+          onclick="this.parentElement.remove(); toggleView();"
+        >
+          🗑️
+        </button>
+      `;
+
+      list.appendChild(li);
+      input.value = '';
+      toggleView();
+    });
+  </script>
+</body>
+</html>
