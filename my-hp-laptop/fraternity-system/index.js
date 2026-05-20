@@ -1,0 +1,1 @@
+onclick='document.getElementById("long").innerHTML = "Ragnar Lothbrok"'
