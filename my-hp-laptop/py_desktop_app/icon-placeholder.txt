@@ -1,0 +1,7 @@
+Place a Windows .ico file here if you want a custom application icon.
+
+Recommended: create or convert a 256x256 ICO and name it `app_icon.ico`,
+then update `installer.iss` and the Inno Setup [Icons] section to reference it.
+
+Example (Inno Setup [Icons] with icon):
+Name: "{group}\Minimal Tkinter App"; Filename: "{app}\main.exe"; IconFilename: "{app}\\app_icon.ico"
