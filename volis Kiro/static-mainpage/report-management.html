@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Report &amp; LIPAS VOLPAS — Production Monitoring System</title>
+    <link rel="icon" href="../images/p_icon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="report-management.css">
+    <script src="report-management.js" defer></script>
+</head>
+<body>
+<div class="app-shell">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="sidebar-brand-logo"><img src="../images/pioneerlogo.png" alt="Pioneer"></div>
+            <div><div class="sidebar-brand-title">Pioneer</div><div class="sidebar-brand-sub">Production Monitor</div></div>
+        </div>
+        <nav class="sidebar-nav">
+            <a class="nav-item" href="dashboard.html"><span class="nav-icon">◈</span><span class="nav-label">Dashboard</span></a>
+            <a class="nav-item" href="production-records.html"><span class="nav-icon">◈</span><span class="nav-label">Production Records</span></a>
+            <a class="nav-item active" href="report-management.html"><span class="nav-icon">◈</span><span class="nav-label">Line Report &amp; LIPAS VOLPAS</span></a>
+            <div class="nav-section-label">Admin Access</div>
+            <a class="nav-item" href="manage-users.html"><span class="nav-icon">◈</span><span class="nav-label">User Management <span class="nav-badge">2</span></span></a>
+        </nav>
+        <div class="sidebar-footer">© 2026 Pioneer Corp.</div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <div class="main" id="mainArea">
+        <header class="topbar">
+            <div class="topbar-inner">
+                <div class="topbar-left"><button class="hamburger-btn" id="hamburgerBtn">&#9776;</button></div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:1px;">
+                    <div class="topbar-title" id="topbarTitle">Formulate Line Report</div>
+                    <div class="topbar-breadcrumb">Line Report &amp; LIPAS VOLPAS &rsaquo; <span id="topbarSub">Formulate</span></div>
+                </div>
+                <div class="topbar-right">
+                    <span class="topbar-period">May 2026</span>
+                    <span class="topbar-dot"></span>
+                    <span class="role-badge system_admin">System Admin</span>
+                    <button class="logout-btn" onclick="openLogout()">&#x2192; Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="sub-nav">
+            <button class="sub-nav-btn" id="btn-formulate"   onclick="switchView('formulate')"><span>⊕</span> Formulate Report</button>
+            <button class="sub-nav-btn" id="btn-manage-line" onclick="switchView('manage-line')"><span>☰</span> Manage Line Report</button>
+            <button class="sub-nav-btn" id="btn-manage-lv"   onclick="switchView('manage-lv')"><span>◫</span> Manage LIPAS VOLPAS</button>
+        </div>
+
+        <div class="content">
+
+            <!-- ===== FORMULATE ===== -->
+            <div id="formulate-section" class="view-section hidden">
+                <div class="section-title">Formulate Line Report <span class="section-chip">Preview mode — static data</span></div>
+
+                <div class="input-panel">
+                    <div class="input-panel-head">Filters</div>
+                    <div class="input-controls">
+                        <div class="filter-group"><span class="filter-label">Team</span>
+                            <select class="filter-select" id="f-team" onchange="formulateApply()">
+                                <option value="">— Select Team —</option>
+                                <option value="A">Team A</option><option value="B">Team B</option><option value="C">Team C</option>
+                            </select>
+                        </div>
+                        <div class="filter-group"><span class="filter-label">Month</span>
+                            <select class="filter-select" id="f-month" onchange="formulateApply()">
+                                <option value="">All</option>
+                                <option value="JANUARY">January</option><option value="FEBRUARY">February</option>
+                                <option value="MARCH">March</option><option value="APRIL">April</option>
+                                <option value="MAY" selected>May</option><option value="JUNE">June</option>
+                                <option value="JULY">July</option><option value="AUGUST">August</option>
+                                <option value="SEPTEMBER">September</option><option value="OCTOBER">October</option>
+                                <option value="NOVEMBER">November</option><option value="DECEMBER">December</option>
+                            </select>
+                        </div>
+                        <div class="filter-group"><span class="filter-label">Prod. Days</span>
+                            <select class="filter-select" id="f-ops" onchange="formulateApply()">
+                                <option value="">All</option>
+                                <option value="2026-05-05|2026-05-11">May 5 – May 11</option>
+                                <option value="2026-05-12|2026-05-18">May 12 – May 18</option>
+                                <option value="2026-05-19|2026-05-25" selected>May 19 – May 25</option>
+                                <option value="2026-05-26|2026-06-01">May 26 – Jun 1</option>
+                            </select>
+                        </div>
+                        <div class="filter-group"><span class="filter-label">Day</span>
+                            <input class="filter-input" type="date" id="f-day" value="2026-05-21" onchange="formulateApply()">
+                        </div>
+                        <div class="filter-group"><span class="filter-label">Shift</span>
+                            <div class="shift-checks">
+                                <label class="shift-check-label"><input type="checkbox" class="shift-cb" value="1" checked> 1st</label>
+                                <label class="shift-check-label"><input type="checkbox" class="shift-cb" value="2" checked> 2nd</label>
+                                <label class="shift-check-label"><input type="checkbox" class="shift-cb" value="3" checked> 3rd</label>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:8px;align-items:flex-end;">
+                            <button class="btn btn-primary" onclick="formulateApply()">Apply</button>
+                            <button class="btn btn-secondary" onclick="formulateReset()">Reset</button>
+                        </div>
+                    </div>
+                    <div class="filter-hint"><span style="color:var(--pioneer-blue);">ℹ</span> Select Team, Month, Prod. Days, and a Day to generate the report.</div>
+                </div>
+
+                <div id="formulateResults"></div>
+
+                <div id="formulateSaveBar" class="save-bar hidden">
+                    <button class="btn btn-purple" onclick="openSaveModal()">💾 Save All Days to Report</button>
+                    <button class="btn btn-primary" onclick="openLvModal()">⊕ Add to LIPAS VOLPAS Data</button>
+                </div>
+            </div>
+
+            <!-- ===== MANAGE LINE REPORT ===== -->
+            <div id="manage-line-section" class="view-section hidden">
+                <div class="section-title">Manage Line Report Records</div>
+
+                <div class="input-panel">
+                    <div class="input-panel-head">Filters</div>
+                    <div class="input-controls">
+                        <div class="filter-group"><span class="filter-label">Team</span>
+                            <select class="filter-select" id="ml-team" onchange="manageLineApply()">
+                                <option value="">All Teams</option>
+                                <option value="A">Team A</option><option value="B">Team B</option><option value="C">Team C</option>
+                            </select>
+                        </div>
+                        <div class="filter-group"><span class="filter-label">Month</span>
+                            <select class="filter-select" id="ml-month" onchange="manageLineApply()">
+                                <option value="">All</option>
+                                <option value="MAY" selected>May</option><option value="APRIL">April</option><option value="MARCH">March</option>
+                            </select>
+                        </div>
+                        <div class="filter-group"><span class="filter-label">Day</span>
+                            <input class="filter-input" type="date" id="ml-day" onchange="manageLineApply()">
+                        </div>
+                        <div class="filter-group"><span class="filter-label">Shift</span>
+                            <div class="shift-checks">
+                                <label class="shift-check-label"><input type="checkbox" class="ml-shift-cb" value="1" checked> 1st</label>
+                                <label class="shift-check-label"><input type="checkbox" class="ml-shift-cb" value="2" checked> 2nd</label>
+                                <label class="shift-check-label"><input type="checkbox" class="ml-shift-cb" value="3" checked> 3rd</label>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:8px;align-items:flex-end;">
+                            <button class="btn btn-primary" onclick="manageLineApply()">Apply</button>
+                            <button class="btn btn-secondary" onclick="manageLineReset()">Reset</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="manageLineResults"></div>
+            </div>
+
+            <!-- ===== MANAGE LIPAS VOLPAS ===== -->
+            <div id="manage-lv-section" class="view-section hidden">
+                <div class="section-title">Manage LIPAS &amp; VOLPAS Records <span class="section-chip">Plan vs Actual</span></div>
+
+                <div class="input-panel">
+                    <div class="input-panel-head">Filters</div>
+                    <div class="input-controls">
+                        <div class="filter-group"><span class="filter-label">Team</span>
+                            <select class="filter-select" id="lv-team" onchange="manageLvApply()">
+                                <option value="">All Teams</option>
+                                <option value="A">Team A</option><option value="B">Team B</option><option value="C">Team C</option>
+                            </select>
+                        </div>
+                        <div class="filter-group"><span class="filter-label">Year</span>
+                            <select class="filter-select" id="lv-year" onchange="manageLvApply()">
+                                <option value="2026" selected>2026</option><option value="2025">2025</option>
+                            </select>
+                        </div>
+                        <div class="filter-group"><span class="filter-label">Month</span>
+                            <select class="filter-select" id="lv-month" onchange="manageLvApply()">
+                                <option value="">All Months</option>
+                                <option value="MAY" selected>May</option><option value="APRIL">April</option><option value="MARCH">March</option>
+                            </select>
+                        </div>
+                        <div class="filter-group"><span class="filter-label">Prod. Days</span>
+                            <select class="filter-select" id="lv-ops" onchange="manageLvApply()">
+                                <option value="">All (aggregated)</option>
+                                <option value="2026-05-05|2026-05-11">May 5 – May 11</option>
+                                <option value="2026-05-12|2026-05-18">May 12 – May 18</option>
+                                <option value="2026-05-19|2026-05-25">May 19 – May 25</option>
+                            </select>
+                        </div>
+                        <div style="display:flex;gap:8px;align-items:flex-end;">
+                            <button class="btn btn-primary" onclick="manageLvApply()">Apply</button>
+                            <button class="btn btn-secondary" onclick="manageLvReset()">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-grid" id="lvTotalsGrid"></div>
+
+                <div class="section-title">LIPAS Summary <span class="section-chip">Plan vs Actual SKUs</span></div>
+                <div class="table-wrap">
+                    <div class="table-scroll"><table><thead id="lipasHead"></thead><tbody id="lipasTbody"></tbody></table></div>
+                </div>
+
+                <div class="section-title" style="margin-top:24px;">VOLPAS Summary <span class="section-chip">Plan vs Actual Quantity</span></div>
+                <div class="table-wrap">
+                    <div class="table-scroll"><table><thead id="volpasHead"></thead><tbody id="volpasTbody"></tbody></table></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Save confirm -->
+<div class="cdlg-overlay" id="saveDlg">
+    <div class="cdlg-box">
+        <div class="cdlg-icon info"><span style="font-size:22px;">💾</span></div>
+        <div class="cdlg-title">Save Report Data?</div>
+        <div class="cdlg-msg">This will save the formulated report for all shifts. Existing records for this period will be overwritten.</div>
+        <div class="cdlg-actions">
+            <button class="btn btn-secondary" onclick="closeSaveModal()">Cancel</button>
+            <button class="btn btn-primary"   onclick="confirmSave()">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- LV week modal -->
+<div class="modal-overlay" id="lvModal">
+    <div class="modal-box" style="max-width:400px;">
+        <div class="modal-head"><span class="modal-title">⊕ Add to LIPAS VOLPAS</span><button class="modal-close" onclick="closeLvModal()">✕</button></div>
+        <div class="modal-body">
+            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">Select the week slot to save the current plan &amp; actual values.</p>
+            <div class="week-radio-group">
+                <label class="week-radio"><input type="radio" name="lv-week" value="1" checked> Week 1</label>
+                <label class="week-radio"><input type="radio" name="lv-week" value="2"> Week 2</label>
+                <label class="week-radio"><input type="radio" name="lv-week" value="3"> Week 3</label>
+                <label class="week-radio"><input type="radio" name="lv-week" value="4"> Week 4</label>
+                <label class="week-radio"><input type="radio" name="lv-week" value="5"> Week 5</label>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button class="btn btn-secondary" onclick="closeLvModal()">Cancel</button>
+            <button class="btn btn-primary"   onclick="confirmLv()">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- Logout -->
+<div class="cdlg-overlay" id="logoutDlg">
+    <div class="cdlg-box">
+        <div class="cdlg-icon"><span>&#x2192;</span></div>
+        <div class="cdlg-title">Sign Out?</div>
+        <div class="cdlg-msg">You'll be returned to the login screen.</div>
+        <div class="cdlg-actions">
+            <button class="btn btn-secondary" onclick="closeLogout()">Cancel</button>
+            <button class="btn btn-danger" onclick="window.location.href='auth-login.html'">Sign Out</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+</body>
+</html>

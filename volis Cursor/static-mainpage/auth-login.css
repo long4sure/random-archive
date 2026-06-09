@@ -1,0 +1,90 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: url("../images/pioneer_login.jpg") no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 22% 28%, rgba(0,0,0,.18), rgba(0,0,0,.56));
+}
+
+.login-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255,255,255,.93);
+    backdrop-filter: blur(14px);
+    border-radius: 26px;
+    padding: 36px 32px;
+    box-shadow: 0 28px 60px rgba(0,0,0,.35);
+}
+
+.login-heading {
+    margin: 0 0 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #0f172a;
+}
+
+.login-icon { height: 1.1em; }
+label { display: block; margin-bottom: 8px; font-size: 14px; color: #475569; font-weight: 600; }
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.pw-field { position: relative; margin-bottom: 16px; }
+.pw-field input { margin-bottom: 0; padding-right: 44px; }
+.pw-eye {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    color: #64748b;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(135deg,#3b82f6,#2563eb);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.error {
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    font-size: 14px;
+}
+
+.note { margin: 14px 0 0; text-align: center; color: #475569; font-size: 14px; }
+.note a { color: #2563eb; text-decoration: none; font-weight: 700; }
+.hidden { display: none; }

@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Utilities Cost per Kg — Engineering CC Tracker FY26</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f4f3ef;
+    --surface: #ffffff;
+    --surface2: #f9f8f5;
+    --border: #e0ddd4;
+    --border2: #ccc9be;
+    --text: #1a1917;
+    --text2: #5a5751;
+    --text3: #9a9790;
+    --accent: #1a4a8a;
+    --accent-bg: #e8f0fb;
+    --green: #2a6e3a;
+    --green-bg: #e8f5ec;
+    --red: #b83232;
+    --red-bg: #fbeaea;
+    --amber: #8a5a00;
+    --amber-bg: #fdf3e0;
+    --teal: #0f6e56;
+    --teal-bg: #e0f4ee;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --radius: 6px;
+    --radius-lg: 10px;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  header {
+    max-width: 1400px;
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--text);
+    padding-bottom: 1rem;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  header .subtitle {
+    font-size: 0.8rem;
+    color: var(--text2);
+    font-weight: 400;
+    margin-top: 4px;
+    font-family: var(--mono);
+  }
+
+  .badge {
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 3px;
+    background: var(--accent);
+    color: #fff;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .main { max-width: 1400px; margin: 0 auto; }
+
+  /* Summary Cards */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .summary-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+  }
+
+  .summary-card .label {
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+
+  .summary-card .value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: var(--mono);
+    letter-spacing: -0.02em;
+  }
+
+  .summary-card .sub {
+    font-size: 0.75rem;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  .value.pos { color: var(--green); }
+  .value.neg { color: var(--red); }
+  .value.neutral { color: var(--accent); }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tab-btn {
+    font-family: var(--font);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    color: var(--text2);
+    margin-bottom: -1px;
+    transition: all 0.15s;
+  }
+
+  .tab-btn.active {
+    color: var(--text);
+    border-bottom-color: var(--text);
+  }
+
+  .tab-btn:hover:not(.active) {
+    color: var(--text);
+    background: var(--surface2);
+    border-radius: 4px 4px 0 0;
+  }
+
+  /* Section panels */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Section headers */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-size: 0.8rem;
+    font-family: var(--mono);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text2);
+  }
+
+  .section-tag {
+    font-size: 0.65rem;
+    font-family: var(--mono);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .tag-utilities { background: var(--accent-bg); color: var(--accent); }
+  .tag-rm { background: var(--teal-bg); color: var(--teal); }
+
+  /* Data table */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: auto;
+    margin-bottom: 2rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    min-width: 700px;
+  }
+
+  thead th {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text3);
+    padding: 10px 12px 8px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+    white-space: nowrap;
+  }
+
+  thead th:first-child { text-align: left; }
+
+  thead th.group-act { background: #eef3fc; color: var(--accent); }
+  thead th.group-ob { background: #e8f5ec; color: var(--green); }
+  thead th.group-act25 { background: #f5f4f0; color: var(--text2); }
+
+  tbody tr:hover { background: var(--surface2); }
+
+  td {
+    padding: 9px 12px;
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td:first-child {
+    text-align: left;
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  tr.row-cost td { color: var(--text); }
+  tr.row-vol td { color: var(--text2); }
+  tr.row-cpk td { font-weight: 500; color: var(--accent); background: var(--accent-bg); }
+  tr.row-cpk td:first-child { color: var(--accent); }
+
+  td.zero { color: var(--text3); }
+  td.editable-cell {
+    padding: 0;
+  }
+
+  td.editable-cell input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text);
+    padding: 9px 12px;
+    outline: none;
+    -moz-appearance: textfield;
+  }
+
+  td.editable-cell input::-webkit-inner-spin-button,
+  td.editable-cell input::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+  td.editable-cell input:focus {
+    background: #fffbea;
+    box-shadow: inset 0 0 0 2px var(--amber);
+  }
+
+  tr.row-cpk td.editable-cell input {
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-bg);
+  }
+
+  /* Group separator */
+  .col-sep { border-left: 2px solid var(--border2) !important; }
+
+  /* Entry panel */
+  .entry-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .entry-panel h3 {
+    font-size: 0.8rem;
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text2);
+    margin-bottom: 1rem;
+  }
+
+  .entry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .field-group label {
+    display: block;
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 5px;
+  }
+
+  .field-group select,
+  .field-group input[type="number"] {
+    width: 100%;
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    background: var(--surface2);
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--text);
+    padding: 8px 10px;
+    outline: none;
+    transition: border-color 0.15s;
+    -moz-appearance: textfield;
+  }
+
+  .field-group input[type="number"]::-webkit-inner-spin-button,
+  .field-group input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+  .field-group select:focus,
+  .field-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-bg); }
+
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .btn {
+    font-family: var(--font);
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text);
+    transition: all 0.15s;
+  }
+
+  .btn:hover { background: var(--surface2); border-color: var(--text); }
+  .btn:active { transform: scale(0.98); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .btn-primary:hover { background: #1a3d78; border-color: #1a3d78; }
+
+  .btn-danger {
+    color: var(--red);
+    border-color: currentColor;
+  }
+  .btn-danger:hover { background: var(--red-bg); }
+
+  /* Variance section */
+  .variance-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 2rem;
+  }
+
+  .var-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+  }
+
+  .var-card h4 {
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text3);
+    margin-bottom: 1rem;
+  }
+
+  .var-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+
+  .var-row:last-child { border-bottom: none; }
+
+  .var-label { color: var(--text2); font-weight: 500; }
+
+  .var-val {
+    font-family: var(--mono);
+    font-weight: 500;
+  }
+
+  .var-val.over { color: var(--red); }
+  .var-val.under { color: var(--green); }
+
+  /* Pill indicator */
+  .pill {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-family: var(--mono);
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-left: 6px;
+  }
+
+  .pill-over { background: var(--red-bg); color: var(--red); }
+  .pill-under { background: var(--green-bg); color: var(--green); }
+
+  /* Footer note */
+  .note {
+    font-size: 0.72rem;
+    color: var(--text3);
+    font-family: var(--mono);
+    text-align: right;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 700px) {
+    .variance-grid { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Utilities Cost per Kg</h1>
+    <div class="subtitle">Engineering Cost Center Tracker · FY2026</div>
+  </div>
+  <span class="badge">APR FY26</span>
+</header>
+
+<div class="main">
+
+  <!-- Summary cards -->
+  <div class="summary-grid" id="summary-cards"></div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('utilities')">Utilities</button>
+    <button class="tab-btn" onclick="showTab('rm')">Repair & Maintenance</button>
+    <button class="tab-btn" onclick="showTab('variance')">Variance Summary</button>
+    <button class="tab-btn" onclick="showTab('entry')">Data Entry</button>
+  </div>
+
+  <!-- Utilities Tab -->
+  <div class="tab-panel active" id="tab-utilities">
+    <div class="section-header">
+      <span class="section-title">Utilities</span>
+      <span class="section-tag tag-utilities">Cost / Volume / Cost per Kg</span>
+    </div>
+    <div class="table-wrap">
+      <table id="tbl-utilities"></table>
+    </div>
+  </div>
+
+  <!-- R&M Tab -->
+  <div class="tab-panel" id="tab-rm">
+    <div class="section-header">
+      <span class="section-title">Repair & Maintenance</span>
+      <span class="section-tag tag-rm">Cost / Volume / Cost per Kg</span>
+    </div>
+    <div class="table-wrap">
+      <table id="tbl-rm"></table>
+    </div>
+  </div>
+
+  <!-- Variance Tab -->
+  <div class="tab-panel" id="tab-variance">
+    <div class="variance-grid" id="variance-grid"></div>
+  </div>
+
+  <!-- Entry Tab -->
+  <div class="tab-panel" id="tab-entry">
+    <div class="entry-panel">
+      <h3>Add / Update Entry</h3>
+      <div class="entry-grid">
+        <div class="field-group">
+          <label>Category</label>
+          <select id="e-cat">
+            <option value="utilities">Utilities</option>
+            <option value="rm">R&M</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Data Set</label>
+          <select id="e-set">
+            <option value="act26">Actual FY26</option>
+            <option value="ob26">Budget (OB26)</option>
+            <option value="act25">Actual FY25</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Month</label>
+          <select id="e-month">
+            <option value="0">October</option>
+            <option value="1">November</option>
+            <option value="2">December</option>
+            <option value="3">January</option>
+            <option value="4">February</option>
+            <option value="5">March</option>
+            <option value="6">April</option>
+            <option value="7">May</option>
+            <option value="8">June</option>
+            <option value="9">July</option>
+            <option value="10">August</option>
+            <option value="11">September</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Cost Amount</label>
+          <input type="number" id="e-cost" placeholder="e.g. 1419.40" step="0.001">
+        </div>
+        <div class="field-group">
+          <label>Volume (kg)</label>
+          <input type="number" id="e-vol" placeholder="e.g. 1235.08" step="0.001">
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="applyEntry()">Apply Entry</button>
+        <button class="btn" onclick="clearEntry()">Clear</button>
+        <button class="btn btn-danger" onclick="resetData()">Reset to Defaults</button>
+      </div>
+      <p id="entry-msg" style="margin-top:10px; font-size:0.78rem; font-family:var(--mono); color: var(--green); display:none;"></p>
+    </div>
+    <div class="note">* All Cost per Kg values are auto-calculated as Cost ÷ Volume. Blank months (zero volume) are excluded from averages.</div>
+  </div>
+
+</div>
+
+<script>
+const MONTHS = ['OCT','NOV','DEC','JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP'];
+
+let data = {
+  utilities: {
+    act26: { cost: [1419.396,1774.361,969.300,1402.336,1610.775,1823.867,1761.209,0,0,0,0,0], vol: [1235.077,1604.295,1116.661,1610.185,1401.684,1923.821,1795.409,0,0,0,0,0] },
+    ob26:  { cost: [1360.921,1360.921,1360.921,1360.921,1360.921,1098.064,1098.064,1098.064,1098.064,1098.064,1098.064,1098.064], vol: [1221.866,1414.924,1090.697,1561.423,1557.404,1735.500,1562.843,1582.313,1778.153,1786.124,1680.816,1842.025] },
+    act25: { cost: [989.328,1216.217,1100.687,1197.250,1011.898,1424.429,1006.350,1020.920,1645.035,1576.584,1604.604,1778.981], vol: [1348.547,1507.939,852.370,1119.745,1401.766,1932.838,1132.089,1545.606,1462.671,1661.469,1385.854,1906.487] }
+  },
+  rm: {
+    act26: { cost: [627.408,534.585,592.597,413.535,782.007,720.106,1510.803,0,0,0,0,0], vol: [1235.077,1604.295,1116.661,1610.185,1401.684,1923.821,1795.409,0,0,0,0,0] },
+    ob26:  { cost: [147.667,167.667,467.667,1707.667,232.667,608.667,897.667,1167.667,237.667,157.667,207.667,638.667], vol: [1221.866,1414.924,1090.697,1561.423,1557.404,1735.500,1562.843,1582.313,1778.153,1786.124,1680.816,1842.025] },
+    act25: { cost: [204.637,227.669,98.505,424.059,859.434,649.425,560.928,1463.890,1098.990,1021.489,656.978,644.171], vol: [1348.547,1507.939,852.370,1119.745,1401.766,1932.838,1132.089,1545.606,1462.671,1661.469,1385.854,1906.487] }
+  }
+};
+
+function cpk(cost, vol) { return vol > 0 ? cost / vol : null; }
+
+function sumArr(arr, count) {
+  return arr.slice(0, count !== undefined ? count : arr.length).reduce((a,b) => a+b, 0);
+}
+
+function ytdCount(arr) {
+  // count non-zero entries
+  let c = 0;
+  for (let i = 0; i < arr.length; i++) { if (arr[i] > 0) c++; }
+  return c;
+}
+
+function fmt(v, dec=3) {
+  if (v === null || v === undefined || isNaN(v)) return '—';
+  return v.toFixed(dec);
+}
+
+function fmtNum(v) {
+  if (v === null || v === undefined || isNaN(v)) return '—';
+  return v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 3 });
+}
+
+function buildTable(tableId, cat) {
+  const tbl = document.getElementById(tableId);
+  const d = data[cat];
+  const ytd = ytdCount(d.act26.cost);
+
+  // Header rows
+  const colGroups = [
+    { label: 'Actual FY26', months: MONTHS, cls: 'group-act', sep: true },
+    { label: 'Budget FY26 (OB26)', months: MONTHS, cls: 'group-ob', sep: true },
+    { label: 'Actual FY25', months: MONTHS, cls: 'group-act25', sep: false }
+  ];
+
+  let thead = '<thead>';
+  // Top group row
+  thead += '<tr><th rowspan="2" style="text-align:left; vertical-align:bottom;">Row</th>';
+  colGroups.forEach((g, gi) => {
+    thead += `<th colspan="${g.months.length}" class="${g.cls}${gi>0?' col-sep':''}">${g.label}</th>`;
+  });
+  // Add totals
+  thead += `<th class="group-act col-sep" style="white-space:nowrap;">YTD Act26</th>`;
+  thead += `<th class="group-ob col-sep" style="white-space:nowrap;">YTD OB26</th>`;
+  thead += `<th class="group-act25 col-sep" style="white-space:nowrap;">FY25 Total</th>`;
+  thead += '</tr><tr>';
+
+  colGroups.forEach((g, gi) => {
+    g.months.forEach((m, mi) => {
+      thead += `<th class="${g.cls}${mi===0 && gi>0?' col-sep':''}">${m}</th>`;
+    });
+  });
+  thead += '<th class="group-act col-sep">Sum</th><th class="group-ob col-sep">Sum</th><th class="group-act25 col-sep">Sum</th>';
+  thead += '</tr></thead>';
+
+  // Body
+  let tbody = '<tbody>';
+  const rowDefs = [
+    { key: 'cost', label: 'Cost', rowCls: 'row-cost' },
+    { key: 'vol',  label: 'Volume (kg)', rowCls: 'row-vol' },
+    { key: 'cpk',  label: 'Cost / Kg', rowCls: 'row-cpk' }
+  ];
+
+  const sets = ['act26', 'ob26', 'act25'];
+  rowDefs.forEach(rd => {
+    tbody += `<tr class="${rd.rowCls}">`;
+    tbody += `<td>${rd.label}</td>`;
+    sets.forEach((s, si) => {
+      MONTHS.forEach((m, mi) => {
+        const isFirst = mi === 0 && si > 0;
+        const sepCls = isFirst ? ' col-sep' : '';
+        let val;
+        if (rd.key === 'cpk') {
+          val = cpk(d[s].cost[mi], d[s].vol[mi]);
+        } else {
+          val = d[s][rd.key][mi];
+        }
+        const zeroCls = (!val || val === 0) ? ' zero' : '';
+        const isAct26 = s === 'act26';
+        const isVol = rd.key === 'vol';
+        // Editable for act26 cost & vol
+        if (isAct26 && rd.key !== 'cpk') {
+          const dataAttr = `data-cat="${cat}" data-set="${s}" data-key="${rd.key}" data-mi="${mi}"`;
+          tbody += `<td class="editable-cell${sepCls}"><input type="number" step="0.001" value="${val ? val.toFixed(3) : ''}" placeholder="0.000" ${dataAttr} onchange="handleCellEdit(this)" /></td>`;
+        } else if (rd.key === 'cpk') {
+          const id = `cpk-${cat}-${s}-${mi}`;
+          tbody += `<td id="${id}" class="${zeroCls}${sepCls}">${val !== null ? fmt(val) : '—'}</td>`;
+        } else {
+          tbody += `<td class="${zeroCls}${sepCls}">${val ? fmtNum(val) : '—'}</td>`;
+        }
+      });
+    });
+
+    // Totals
+    if (rd.key === 'cpk') {
+      const ytdCostAct = sumArr(d.act26.cost, ytd);
+      const ytdVolAct = sumArr(d.act26.vol, ytd);
+      const ytdCostOb = sumArr(d.ob26.cost, ytd);
+      const ytdVolOb = sumArr(d.ob26.vol, ytd);
+      const totalCostAct25 = sumArr(d.act25.cost);
+      const totalVolAct25 = sumArr(d.act25.vol);
+      const v1 = cpk(ytdCostAct, ytdVolAct);
+      const v2 = cpk(ytdCostOb, ytdVolOb);
+      const v3 = cpk(totalCostAct25, totalVolAct25);
+      tbody += `<td id="cpk-tot-${cat}-act26" class="col-sep" style="font-weight:600">${v1!==null?fmt(v1):'—'}</td>`;
+      tbody += `<td id="cpk-tot-${cat}-ob26" class="col-sep" style="font-weight:600">${v2!==null?fmt(v2):'—'}</td>`;
+      tbody += `<td id="cpk-tot-${cat}-act25" class="col-sep" style="font-weight:600">${v3!==null?fmt(v3):'—'}</td>`;
+    } else if (rd.key === 'cost') {
+      const ytd26 = sumArr(d.act26.cost, ytd);
+      const ytdOb = sumArr(d.ob26.cost, ytd);
+      const total25 = sumArr(d.act25.cost);
+      tbody += `<td id="tot-cost-${cat}-act26" class="col-sep" style="font-weight:600">${fmtNum(ytd26)}</td>`;
+      tbody += `<td id="tot-cost-${cat}-ob26" class="col-sep" style="font-weight:600">${fmtNum(ytdOb)}</td>`;
+      tbody += `<td id="tot-cost-${cat}-act25" class="col-sep" style="font-weight:600">${fmtNum(total25)}</td>`;
+    } else {
+      const ytd26 = sumArr(d.act26.vol, ytd);
+      const ytdOb = sumArr(d.ob26.vol, ytd);
+      const total25 = sumArr(d.act25.vol);
+      tbody += `<td class="col-sep" style="font-weight:600">${fmtNum(ytd26)}</td>`;
+      tbody += `<td class="col-sep" style="font-weight:600">${fmtNum(ytdOb)}</td>`;
+      tbody += `<td class="col-sep" style="font-weight:600">${fmtNum(total25)}</td>`;
+    }
+    tbody += '</tr>';
+  });
+
+  tbody += '</tbody>';
+  tbl.innerHTML = thead + tbody;
+}
+
+function handleCellEdit(input) {
+  const cat = input.dataset.cat;
+  const s = input.dataset.set;
+  const key = input.dataset.key;
+  const mi = parseInt(input.dataset.mi);
+  const val = parseFloat(input.value) || 0;
+  data[cat][s][key][mi] = val;
+  refreshCpk(cat, s, mi);
+  refreshSummary();
+  refreshVariance();
+}
+
+function refreshCpk(cat, s, mi) {
+  const d = data[cat];
+  const val = cpk(d[s].cost[mi], d[s].vol[mi]);
+  const cell = document.getElementById(`cpk-${cat}-${s}-${mi}`);
+  if (cell) cell.textContent = val !== null ? fmt(val) : '—';
+  refreshTotals(cat);
+}
+
+function refreshTotals(cat) {
+  const d = data[cat];
+  const ytd = ytdCount(d.act26.cost);
+  ['act26', 'ob26', 'act25'].forEach(s => {
+    const costSum = s === 'act25' ? sumArr(d[s].cost) : sumArr(d[s].cost, ytd);
+    const volSum = s === 'act25' ? sumArr(d[s].vol) : sumArr(d[s].vol, ytd);
+    const cpkTot = cpk(costSum, volSum);
+    const el = document.getElementById(`cpk-tot-${cat}-${s}`);
+    if (el) el.textContent = cpkTot !== null ? fmt(cpkTot) : '—';
+    const costEl = document.getElementById(`tot-cost-${cat}-${s}`);
+    if (costEl) costEl.textContent = fmtNum(costSum);
+  });
+}
+
+function buildSummary() {
+  const cards = document.getElementById('summary-cards');
+  cards.innerHTML = '';
+  const ytdU = ytdCount(data.utilities.act26.cost);
+  const ytdR = ytdCount(data.rm.act26.cost);
+
+  const utAct = sumArr(data.utilities.act26.cost, ytdU);
+  const utOb = sumArr(data.utilities.ob26.cost, ytdU);
+  const utVolAct = sumArr(data.utilities.act26.vol, ytdU);
+  const utVolOb = sumArr(data.utilities.ob26.vol, ytdU);
+  const rmAct = sumArr(data.rm.act26.cost, ytdR);
+  const rmOb = sumArr(data.rm.ob26.cost, ytdR);
+  const rmVolAct = sumArr(data.rm.act26.vol, ytdR);
+
+  const engCpkAct = cpk(utAct + rmAct, utVolAct);
+  const engCpkOb = cpk(utOb + sumArr(data.rm.ob26.cost, ytdR), utVolOb);
+  const engVar = engCpkAct && engCpkOb ? ((engCpkAct - engCpkOb) / engCpkOb) * 100 : null;
+
+  const defs = [
+    { label: 'YTD Utilities Cost', value: fmtNum(utAct), sub: 'Actual FY26 (Oct–Apr)', cls: 'neutral' },
+    { label: 'YTD R&M Cost', value: fmtNum(rmAct), sub: 'Actual FY26 (Oct–Apr)', cls: 'neutral' },
+    { label: 'Engg CC Cost/Kg (Act)', value: engCpkAct ? engCpkAct.toFixed(4) : '—', sub: 'Combined YTD Actual', cls: 'neutral' },
+    { label: 'Engg CC Cost/Kg (OB)', value: engCpkOb ? engCpkOb.toFixed(4) : '—', sub: 'Budget YTD', cls: 'neutral' },
+    { label: 'Variance vs Budget', value: engVar !== null ? (engVar > 0 ? '+' : '') + engVar.toFixed(2) + '%' : '—', sub: engVar > 0 ? 'Over budget' : 'Under budget', cls: engVar > 0 ? 'neg' : 'pos' },
+    { label: 'YTD Volume (Kg)', value: fmtNum(utVolAct), sub: 'Actual FY26', cls: 'neutral' }
+  ];
+
+  defs.forEach(d => {
+    cards.innerHTML += `
+      <div class="summary-card">
+        <div class="label">${d.label}</div>
+        <div class="value ${d.cls}">${d.value}</div>
+        <div class="sub">${d.sub}</div>
+      </div>`;
+  });
+}
+
+function buildVariance() {
+  const vg = document.getElementById('variance-grid');
+  const cats = [
+    { key: 'utilities', label: 'Utilities' },
+    { key: 'rm', label: 'Repair & Maintenance' }
+  ];
+  vg.innerHTML = '';
+
+  cats.forEach(c => {
+    const d = data[c.key];
+    const ytd = ytdCount(d.act26.cost);
+    const actCost = sumArr(d.act26.cost, ytd);
+    const obCost = sumArr(d.ob26.cost, ytd);
+    const actVol = sumArr(d.act26.vol, ytd);
+    const obVol = sumArr(d.ob26.vol, ytd);
+    const actCpk = cpk(actCost, actVol);
+    const obCpk = cpk(obCost, obVol);
+    const absVar = actCost - obCost;
+    const pctVar = obCost > 0 ? (absVar / obCost) * 100 : null;
+    const cpkVar = actCpk && obCpk ? actCpk - obCpk : null;
+    const cpkPct = actCpk && obCpk ? ((actCpk - obCpk) / obCpk) * 100 : null;
+
+    const isOver = absVar > 0;
+    vg.innerHTML += `
+      <div class="var-card">
+        <h4>${c.label} — OB vs Actual (YTD)</h4>
+        <div class="var-row">
+          <span class="var-label">Actual Cost</span>
+          <span class="var-val">${fmtNum(actCost)}</span>
+        </div>
+        <div class="var-row">
+          <span class="var-label">Budget Cost</span>
+          <span class="var-val">${fmtNum(obCost)}</span>
+        </div>
+        <div class="var-row">
+          <span class="var-label">Absolute Variance</span>
+          <span class="var-val ${isOver ? 'over' : 'under'}">${isOver ? '+' : ''}${fmtNum(absVar)} <span class="pill ${isOver ? 'pill-over' : 'pill-under'}">${isOver ? 'Over' : 'Under'}</span></span>
+        </div>
+        <div class="var-row">
+          <span class="var-label">% Variance</span>
+          <span class="var-val ${isOver ? 'over' : 'under'}">${pctVar !== null ? (isOver ? '+' : '') + pctVar.toFixed(2) + '%' : '—'}</span>
+        </div>
+        <div class="var-row">
+          <span class="var-label">Actual Cost/Kg</span>
+          <span class="var-val">${actCpk !== null ? actCpk.toFixed(4) : '—'}</span>
+        </div>
+        <div class="var-row">
+          <span class="var-label">Budget Cost/Kg</span>
+          <span class="var-val">${obCpk !== null ? obCpk.toFixed(4) : '—'}</span>
+        </div>
+        <div class="var-row">
+          <span class="var-label">Cost/Kg Variance</span>
+          <span class="var-val ${cpkVar > 0 ? 'over' : 'under'}">${cpkVar !== null ? (cpkVar > 0 ? '+' : '') + cpkVar.toFixed(4) : '—'} <span class="pill ${cpkPct > 0 ? 'pill-over' : 'pill-under'}">${cpkPct !== null ? (cpkPct > 0 ? '+' : '') + cpkPct.toFixed(1) + '%' : ''}</span></span>
+        </div>
+      </div>`;
+  });
+}
+
+function refreshSummary() { buildSummary(); }
+function refreshVariance() { buildVariance(); }
+
+function showTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function applyEntry() {
+  const cat = document.getElementById('e-cat').value;
+  const set = document.getElementById('e-set').value;
+  const mi = parseInt(document.getElementById('e-month').value);
+  const cost = parseFloat(document.getElementById('e-cost').value);
+  const vol = parseFloat(document.getElementById('e-vol').value);
+
+  if (isNaN(cost) && isNaN(vol)) {
+    showMsg('Please enter at least a cost or volume value.', true);
+    return;
+  }
+
+  if (!isNaN(cost)) data[cat][set].cost[mi] = cost;
+  if (!isNaN(vol)) data[cat][set].vol[mi] = vol;
+
+  buildTable('tbl-utilities', 'utilities');
+  buildTable('tbl-rm', 'rm');
+  buildSummary();
+  buildVariance();
+
+  const monthName = MONTHS[mi];
+  const setLabel = { act26: 'Actual FY26', ob26: 'Budget FY26', act25: 'Actual FY25' }[set];
+  showMsg(`✓ Updated ${cat === 'utilities' ? 'Utilities' : 'R&M'} — ${setLabel} — ${monthName}: Cost=${!isNaN(cost) ? cost.toFixed(3) : 'unchanged'}, Volume=${!isNaN(vol) ? vol.toFixed(3) : 'unchanged'}`, false);
+}
+
+function clearEntry() {
+  document.getElementById('e-cost').value = '';
+  document.getElementById('e-vol').value = '';
+  document.getElementById('entry-msg').style.display = 'none';
+}
+
+function showMsg(msg, isErr) {
+  const el = document.getElementById('entry-msg');
+  el.textContent = msg;
+  el.style.color = isErr ? 'var(--red)' : 'var(--green)';
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+const DEFAULT_DATA = JSON.parse(JSON.stringify(data));
+
+function resetData() {
+  if (!confirm('Reset all data to original defaults?')) return;
+  data = JSON.parse(JSON.stringify(DEFAULT_DATA));
+  buildTable('tbl-utilities', 'utilities');
+  buildTable('tbl-rm', 'rm');
+  buildSummary();
+  buildVariance();
+  showMsg('Data reset to original defaults.', false);
+}
+
+// Init
+buildTable('tbl-utilities', 'utilities');
+buildTable('tbl-rm', 'rm');
+buildSummary();
+buildVariance();
+</script>
+</body>
+</html>

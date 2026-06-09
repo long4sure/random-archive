@@ -1,0 +1,51 @@
+/* dashboard.css — page-specific styles only; theme.css handles the base */
+
+/* ── Tab bar override: full-width underline style ── */
+.tab-bar {
+    display: flex; gap: 0;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+    width: 100%;
+    border-bottom: 2px solid var(--border);
+    position: static;
+}
+.tab-btn {
+    padding: 11px 20px;
+    border-radius: 0;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    font-size: 13px;
+}
+.tab-btn.active {
+    color: var(--pioneer-blue);
+    border-bottom-color: var(--pioneer-blue);
+    background: var(--pioneer-blue-light);
+    box-shadow: none;
+}
+
+/* ── Chart grid ── */
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.chart-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+.chart-card.full { grid-column: 1 / -1; }
+.chart-card-head { padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg); font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .5px; display: flex; align-items: center; justify-content: space-between; }
+.chart-card canvas { display: block; padding: 16px; max-height: 260px; }
+
+/* ── LIPAS VOLPAS toggle ── */
+.lv-toggle { display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+.lv-toggle-btn { padding: 8px 14px; border: none; background: var(--white); font-family: 'Inter',sans-serif; font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all .15s; border-right: 1px solid var(--border); }
+.lv-toggle-btn:last-child { border-right: none; }
+.lv-toggle-btn.active { background: var(--pioneer-blue); color: #fff; }
+.lv-toggle-btn:hover:not(.active) { background: var(--bg); color: var(--text-primary); }
+
+/* ── LV percentage ── */
+.lv-pct { font-size: 13px; font-weight: 700; margin-top: 4px; }
+.pct-green { color: var(--green); }
+.pct-red   { color: var(--pioneer-red); }
+
+/* ── Sidebar nav icons (using FA via content) ── */
+.nav-item .nav-icon { font-style: normal; }
+
+@media (max-width: 900px) {
+    .chart-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utilities Cost per Kg — Engineering CC Tracker FY26</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Utilities Cost per Kg</h1>
+    <div class="subtitle">Engineering Cost Center Tracker · FY2026</div>
+  </div>
+  <span class="badge">APR FY26</span>
+</header>
+
+<div class="main">
+
+  <!-- ── Summary Cards ── -->
+  <div class="summary-grid" id="summary-cards"></div>
+
+  <!-- ── Tabs ── -->
+  <div class="tabs">
+    <button class="tab-btn active"  onclick="showTab('utilities', this)">Utilities</button>
+    <button class="tab-btn"         onclick="showTab('rm', this)">Repair &amp; Maintenance</button>
+    <button class="tab-btn"         onclick="showTab('variance', this)">Variance Summary</button>
+    <button class="tab-btn"         onclick="showTab('entry', this)">Data Entry</button>
+  </div>
+
+  <!-- ── Utilities Tab ── -->
+  <div class="tab-panel active" id="tab-utilities">
+    <div class="section-header">
+      <span class="section-title">Utilities</span>
+      <span class="section-tag tag-utilities">Cost · Volume · Cost per Kg</span>
+    </div>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot dot-act26"></span>Actual FY26</span>
+      <span class="legend-item"><span class="legend-dot dot-ob26"></span>Budget OB26</span>
+      <span class="legend-item"><span class="legend-dot dot-act25"></span>Actual FY25</span>
+      <span class="legend-item"><span class="legend-dot dot-edit"></span>Editable cell (click to edit)</span>
+    </div>
+    <div class="table-wrap">
+      <table id="tbl-utilities"></table>
+    </div>
+  </div>
+
+  <!-- ── R&M Tab ── -->
+  <div class="tab-panel" id="tab-rm">
+    <div class="section-header">
+      <span class="section-title">Repair &amp; Maintenance</span>
+      <span class="section-tag tag-rm">Cost · Volume · Cost per Kg</span>
+    </div>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot dot-act26"></span>Actual FY26</span>
+      <span class="legend-item"><span class="legend-dot dot-ob26"></span>Budget OB26</span>
+      <span class="legend-item"><span class="legend-dot dot-act25"></span>Actual FY25</span>
+      <span class="legend-item"><span class="legend-dot dot-edit"></span>Editable cell (click to edit)</span>
+    </div>
+    <div class="table-wrap">
+      <table id="tbl-rm"></table>
+    </div>
+  </div>
+
+  <!-- ── Variance Tab ── -->
+  <div class="tab-panel" id="tab-variance">
+    <div class="variance-grid" id="variance-grid"></div>
+  </div>
+
+  <!-- ── Data Entry Tab ── -->
+  <div class="tab-panel" id="tab-entry">
+    <div class="entry-panel">
+      <h3>Add / Update Entry</h3>
+      <div class="entry-grid">
+
+        <div class="field-group">
+          <label>Category</label>
+          <select id="e-cat">
+            <option value="utilities">Utilities</option>
+            <option value="rm">Repair &amp; Maintenance</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label>Data Set</label>
+          <select id="e-set">
+            <option value="act26">Actual FY26</option>
+            <option value="ob26">Budget FY26 (OB26)</option>
+            <option value="act25">Actual FY25</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label>Month</label>
+          <select id="e-month">
+            <option value="0">October</option>
+            <option value="1">November</option>
+            <option value="2">December</option>
+            <option value="3">January</option>
+            <option value="4">February</option>
+            <option value="5">March</option>
+            <option value="6">April</option>
+            <option value="7">May</option>
+            <option value="8">June</option>
+            <option value="9">July</option>
+            <option value="10">August</option>
+            <option value="11">September</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label>Cost Amount</label>
+          <input type="number" id="e-cost" placeholder="e.g. 1419.396" step="0.001">
+        </div>
+
+        <div class="field-group">
+          <label>Volume (kg)</label>
+          <input type="number" id="e-vol" placeholder="e.g. 1235.077" step="0.001">
+        </div>
+
+      </div><!-- .entry-grid -->
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="applyEntry()">Apply Entry</button>
+        <button class="btn"             onclick="clearEntry()">Clear Fields</button>
+        <button class="btn btn-danger"  onclick="resetData()">Reset to Defaults</button>
+      </div>
+
+      <p id="entry-msg"></p>
+    </div><!-- .entry-panel -->
+
+    <p class="note">
+      * Cost per Kg = Cost ÷ Volume (auto-calculated). All three datasets are editable directly in the table cells or via this form. Blank (zero) months are excluded from YTD averages.
+    </p>
+  </div><!-- #tab-entry -->
+
+</div><!-- .main -->
+
+<script src="app.js"></script>
+</body>
+</html>

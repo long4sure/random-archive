@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - Static</title>
+    <link rel="icon" href="../images/p_icon.png" type="image/png">
+    <link rel="stylesheet" href="auth-register.css">
+    <script src="auth-register.js" defer></script>
+</head>
+<body>
+    <div class="register-card">
+        <h2 class="register-heading">
+            <img src="../images/login3.png" alt="Login icon" class="register-icon">
+            Create Account
+        </h2>
+
+        <div class="error hidden" id="registerError">All fields are required.</div>
+        <div class="success hidden" id="registerSuccess">Account created in static mode. Redirecting to sign in...</div>
+
+        <form id="registerForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Choose a username" required>
+
+            <label for="password">Password</label>
+            <div class="pw-field">
+                <input type="password" id="password" placeholder="Min. 6 characters" required>
+                <button type="button" class="pw-eye" data-target="password">&#x1F441;</button>
+            </div>
+
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="pw-field">
+                <input type="password" id="confirmPassword" placeholder="Re-enter password" required>
+                <button type="button" class="pw-eye" data-target="confirmPassword">&#x1F441;</button>
+            </div>
+
+            <label>Role</label>
+            <div class="role-group">
+                <label class="role-option selected">
+                    <input type="radio" name="role" value="viewer" checked>
+                    <span class="role-label">Viewer</span>
+                    <span class="role-desc">Read-only reports</span>
+                </label>
+                <label class="role-option">
+                    <input type="radio" name="role" value="data_entry">
+                    <span class="role-label">Data Entry</span>
+                    <span class="role-desc">Can submit records</span>
+                </label>
+            </div>
+
+            <button type="submit" class="submit-btn">Create Account</button>
+        </form>
+
+        <p class="note">Already have an account? <a href="auth-login.html">Sign in</a></p>
+    </div>
+</body>
+</html>

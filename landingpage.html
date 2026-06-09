@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pioneer Adhesives Inc. - Portal Selector</title>
+    <style>
+        /* --- RESET & BASIC --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+            background-color: #000;
+        }
+
+        /* --- BACKGROUND IMAGE SETUP --- */
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('building.jpg'); /* MAKE SURE IMAGE IS NAMED building.jpg */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1;
+            filter: brightness(0.9); /* Slight dim for text readability */
+        }
+
+        /* --- OVERLAY STRUCTURE --- */
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+        }
+
+        /* --- LEFT COLUMN: MISSION/VISION (BLOCKING STAIRS) --- */
+        .info-column {
+            width: 55%; /* Adjusted width to cover left side where stairs are */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px;
+            /* Semi-transparent background to hide the stairs */
+            background: linear-gradient(90deg, rgba(139, 0, 0, 0.95) 0%, rgba(180, 0, 0, 0.85) 100%);
+            backdrop-filter: blur(5px); /* glass effect */
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            color: white;
+            overflow-y: auto;
+            border-right: 4px solid #fff;
+        }
+
+        .info-column h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #ffcc00;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .info-column h2 {
+            font-size: 1.8rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #ffcc00;
+        }
+
+        .info-column p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .info-column ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-column ul li {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .info-column ul li::before {
+            content: "•";
+            color: #ffcc00;
+            font-size: 1.5rem;
+            position: absolute;
+            left: 0;
+            top: -5px;
+        }
+
+        /* --- RIGHT COLUMN: BUTTONS --- */
+        .action-column {
+            width: 45%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            gap: 40px;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.15); /* Glassmorphism */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 30px 50px;
+            text-align: center;
+            width: 80%;
+            max-width: 500px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.5);
+        }
+
+        .dashboard-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .dashboard-card p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .card-lipas {
+            border-bottom: 4px solid #ffcc00;
+        }
+
+        .card-kpi {
+            border-bottom: 4px solid #00d2ff;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                padding: 0;
+            }
+            .info-column {
+                width: 100%;
+                height: auto;
+                padding: 30px;
+                border-right: none;
+                border-bottom: 4px solid #fff;
+                background: rgba(139, 0, 0, 0.95);
+                flex: 1;
+            }
+            .action-column {
+                width: 100%;
+                height: auto;
+                padding: 30px;
+                flex: 1;
+                justify-content: center;
+            }
+            .dashboard-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Image -->
+    <div class="bg-image"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+
+        <!-- Left Side: Mission/Vision (Covers the staircase area) -->
+        <div class="info-column">
+            <h1>Our Vision</h1>
+            <p>We will be the <strong>elite adhesives and construction solutions company</strong> that consistently achieves profitable growth by doing it right to masterfully serve its customers whilst caring for its community and the environment.</p>
+
+            <h1>Our Mission</h1>
+            <p>As a dynamic <strong>multinational adhesives and construction solutions company</strong>, we commit to doing things right by:</p>
+            <ul>
+                <li>Exceeding customer expectations through process excellence and innovation; living our corporate values of teamwork, integrity, malasakit (compassion), and excellence.</li>
+                <li>Continually promoting sustainable development, and achieving quality and profitable growth objectives.</li>
+            </ul>
+            
+            <div style="margin-top: 20px; opacity: 0.7; font-size: 0.9rem;">
+                Pioneer Adhesives, Inc. | Building Stronger Connections
+            </div>
+        </div>
+
+        <!-- Right Side: Dashboard Links -->
+        <div class="action-column">
+            
+            <!-- Lipas Volpas Link -->
+            <a href="http://scmkpi.pioneerph.com/lipas_volpas_line_dashboard/login.php" target="_blank" class="dashboard-card card-lipas">
+                <h3>Lipas Volpas</h3>
+                <p>Line Dashboard & Production Monitoring</p>
+            </a>
+
+            <!-- KPI Link -->
+            <a href="http://scmkpi.pioneerph.com/pioneer-kpi/public/" target="_blank" class="dashboard-card card-kpi">
+                <h3>KPI Dashboard</h3>
+                <p>Key Performance Indicators & Analytics</p>
+            </a>
+
+        </div>
+    </div>
+
+    <script>
+        // Optional JS: Log interaction or prepare animations
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Pioneer Dashboard Selector Loaded.");
+            
+            // You can add tracking or animations here if needed later
+            const cards = document.querySelectorAll('.dashboard-card');
+            cards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Just letting the href handle the work, but you could add a loader here
+                    console.log("Navigating to: " + this.href);
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

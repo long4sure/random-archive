@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — Production Monitoring System</title>
+    <link rel="icon" href="../images/p_icon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="dashboard.js" defer></script>
+</head>
+<body>
+<div class="app-shell">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="sidebar-brand-logo"><img src="../images/pioneerlogo.png" alt="Pioneer"></div>
+            <div>
+                <div class="sidebar-brand-title">Pioneer</div>
+                <div class="sidebar-brand-sub">Production Monitor</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a class="nav-item active" href="dashboard.html">
+                <span class="nav-icon">&#9783;</span>
+                <span class="nav-label">Dashboard</span>
+            </a>
+            <a class="nav-item" href="production-records.html">
+                <span class="nav-icon">&#9783;</span>
+                <span class="nav-label">Production Records</span>
+            </a>
+            <a class="nav-item" href="report-management.html">
+                <span class="nav-icon">&#9783;</span>
+                <span class="nav-label">Line Report &amp; LIPAS VOLPAS</span>
+            </a>
+            <div class="nav-section-label">Admin Access</div>
+            <a class="nav-item" href="manage-users.html">
+                <span class="nav-icon">&#9783;</span>
+                <span class="nav-label">User Management <span class="nav-badge">2</span></span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">© 2026 Pioneer Corp.</div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- ── Main ── -->
+    <div class="main" id="mainArea">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-inner">
+                <div class="topbar-left">
+                    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle sidebar">&#9776;</button>
+                </div>
+                <div style="flex:1; display:flex; flex-direction:column; gap:1px;">
+                    <div class="topbar-title" id="topbarTitle">Weekly Report</div>
+                    <div class="topbar-breadcrumb">Dashboard &rsaquo; Reports</div>
+                </div>
+                <div class="topbar-right">
+                    <span class="topbar-period" id="topbarPeriod">May 2026</span>
+                    <span class="topbar-dot"></span>
+                    <span class="role-badge system_admin">System Admin</span>
+                    <button class="logout-btn" onclick="openLogout()">&#x2192; Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Report nav tabs -->
+        <div style="padding:0 28px; background:var(--white); border-bottom:1px solid var(--border);">
+            <div class="tab-bar" style="position:static; margin:0; padding:8px 0 0; background:transparent; border-radius:0; width:100%;">
+                <button class="tab-btn" id="tab-weekly"      onclick="switchReport('weekly')">Weekly</button>
+                <button class="tab-btn" id="tab-monthly"     onclick="switchReport('monthly')">Monthly</button>
+                <button class="tab-btn" id="tab-yearly"      onclick="switchReport('yearly')">Yearly</button>
+                <button class="tab-btn" id="tab-lipas_volpas" onclick="switchReport('lipas_volpas')">LIPAS VOLPAS</button>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <!-- ===== WEEKLY ===== -->
+            <div id="weekly-section" class="report-section">
+                <div class="filter-toolbar">
+                    <div class="filter-group">
+                        <span class="filter-label">Team</span>
+                        <select class="filter-select" id="w-team" onchange="applyWeeklyFilters()">
+                            <option value="">All Teams</option>
+                            <option value="A">Team A</option>
+                            <option value="B">Team B</option>
+                            <option value="C">Team C</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Year</span>
+                        <select class="filter-select" id="w-year" onchange="applyWeeklyFilters()">
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026" selected>2026</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Month</span>
+                        <select class="filter-select" id="w-month" onchange="applyWeeklyFilters()">
+                            <option value="JANUARY">January</option><option value="FEBRUARY">February</option>
+                            <option value="MARCH">March</option><option value="APRIL">April</option>
+                            <option value="MAY" selected>May</option><option value="JUNE">June</option>
+                            <option value="JULY">July</option><option value="AUGUST">August</option>
+                            <option value="SEPTEMBER">September</option><option value="OCTOBER">October</option>
+                            <option value="NOVEMBER">November</option><option value="DECEMBER">December</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Prod. Days</span>
+                        <select class="filter-select" id="w-ops" onchange="applyWeeklyFilters()">
+                            <option value="all">All</option>
+                            <option value="week1">May 5 – May 11</option>
+                            <option value="week2">May 12 – May 18</option>
+                            <option value="week3" selected>May 19 – May 25</option>
+                            <option value="week4">May 26 – Jun 1</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Shift</span>
+                        <select class="filter-select" id="w-shift" onchange="applyWeeklyFilters()">
+                            <option value="all">All Shifts</option>
+                            <option value="1">1st Shift</option>
+                            <option value="2">2nd Shift</option>
+                            <option value="3">3rd Shift</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="kpi-grid">
+                    <div class="card card-info"><div class="card-title">Total SKU Count</div><div class="card-value mono" id="w-kpi-sku">42</div></div>
+                    <div class="card card-ok">  <div class="card-title">LIPAS Count</div>    <div class="card-value mono" id="w-kpi-lipas">38</div></div>
+                    <div class="card card-info"><div class="card-title">VOLPAS Actual</div>  <div class="card-value mono" id="w-kpi-actual">123,500</div></div>
+                    <div class="card card-warn"><div class="card-title">VOLPAS Planned</div> <div class="card-value mono" id="w-kpi-planned">130,000</div></div>
+                </div>
+
+                <div class="chart-grid">
+                    <div class="chart-card">
+                        <div class="chart-card-head"><span>VOLPAS Actual vs Planned</span></div>
+                        <canvas id="cumulativeChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-card-head"><span id="dailyShiftTitle">Daily Shift Output – May 19–25</span></div>
+                        <canvas id="dailyShiftChart_0"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== MONTHLY ===== -->
+            <div id="monthly-section" class="report-section hidden">
+                <div class="filter-toolbar">
+                    <div class="filter-group"><span class="filter-label">Team</span>
+                        <select class="filter-select" id="m-team" onchange="applyMonthlyFilters()">
+                            <option value="">All Teams</option><option value="A">Team A</option><option value="B">Team B</option><option value="C">Team C</option>
+                        </select>
+                    </div>
+                    <div class="filter-group"><span class="filter-label">Year</span>
+                        <select class="filter-select" id="m-year" onchange="applyMonthlyFilters()">
+                            <option value="2024">2024</option><option value="2025">2025</option><option value="2026" selected>2026</option>
+                        </select>
+                    </div>
+                    <div class="filter-group"><span class="filter-label">Month</span>
+                        <select class="filter-select" id="m-month" onchange="applyMonthlyFilters()">
+                            <option value="">All Months</option>
+                            <option value="JANUARY">January</option><option value="FEBRUARY">February</option>
+                            <option value="MARCH">March</option><option value="APRIL">April</option>
+                            <option value="MAY" selected>May</option><option value="JUNE">June</option>
+                            <option value="JULY">July</option><option value="AUGUST">August</option>
+                            <option value="SEPTEMBER">September</option><option value="OCTOBER">October</option>
+                            <option value="NOVEMBER">November</option><option value="DECEMBER">December</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="kpi-grid">
+                    <div class="card card-info"><div class="card-title">SKU Count (Month)</div>   <div class="card-value mono" id="m-kpi-sku">151</div></div>
+                    <div class="card card-ok">  <div class="card-title">LIPAS Count (Month)</div> <div class="card-value mono" id="m-kpi-lipas">140</div></div>
+                    <div class="card card-info"><div class="card-title">VOLPAS Actual</div>        <div class="card-value mono" id="m-kpi-actual">487,900</div></div>
+                    <div class="card card-warn"><div class="card-title">VOLPAS Planned</div>       <div class="card-value mono" id="m-kpi-planned">500,000</div></div>
+                </div>
+                <div class="chart-grid">
+                    <div class="chart-card"><div class="chart-card-head"><span>Cumulative Output by Week</span></div><canvas id="monthlyShiftChart"></canvas></div>
+                    <div class="chart-card"><div class="chart-card-head"><span>VOLPAS Actual vs Planned</span></div><canvas id="monthlyCumChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- ===== YEARLY ===== -->
+            <div id="yearly-section" class="report-section hidden">
+                <div class="filter-toolbar">
+                    <div class="filter-group"><span class="filter-label">Team</span>
+                        <select class="filter-select" id="y-team" onchange="applyYearlyFilters()">
+                            <option value="">All Teams</option><option value="A">Team A</option><option value="B">Team B</option><option value="C">Team C</option>
+                        </select>
+                    </div>
+                    <div class="filter-group"><span class="filter-label">Year</span>
+                        <select class="filter-select" id="y-year" onchange="applyYearlyFilters()">
+                            <option value="2024">2024</option><option value="2025">2025</option><option value="2026" selected>2026</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="kpi-grid">
+                    <div class="card card-info"><div class="card-title">SKU Count (Year)</div>   <div class="card-value mono" id="y-kpi-sku">1,640</div></div>
+                    <div class="card card-ok">  <div class="card-title">LIPAS Count (Year)</div> <div class="card-value mono" id="y-kpi-lipas">1,582</div></div>
+                    <div class="card card-info"><div class="card-title">VOLPAS Actual</div>       <div class="card-value mono" id="y-kpi-actual">5,654,200</div></div>
+                    <div class="card card-warn"><div class="card-title">VOLPAS Planned</div>      <div class="card-value mono" id="y-kpi-planned">5,900,000</div></div>
+                </div>
+                <div class="chart-grid">
+                    <div class="chart-card"><div class="chart-card-head"><span>Cumulative Output by Month – 2026</span></div><canvas id="yearlyShiftChart"></canvas></div>
+                    <div class="chart-card"><div class="chart-card-head"><span>VOLPAS Actual vs Planned – 2026</span></div><canvas id="yearlyCumChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- ===== LIPAS VOLPAS ===== -->
+            <div id="lipas_volpas-section" class="report-section hidden">
+                <div class="filter-toolbar">
+                    <div class="filter-group"><span class="filter-label">Period</span>
+                        <select class="filter-select" id="lv-period" onchange="applyLvFilters()">
+                            <option value="monthly" selected>Monthly</option>
+                            <option value="weekly">Weekly</option>
+                        </select>
+                    </div>
+                    <div class="filter-group"><span class="filter-label">Year</span>
+                        <select class="filter-select" id="lv-year" onchange="applyLvFilters()">
+                            <option value="2024">2024</option><option value="2025">2025</option><option value="2026" selected>2026</option>
+                        </select>
+                    </div>
+                    <div class="filter-group" id="lv-month-group"><span class="filter-label">Month</span>
+                        <select class="filter-select" id="lv-month" onchange="applyLvFilters()">
+                            <option value="">All Months</option>
+                            <option value="JANUARY">January</option><option value="FEBRUARY">February</option>
+                            <option value="MARCH">March</option><option value="APRIL">April</option>
+                            <option value="MAY" selected>May</option><option value="JUNE">June</option>
+                            <option value="JULY">July</option><option value="AUGUST">August</option>
+                            <option value="SEPTEMBER">September</option><option value="OCTOBER">October</option>
+                            <option value="NOVEMBER">November</option><option value="DECEMBER">December</option>
+                        </select>
+                    </div>
+                    <div class="filter-group hidden" id="lv-week-group"><span class="filter-label">Week</span>
+                        <select class="filter-select" id="lv-week" onchange="applyLvFilters()">
+                            <option value="all">All Weeks</option>
+                            <option value="1">Week 1</option><option value="2">Week 2</option>
+                            <option value="3">Week 3</option><option value="4">Week 4</option><option value="5">Week 5</option>
+                        </select>
+                    </div>
+                    <div class="filter-group"><span class="filter-label">Team</span>
+                        <select class="filter-select" id="lv-team" onchange="applyLvFilters()">
+                            <option value="">All Teams</option><option value="A">Team A</option><option value="B">Team B</option><option value="C">Team C</option>
+                        </select>
+                    </div>
+                    <div class="filter-group"><span class="filter-label">Dataset</span>
+                        <select class="filter-select" id="lv-dataset" onchange="applyLvFilters()">
+                            <option value="both">LIPAS + VOLPAS</option>
+                            <option value="lipas">LIPAS Only</option>
+                            <option value="volpas">VOLPAS Only</option>
+                        </select>
+                    </div>
+                    <div class="filter-group"><span class="filter-label">Chart Type</span>
+                        <div class="lv-toggle">
+                            <button class="lv-toggle-btn active" id="btn-bar" onclick="setLvChartType('bar')">Bar</button>
+                            <button class="lv-toggle-btn" id="btn-pie" onclick="setLvChartType('pie')">Pie</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-grid" id="lv-kpi-grid">
+                    <div class="card card-info" id="lv-card-lplan">  <div class="card-title">LIPAS Plan</div>    <div class="card-value mono" id="lv-kpi-lplan">245,000</div></div>
+                    <div class="card card-ok"   id="lv-card-lactual"><div class="card-title">LIPAS Actual</div>  <div class="card-value mono" id="lv-kpi-lactual">238,200</div><div class="lv-pct pct-green" id="lv-kpi-lpct">97.22%</div></div>
+                    <div class="card card-warn" id="lv-card-vplan">  <div class="card-title">VOLPAS Plan</div>   <div class="card-value mono" id="lv-kpi-vplan">252,000</div></div>
+                    <div class="card card-ok"   id="lv-card-vactual"><div class="card-title">VOLPAS Actual</div> <div class="card-value mono" id="lv-kpi-vactual">249,000</div><div class="lv-pct pct-green" id="lv-kpi-vpct">98.81%</div></div>
+                </div>
+
+                <div id="lv-lipas-wrap">
+                    <div class="section-title">LIPAS <span class="section-chip">Plan vs Actual</span></div>
+                    <div class="chart-card full"><canvas id="lvLipasChart"></canvas></div>
+                </div>
+                <div id="lv-volpas-wrap">
+                    <div class="section-title">VOLPAS <span class="section-chip">Plan vs Actual</span></div>
+                    <div class="chart-card full"><canvas id="lvVolpasChart"></canvas></div>
+                </div>
+            </div>
+
+        </div><!-- .content -->
+    </div><!-- .main -->
+</div><!-- .app-shell -->
+
+<!-- Logout confirm -->
+<div class="cdlg-overlay" id="logoutDlg">
+    <div class="cdlg-box">
+        <div class="cdlg-icon"><span>&#x2192;</span></div>
+        <div class="cdlg-title">Sign Out?</div>
+        <div class="cdlg-msg">You'll be returned to the login screen.</div>
+        <div class="cdlg-actions">
+            <button class="btn btn-secondary" onclick="closeLogout()">Cancel</button>
+            <button class="btn btn-danger" onclick="window.location.href='auth-login.html'">Sign Out</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

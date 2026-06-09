@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pioneer Adhesives Inc. - Portal Selector</title>
+    <style>
+        /* --- RESET & BASIC --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+            background-color: #000;
+        }
+
+        /* --- BACKGROUND IMAGE SETUP --- */
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('building.jpg'); /* MAKE SURE IMAGE IS NAMED building.jpg */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1;
+            filter: brightness(0.95); /* Adjust brightness of background */
+        }
+
+        /* --- OVERLAY STRUCTURE --- */
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+        }
+
+        /* --- LEFT COLUMN: COMPANY INFO, MISSION, VISION (WHITE BACKGROUND) --- */
+        .info-column {
+            width: 60%; /* Adjusted width to cover left side where stairs are */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px;
+            /* WHITE BACKGROUND TO BLOCK THE STAIRS */
+            background-color: rgba(255, 255, 255, 0.95); 
+            box-shadow: 5px 0 20px rgba(0,0,0,0.3);
+            color: #333;
+            overflow-y: auto;
+            border-right: 4px solid #cc0000; /* Pioneer Red accent */
+        }
+
+        /* Company Info Style */
+        .company-info {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .company-info h2 {
+            color: #cc0000; /* Pioneer Red */
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .company-info p {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        /* Mission / Vision Styles */
+        .mv-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mv-item {
+            background: transparent;
+        }
+
+        .mv-item h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            color: #cc0000; /* Pioneer Red */
+            border-bottom: 2px solid #cc0000;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .mv-item p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .mv-item ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .mv-item ul li {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            color: #333;
+        }
+
+        .mv-item ul li::before {
+            content: "•";
+            color: #cc0000;
+            font-weight: bold;
+            font-size: 1.2rem;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+
+        /* --- RIGHT COLUMN: BUTTONS --- */
+        .action-column {
+            width: 40%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            gap: 40px;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.85); /* Glassmorphism */
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 30px 40px;
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: #ffffff;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+        }
+
+        .dashboard-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .dashboard-card p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            color: #555;
+        }
+
+        .card-lipas {
+            border-bottom: 5px solid #cc0000;
+        }
+
+        .card-kpi {
+            border-bottom: 5px solid #0055aa;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 950px) {
+            .container {
+                flex-direction: column;
+                padding: 0;
+                overflow-y: auto;
+                height: auto;
+                min-height: 100vh;
+            }
+            .info-column {
+                width: 100%;
+                height: auto;
+                padding: 30px;
+                border-right: none;
+                border-bottom: 4px solid #cc0000;
+            }
+            .action-column {
+                width: 100%;
+                height: auto;
+                padding: 30px;
+                flex: 1;
+                justify-content: center;
+                gap: 20px;
+            }
+            .dashboard-card {
+                width: 100%;
+            }
+            body {
+                overflow-y: auto; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Image -->
+    <div class="bg-image"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+
+        <!-- Left Side: Company Info, Mission, Vision (White Background) -->
+        <div class="info-column">
+            
+            <!-- Company Info Section -->
+            <div class="company-info">
+                <h2>Pioneer Adhesives Inc.</h2>
+                <p>formerly Republic Chemical Industries, Inc.</p>
+                <p>A wholly Filipino-owned manufacturing company renowned for producing industrial and household adhesives, sealants, waterproofing, and specialty coatings in the Philippines. It is globally recognized and certified for its strict quality and environmental management standards.</p>
+            </div>
+
+            <!-- Vision & Mission Section -->
+            <div class="mv-container">
+                <div class="mv-item">
+                    <h1>Our Vision</h1>
+                    <p>We will be the <strong>elite adhesives and construction solutions company</strong> that consistently achieves profitable growth by doing it right to masterfully serve its customers whilst caring for its community and the environment.</p>
+                </div>
+
+                <div class="mv-item">
+                    <h1>Our Mission</h1>
+                    <p>As a dynamic <strong>multinational adhesives and construction solutions company</strong>, we commit to doing things right by:</p>
+                    <ul>
+                        <li>Exceeding customer expectations through process excellence and innovation; living our corporate values of teamwork, integrity, malasakit (compassion), and excellence.</li>
+                        <li>Continually promoting sustainable development, and achieving quality and profitable growth objectives.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Dashboard Links -->
+        <div class="action-column">
+            
+            <!-- Lipas Volpas Link -->
+            <a href="http://scmkpi.pioneerph.com/lipas_volpas_line_dashboard/login.php" target="_blank" class="dashboard-card card-lipas">
+                <h3>Lipas Volpas</h3>
+                <p>Line Dashboard & Production Monitoring</p>
+            </a>
+
+            <!-- KPI Link -->
+            <a href="http://scmkpi.pioneerph.com/pioneer-kpi/public/" target="_blank" class="dashboard-card card-kpi">
+                <h3>KPI Dashboard</h3>
+                <p>Key Performance Indicators & Analytics</p>
+            </a>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Pioneer Dashboard Selector Loaded.");
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+/* manage-users.css — page-specific only */
+
+/* ── Sub-nav ── */
+.sub-nav { display:flex; gap:0; background:var(--white); border-bottom:1px solid var(--border); padding:0 28px; }
+.sub-nav-btn { padding:11px 20px; border:none; border-bottom:2px solid transparent; margin-bottom:-1px; background:transparent; font-family:'Inter',sans-serif; font-size:13px; font-weight:600; color:var(--text-secondary); cursor:pointer; transition:all .15s; display:flex; align-items:center; gap:6px; }
+.sub-nav-btn:hover  { color:var(--pioneer-blue); background:var(--accent-faint); }
+.sub-nav-btn.active { color:var(--pioneer-blue); border-bottom-color:var(--pioneer-blue); background:var(--pioneer-blue-light); }
+
+/* ── Input panel ── */
+.input-panel { background:var(--white); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-sm); margin-bottom:20px; overflow:hidden; }
+.input-panel-head { padding:12px 20px; border-bottom:1px solid var(--border); background:var(--bg); font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.6px; display:flex; align-items:center; gap:8px; }
+.input-panel-head::before { content:''; width:3px; height:12px; background:var(--pioneer-red); border-radius:2px; flex-shrink:0; }
+.input-panel-actions { display:flex; gap:10px; padding:14px 20px; border-top:1px solid var(--border); background:var(--bg); flex-wrap:wrap; }
+
+/* ── SA tabs ── */
+.sa-tabs { display:flex; gap:0; border-bottom:2px solid var(--border); margin-bottom:20px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.sa-tab { padding:10px 18px; border:none; background:none; font-family:'Inter',sans-serif; font-size:12px; font-weight:600; color:var(--text-secondary); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; white-space:nowrap; transition:all .15s; }
+.sa-tab:hover  { color:var(--pioneer-blue); background:var(--accent-faint); }
+.sa-tab.active { color:var(--pioneer-blue); border-bottom-color:var(--pioneer-blue); background:var(--pioneer-blue-light); }
+.sa-tab-badge  { display:inline-flex; align-items:center; justify-content:center; min-width:16px; height:16px; padding:0 4px; background:var(--pioneer-red); color:#fff; border-radius:10px; font-size:9px; font-weight:700; margin-left:6px; vertical-align:middle; }
+
+/* ── Search ── */
+.sa-search-wrap { position:relative; max-width:320px; margin-bottom:16px; }
+.sa-search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:15px; pointer-events:none; }
+.sa-search-input { width:100%; padding:9px 14px 9px 36px; border:1px solid var(--border); border-radius:var(--radius-sm); font-family:'Inter',sans-serif; font-size:13px; color:var(--text-primary); outline:none; transition:border-color .15s; }
+.sa-search-input:focus { border-color:var(--pioneer-blue); box-shadow:0 0 0 3px rgba(30,95,200,.10); }
+
+/* ── Role badges ── */
+.role-pill { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; }
+.role-pill.system_admin { background:rgba(200,32,42,.12); color:var(--pioneer-red); }
+.role-pill.admin        { background:rgba(240,192,32,.15); color:#7a5800; }
+.role-pill.data_entry   { background:var(--green-light);   color:var(--green); }
+.role-pill.viewer       { background:var(--pioneer-blue-light); color:var(--pioneer-blue-dark); }
+
+/* ── Action buttons in table ── */
+.sa-action-btn { display:inline-flex; align-items:center; gap:3px; padding:4px 10px; border-radius:6px; font-family:'Inter',sans-serif; font-size:11px; font-weight:700; cursor:pointer; border:1px solid transparent; transition:all .12s; }
+.sa-action-approve { background:var(--green-light);        color:var(--green);         border-color:rgba(21,128,61,.2); }
+.sa-action-approve:hover { background:var(--green); color:#fff; }
+.sa-action-reject  { background:var(--pioneer-red-light);  color:var(--pioneer-red);   border-color:rgba(200,32,42,.2); }
+.sa-action-reject:hover  { background:var(--pioneer-red); color:#fff; }
+.sa-action-edit    { background:var(--pioneer-blue-light); color:var(--pioneer-blue-dark); border-color:rgba(30,95,200,.2); }
+.sa-action-edit:hover    { background:var(--pioneer-blue); color:#fff; }
+.sa-action-delete  { background:var(--pioneer-red-light);  color:var(--pioneer-red);   border-color:rgba(200,32,42,.2); }
+.sa-action-delete:hover  { background:var(--pioneer-red); color:#fff; }
+
+/* ── Overview KPI cards ── */
+.kpi-grid .card.pending  { border-left-color:var(--amber-mid); }
+.kpi-grid .card.approved { border-left-color:var(--green-mid); }
+.kpi-grid .card.rejected { border-left-color:var(--pioneer-red); }
+.kpi-grid .card.total    { border-left-color:var(--pioneer-blue); }
+
+@media (max-width:768px) {
+    .sub-nav { padding:0 14px; overflow-x:auto; }
+    .sub-nav-btn { padding:10px 14px; font-size:12px; white-space:nowrap; }
+}

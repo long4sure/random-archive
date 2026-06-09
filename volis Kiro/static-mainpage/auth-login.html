@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In — Production Monitoring System</title>
+    <link rel="icon" href="../images/p_icon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="auth-login.css">
+    <script src="auth-login.js" defer></script>
+</head>
+<body>
+    <div class="login-bg">
+        <div class="login-card">
+            <!-- Top accent bar via CSS ::before -->
+            <div class="login-logo">
+                <img src="../images/pioneerlogo.png" alt="Pioneer" class="login-logo-img">
+                <div class="login-logo-text">
+                    <div class="login-logo-title">Pioneer</div>
+                    <div class="login-logo-sub">Production Monitoring</div>
+                </div>
+            </div>
+
+            <h2 class="login-heading">Welcome back</h2>
+            <p class="login-subheading">Sign in to your account to continue.</p>
+
+            <div class="login-error" id="loginError">
+                <span>&#9888;</span>
+                <span id="loginErrorMsg">Please enter both username and password.</span>
+            </div>
+
+            <form id="loginForm">
+                <div class="login-field">
+                    <label class="login-label" for="username">Username</label>
+                    <input class="login-input" type="text" id="username" name="username"
+                           placeholder="Enter your username" required autocomplete="username">
+                </div>
+
+                <div class="login-field">
+                    <label class="login-label" for="password">Password</label>
+                    <div class="login-input-wrap">
+                        <input class="login-input" type="password" id="password" name="password"
+                               placeholder="Enter your password" required autocomplete="current-password">
+                        <button type="button" class="login-pwd-toggle" id="pwToggle" title="Show/hide password">
+                            &#x1F441;
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn">Sign In</button>
+            </form>
+
+            <div class="login-footer">
+                <p>Don't have an account? <a href="auth-register.html">Create one</a></p>
+                <p style="margin-top:6px;color:#94a3b8;font-size:10px;">Static prototype — any credentials accepted</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

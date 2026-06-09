@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aether · open source</title>
+
+  <!-- Favicon: aether.png as the title bar icon -->
+  <link rel="icon" type="image/png" href="aether.png" />
+
+  <!-- Minimalist style -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f9f6f2;  /* warm vintage paper */
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+      color: #2c2a28;
+    }
+
+    .card {
+      max-width: 800px;
+      width: 100%;
+      background: rgba(255, 252, 248, 0.8);
+      backdrop-filter: blur(2px);
+      border-radius: 48px;
+      padding: 3rem 2.5rem 3.5rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04), 0 4px 18px rgba(0, 0, 0, 0.02);
+      border: 1px solid #ede8e0;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    /* main logo – aether.png */
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2.2rem;
+    }
+
+    .logo {
+      max-width: 160px;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: 0 8px 24px rgba(60, 50, 40, 0.06);
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.01) rotate(0.5deg);
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 450;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+      color: #1f1d1a;
+      font-family: 'Times New Roman', 'Georgia', serif;
+      font-weight: 500;
+    }
+
+    .subhead {
+      font-size: 1.1rem;
+      font-weight: 350;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #7b6e5f;
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid #e2d9ce;
+      padding-bottom: 1.5rem;
+      display: inline-block;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #3d3832;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .content p {
+      margin: 0;
+    }
+
+    .content i {
+      font-style: italic;
+      color: #5f5549;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 0.85rem;
+      background: #ede7df;
+      padding: 0.5rem 1.4rem;
+      border-radius: 40px;
+      color: #3d3832;
+      letter-spacing: 0.04em;
+      border: 1px solid #ddd4c9;
+      font-weight: 400;
+    }
+
+    .badge:hover {
+      background: #e6ded4;
+      border-color: #c9bcae;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #e5dcd2;
+      margin: 2rem 0 0.8rem;
+      width: 60px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .footer-note {
+      font-size: 0.85rem;
+      color: #9b8f80;
+      margin-top: 1.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* responsive */
+    @media (max-width: 500px) {
+      .card {
+        padding: 2rem 1.5rem;
+      }
+      h1 {
+        font-size: 2.2rem;
+      }
+      .logo {
+        max-width: 120px;
+      }
+      .subhead {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <!-- Logo: aether.png appears here & in browser tab -->
+  <div class="logo-container">
+    <img src="aether.png" alt="Aether logo – air and water" class="logo" />
+  </div>
+
+  <h1>aether</h1>
+  <div class="subhead">air · water · open</div>
+
+  <div class="content">
+    <p>
+      <i>“Just like the elements, free and open.”</i>
+    </p>
+    <p>
+      Aether flows where air meets water — a quiet fusion of 
+      wind and wave. Every project here is built with 
+      transparency, collaboration, and the belief that 
+      knowledge should move as freely as the tides.
+    </p>
+  </div>
+
+  <div class="badge-row">
+    <span class="badge">⚡ open source</span>
+    <span class="badge">🌊 air &amp; water</span>
+    <span class="badge">⟡ timeless</span>
+  </div>
+
+  <hr />
+  <div class="footer-note">
+    aether · open · free
+  </div>
+</div>
+
+<!-- fallback: if the image doesn't load, show alt text nicely -->
+<noscript>
+  <div style="background:#f3eee8; padding:1rem; border-radius: 30px;">
+    <p>🌬️ aether — air &amp; water (image: aether.png)</p>
+  </div>
+</noscript>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account — Production Monitoring System</title>
+    <link rel="icon" href="../images/p_icon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="auth-register.css">
+    <script src="auth-register.js" defer></script>
+</head>
+<body>
+    <div class="login-bg">
+        <div class="login-card">
+            <div class="login-logo">
+                <img src="../images/pioneerlogo.png" alt="Pioneer" class="login-logo-img">
+                <div class="login-logo-text">
+                    <div class="login-logo-title">Pioneer</div>
+                    <div class="login-logo-sub">Production Monitoring</div>
+                </div>
+            </div>
+
+            <h2 class="login-heading">Create Account</h2>
+            <p class="login-subheading">New accounts require admin approval before login.</p>
+
+            <div class="login-error" id="registerError"><span>&#9888;</span><span id="registerErrorMsg"></span></div>
+            <div class="login-success hidden" id="registerSuccess"><span>&#10003;</span><span>Account created. Redirecting to sign in…</span></div>
+
+            <form id="registerForm">
+                <div class="form-row-2">
+                    <div class="login-field">
+                        <label class="login-label" for="firstName">First Name</label>
+                        <input class="login-input" type="text" id="firstName" placeholder="First name" required>
+                    </div>
+                    <div class="login-field">
+                        <label class="login-label" for="lastName">Last Name</label>
+                        <input class="login-input" type="text" id="lastName" placeholder="Last name" required>
+                    </div>
+                </div>
+
+                <div class="login-field">
+                    <label class="login-label" for="username">Username</label>
+                    <input class="login-input" type="text" id="username" placeholder="Choose a username" required>
+                </div>
+
+                <div class="login-field">
+                    <label class="login-label" for="password">Password</label>
+                    <div class="login-input-wrap">
+                        <input class="login-input" type="password" id="password" placeholder="Min. 6 characters" required>
+                        <button type="button" class="login-pwd-toggle" data-target="password">&#x1F441;</button>
+                    </div>
+                </div>
+
+                <div class="login-field">
+                    <label class="login-label" for="confirmPassword">Confirm Password</label>
+                    <div class="login-input-wrap">
+                        <input class="login-input" type="password" id="confirmPassword" placeholder="Re-enter password" required>
+                        <button type="button" class="login-pwd-toggle" data-target="confirmPassword">&#x1F441;</button>
+                    </div>
+                </div>
+
+                <div class="login-field">
+                    <label class="login-label">Role</label>
+                    <div class="role-group">
+                        <label class="role-option selected">
+                            <input type="radio" name="role" value="viewer" checked>
+                            <span class="role-label-text">Viewer</span>
+                            <span class="role-desc">Read-only reports</span>
+                        </label>
+                        <label class="role-option">
+                            <input type="radio" name="role" value="data_entry">
+                            <span class="role-label-text">Data Entry</span>
+                            <span class="role-desc">Submit records</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn">Create Account</button>
+            </form>
+
+            <div class="login-footer">
+                Already have an account? <a href="auth-login.html">Sign in</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

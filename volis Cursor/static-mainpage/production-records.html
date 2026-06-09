@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Records - Static</title>
+    <link rel="icon" href="../images/p_icon.png" type="image/png">
+    <link rel="stylesheet" href="production-records.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="production-records.js" defer></script>
+</head>
+<body>
+<div class="page-bg">
+    <header class="header">
+        <h1><img src="../images/pioneerlogo.png" alt="Logo" class="header-logo">Manage Production Records</h1>
+        <a href="auth-login.html" class="logout-btn logout-link">Logout</a>
+    </header>
+
+    <nav class="navbar user-welcome">
+        <span><i class="fa fa-user-circle"></i> Welcome, Demo User | <i class="fa fa-pencil"></i> Data Entry</span>
+    </nav>
+
+    <nav class="navbar">
+        <div class="dropdown">
+            <button class="dropbtn">Production Records <i class="fa fa-caret-down"></i></button>
+            <div class="dropdown-content">
+                <a href="?view=add"><i class="fa fa-plus-circle"></i> Add Record</a>
+                <a href="?view=manage"><i class="fa fa-table"></i> Manage Records</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="dashboard.html"><i class="fa fa-tachometer"></i> Dashboard Page</a></li>
+                <li class="active"><a href="production-records.html"><i class="fa fa-table"></i> Manage Production Records</a></li>
+                <li><a href="report-management.html"><i class="fa fa-file-text-o"></i> Line Report & LIPAS VOLPAS</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <section id="add-section" class="view-section">
+                <h2>Add Production Record</h2>
+                <div class="card">
+                    <div class="form-grid">
+                        <label>Team<select><option>Team A</option><option>Team B</option></select></label>
+                        <label>Line<select><option>Line 1</option><option>Line 2</option></select></label>
+                        <label>Month<select><option>May</option><option>June</option></select></label>
+                        <label>SKU Code<select><option>SKU-001</option><option>SKU-010</option></select></label>
+                        <label>Quantity<input type="number" value="30000"></label>
+                        <label>UOM<input type="text" value="PCS"></label>
+                        <label>Ops Start<input type="date" value="2026-05-18"></label>
+                        <label>Ops End<input type="date" value="2026-05-24"></label>
+                    </div>
+
+                    <h3>Shift Input (Sample)</h3>
+                    <div class="table-responsive">
+                        <table class="data-table compact">
+                            <thead><tr><th>Day</th><th>1st Shift</th><th>2nd Shift</th><th>3rd Shift</th></tr></thead>
+                            <tbody>
+                                <tr><td>Day 1</td><td><input type="number" value="1200"></td><td><input type="number" value="1100"></td><td><input type="number" value="980"></td></tr>
+                                <tr><td>Day 2</td><td><input type="number" value="1180"></td><td><input type="number" value="1080"></td><td><input type="number" value="970"></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="actions"><button class="btn btn-primary">Save Record</button><button class="btn btn-secondary">Reset</button></div>
+                </div>
+            </section>
+
+            <section id="manage-section" class="view-section hidden">
+                <h2>Manage Line Production Records</h2>
+                <div class="card filter-row">
+                    <label>Team<select><option>Team A</option><option>Team B</option><option>Team C</option></select></label>
+                    <label>Month<select><option>All</option><option>May</option></select></label>
+                    <label>Line<select><option>All Lines</option><option>Line 1</option><option>Line 2</option></select></label>
+                    <div class="actions inline">
+                        <button class="btn btn-secondary">Apply Filters</button>
+                        <button class="btn btn-success">Export Excel</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table" id="recordsTable">
+                        <thead><tr><th>TEAM</th><th>MONTH</th><th>LINE</th><th>SKU CODE</th><th>SKU DESCRIPTION</th><th>QUANTITY</th><th>CUMULATIVE OUTPUT</th></tr></thead>
+                        <tbody>
+                            <tr><td>A</td><td>May</td><td>Line 1</td><td>SKU-001</td><td>Product A</td><td>30000</td><td>27800</td></tr>
+                            <tr><td>A</td><td>May</td><td>Line 2</td><td>SKU-010</td><td>Product B</td><td>28000</td><td>26900</td></tr>
+                            <tr><td>B</td><td>May</td><td>Line 3</td><td>SKU-220</td><td>Product C</td><td>25500</td><td>24100</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-primary" id="editBtn" disabled>Edit Selected</button>
+                    <button class="btn btn-danger" id="deleteBtn" disabled>Delete Selected</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer"><p>&copy; 2026 Production Monitoring System</p></footer>
+</div>
+
+</body>
+</html>

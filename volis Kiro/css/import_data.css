@@ -1,0 +1,236 @@
+/* ================================================================
+   import_data.css — Import Data page
+   Supplements mainpage.css. Removes the old duplicate keyframes
+   and the conflicting .main-content override.
+================================================================ */
+
+/* ── Form container ───────────────────────────────────────────── */
+.form-container {
+    max-width: 660px;
+    margin: 0 auto;
+    background: var(--c-white);
+    padding: 32px;
+    border-radius: var(--r-xl);
+    box-shadow: var(--sh-md);
+    border: 1px solid var(--c-slate-200);
+    animation: slideUp 0.45s var(--ease) both;
+}
+
+/* ── Form groups ──────────────────────────────────────────────── */
+.form-group { margin-bottom: 22px; }
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: var(--c-slate-800);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+.form-group select,
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 11px 14px;
+    border: 2px solid var(--c-slate-200);
+    border-radius: var(--r-md);
+    font-size: 14px;
+    background: var(--c-white);
+    color: var(--c-slate-700);
+    transition: border-color var(--t-fast), box-shadow var(--t-fast);
+    -webkit-appearance: none;
+    appearance: none;
+}
+.form-group select:focus,
+.form-group input[type="file"]:focus {
+    outline: none;
+    border-color: var(--c-blue);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+.form-group input[type="file"] {
+    padding: 10px 12px;
+    cursor: pointer;
+    /* Override browser default file input styling */
+    -webkit-appearance: none;
+    appearance: none;
+}
+.form-group small {
+    display: block;
+    margin-top: 6px;
+    color: var(--c-slate-500);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* ── Form actions ─────────────────────────────────────────────── */
+.form-actions {
+    margin-top: 28px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 24px;
+    border: none;
+    border-radius: var(--r-pill);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
+    white-space: nowrap;
+    min-height: 42px;
+    text-decoration: none;
+}
+.btn-primary {
+    background: linear-gradient(135deg, var(--c-blue), var(--c-blue-dark));
+    color: var(--c-white);
+    box-shadow: 0 4px 12px rgba(59,130,246,0.28);
+}
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--c-blue-dark), var(--c-blue-deeper));
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(59,130,246,0.38);
+}
+.btn-primary:active { transform: translateY(0); }
+.btn-secondary {
+    background: var(--c-slate-100);
+    color: var(--c-slate-700);
+    border: 2px solid var(--c-slate-300);
+}
+.btn-secondary:hover { background: var(--c-slate-200); color: var(--c-slate-900); }
+
+/* ── Status messages ──────────────────────────────────────────── */
+.message {
+    padding: 14px 18px;
+    border-radius: var(--r-lg);
+    margin-top: 24px;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideDown 0.35s var(--ease);
+}
+.message.success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1.5px solid #6ee7b7;
+}
+.message.error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1.5px solid #fca5a5;
+}
+
+/* ── Duplicate rows section ───────────────────────────────────── */
+.duplicate-title {
+    margin-top: 40px;
+    margin-bottom: 14px;
+    color: var(--c-red-dark);
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ── Table container (scrollable, does NOT override .main-content) */
+.table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 400px;
+    background: var(--c-white);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-sm);
+    margin-top: 14px;
+    box-sizing: border-box;
+    display: block;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--c-slate-200);
+}
+
+/* ── Data table (import preview) ─────────────────────────────── */
+.data-table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--c-white);
+    white-space: nowrap;
+    table-layout: auto;
+}
+.data-table thead th {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(135deg, var(--c-blue-navy) 0%, var(--c-blue-ink) 100%);
+    color: var(--c-white);
+    z-index: 20;
+    padding: 13px 15px;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-bottom: 2px solid rgba(255,255,255,0.15);
+    text-align: left;
+}
+.data-table tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--c-slate-200);
+    color: var(--c-slate-700);
+    font-size: 13px;
+    vertical-align: middle;
+}
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:nth-child(even) { background: var(--c-slate-50); }
+.data-table tbody tr:hover td {
+    background: #fee2e2;
+    color: #991b1b;
+    font-weight: 500;
+    transition: background var(--t-fast);
+}
+.data-table td.wrap-cell { white-space: normal; word-break: break-word; }
+
+/* ── Progress / upload indicator ─────────────────────────────── */
+.upload-progress {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    margin-top: 18px;
+    padding: 14px 18px;
+    background: #eff6ff;
+    border: 1.5px solid #bfdbfe;
+    border-radius: var(--r-lg);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--c-blue-navy);
+}
+.upload-progress.visible { display: flex; }
+.upload-spinner {
+    width: 20px; height: 20px;
+    border: 3px solid rgba(59,130,246,0.25);
+    border-top-color: var(--c-blue);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+}
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .form-container { padding: 22px 18px; }
+    .table-container { max-height: 300px; }
+    .data-table thead th,
+    .data-table tbody td { padding: 10px 11px; font-size: 12px; }
+    .btn { padding: 11px 20px; font-size: 13px; }
+    .form-actions { flex-direction: column; }
+    .form-actions .btn { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 480px) {
+    .form-container { padding: 18px 14px; }
+}

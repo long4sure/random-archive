@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Static</title>
+    <link rel="icon" href="../images/p_icon.png" type="image/png">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="dashboard.js" defer></script>
+</head>
+<body>
+<div class="page-bg">
+    <header class="header">
+        <h1><img src="../images/pioneerlogo.png" alt="Logo" class="header-logo">Production Dashboard</h1>
+        <a href="auth-login.html" class="logout-btn logout-link">Logout</a>
+    </header>
+
+    <nav class="navbar user-welcome">
+        <span><i class="fa fa-user-circle"></i> Welcome, Demo User | <i class="fa fa-shield"></i> System Admin</span>
+    </nav>
+
+    <nav class="navbar">
+        <div class="dropdown">
+            <button class="dropbtn">Dashboard Reports <i class="fa fa-caret-down"></i></button>
+            <div class="dropdown-content">
+                <a href="?report=weekly"><i class="fa fa-bar-chart"></i> Weekly Report</a>
+                <a href="?report=monthly"><i class="fa fa-line-chart"></i> Monthly Report</a>
+                <a href="?report=yearly"><i class="fa fa-area-chart"></i> Yearly Report</a>
+                <a href="?report=lipas_volpas"><i class="fa fa-pie-chart"></i> LIPAS VOLPAS Report</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <aside class="sidebar sticky-sidebar">
+            <ul>
+                <li class="active"><a href="dashboard.html"><i class="fa fa-tachometer"></i> Dashboard Page</a></li>
+                <li><a href="production-records.html"><i class="fa fa-table"></i> Manage Production Records</a></li>
+                <li><a href="report-management.html"><i class="fa fa-file-text-o"></i> Line Report & LIPAS VOLPAS</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <section id="weekly-section" class="report-section">
+                <h2>Weekly Report</h2>
+                <div class="kpi-grid weekly">
+                    <div class="kpi-card"><div class="label">Total SKU Count</div><div class="value">42</div></div>
+                    <div class="kpi-card"><div class="label">LIPAS Count</div><div class="value">38</div></div>
+                    <div class="kpi-card"><div class="label">VOLPAS Actual</div><div class="value">123,500</div></div>
+                    <div class="kpi-card"><div class="label">VOLPAS Planned</div><div class="value">130,000</div></div>
+                </div>
+                <div class="chart-card"><h3>VOLPAS Actual vs VOLPAS Planned</h3><canvas id="cumulativeChart"></canvas></div>
+                <div class="chart-card-full top-gap"><h3>Daily Shift Output - Week 3, May - Team A</h3><canvas id="dailyShiftChart_0"></canvas></div>
+            </section>
+
+            <section id="monthly-section" class="report-section hidden">
+                <h2>Monthly Report</h2>
+                <div class="kpi-grid monthly">
+                    <div class="kpi-card"><div class="label">Total SKU Count of the Month</div><div class="value">151</div></div>
+                    <div class="kpi-card"><div class="label">LIPAS Count of the Month</div><div class="value">140</div></div>
+                    <div class="kpi-card"><div class="label">VOLPAS Actual of the Month</div><div class="value">487,900</div></div>
+                    <div class="kpi-card"><div class="label">VOLPAS Planned of the Month</div><div class="value">500,000</div></div>
+                </div>
+                <div class="chart-grid-2col">
+                    <div class="chart-card monthly"><h3>Shift Output by Week - May 2026</h3><canvas id="monthlyShiftChart"></canvas></div>
+                    <div class="chart-card monthly"><h3>VOLPAS Actual vs VOLPAS Planned - May 2026</h3><canvas id="monthlyCumChart"></canvas></div>
+                </div>
+            </section>
+
+            <section id="yearly-section" class="report-section hidden">
+                <h2>Yearly Report</h2>
+                <div class="kpi-grid yearly">
+                    <div class="kpi-card"><div class="label">Total SKU Count of the Year</div><div class="value">1,640</div></div>
+                    <div class="kpi-card"><div class="label">LIPAS Count of the Year</div><div class="value">1,582</div></div>
+                    <div class="kpi-card"><div class="label">VOLPAS Actual of the Year</div><div class="value">5,654,200</div></div>
+                    <div class="kpi-card"><div class="label">VOLPAS Planned of the Year</div><div class="value">5,900,000</div></div>
+                </div>
+                <div class="chart-grid-2col">
+                    <div class="chart-card yearly"><h3>Cumulative Output by Month - 2026</h3><canvas id="yearlyShiftChart"></canvas></div>
+                    <div class="chart-card yearly"><h3>VOLPAS Actual vs VOLPAS Planned - 2026</h3><canvas id="yearlyCumChart"></canvas></div>
+                </div>
+            </section>
+
+            <section id="lipas_volpas-section" class="report-section hidden">
+                <h2>LIPAS VOLPAS Report</h2>
+                <div class="kpi-grid">
+                    <div class="kpi-card"><div class="label">LIPAS Plan</div><div class="value">245,000</div></div>
+                    <div class="kpi-card"><div class="label">LIPAS Actual</div><div class="value">238,200</div></div>
+                    <div class="kpi-card"><div class="label">VOLPAS Plan</div><div class="value">252,000</div></div>
+                    <div class="kpi-card"><div class="label">VOLPAS Actual</div><div class="value">249,000</div></div>
+                </div>
+                <h3>LIPAS</h3><div class="chart-card"><canvas id="lvLipasChart"></canvas></div>
+                <h3>VOLPAS</h3><div class="chart-card"><canvas id="lvVolpasChart"></canvas></div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer"><p>&copy; 2026 Production Monitoring System</p></footer>
+</div>
+
+</body>
+</html>

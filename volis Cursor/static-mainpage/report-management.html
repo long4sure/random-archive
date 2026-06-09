@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Management - Static</title>
+    <link rel="icon" href="../images/p_icon.png" type="image/png">
+    <link rel="stylesheet" href="report-management.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="report-management.js" defer></script>
+</head>
+<body>
+<div class="page-bg">
+    <header class="header">
+        <h1><img src="../images/pioneerlogo.png" alt="Logo" class="header-logo">Line Report & LIPAS VOLPAS Management</h1>
+        <a href="auth-login.html" class="logout-btn logout-link">Logout</a>
+    </header>
+
+    <nav class="navbar user-welcome">
+        <span><i class="fa fa-user-circle"></i> Welcome, Demo User | <i class="fa fa-shield"></i> System Admin</span>
+    </nav>
+
+    <nav class="navbar">
+        <div class="dropdown">
+            <button class="dropbtn">Line Report & LIPAS VOLPAS <i class="fa fa-caret-down"></i></button>
+            <div class="dropdown-content">
+                <a href="?view=formulate"><i class="fa fa-plus-circle"></i> Formulate Line Report</a>
+                <a href="?view=manage-line"><i class="fa fa-file-text-o"></i> Manage Line Report</a>
+                <a href="?view=manage-lv"><i class="fa fa-table"></i> Manage Lipas Volpas</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="dashboard.html"><i class="fa fa-tachometer"></i> Dashboard Page</a></li>
+                <li><a href="production-records.html"><i class="fa fa-table"></i> Manage Production Records</a></li>
+                <li class="active"><a href="report-management.html"><i class="fa fa-file-text-o"></i> Line Report & LIPAS VOLPAS</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <section id="formulate-section" class="view-section">
+                <div class="page-header">
+                    <h2>Formulate Line Report</h2>
+                    <p class="text-muted">Static preview of report generation with sample data.</p>
+                </div>
+                <div class="filter-card">
+                    <div class="filter-row">
+                        <div class="filter-group"><label>Team</label><select><option>Team A</option><option>Team B</option></select></div>
+                        <div class="filter-group"><label>Month</label><select><option>May</option><option>June</option></select></div>
+                        <div class="filter-group"><label>Prod. Days</label><select><option>May 13 - May 19, 2026</option></select></div>
+                        <div class="filter-group"><label>Day</label><input type="date" value="2026-05-16"></div>
+                    </div>
+                </div>
+                <div class="table-card">
+                    <div class="table-header"><h3>1st Shift Report</h3><button class="btn-success">Export</button></div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead><tr><th>TEAM</th><th>LINE</th><th>SKU CODE</th><th>SKU DESCRIPTION</th><th>QUANTITY</th><th>SHIFT OUTPUT</th><th>CUMULATIVE</th><th>LIPAS</th><th>VOLPAS</th></tr></thead>
+                            <tbody>
+                                <tr><td>A</td><td>Line 1</td><td>SKU-001</td><td>Product A</td><td>30000</td><td>9800</td><td>9200</td><td>1</td><td>92%</td></tr>
+                                <tr><td>A</td><td>Line 2</td><td>SKU-010</td><td>Product B</td><td>28000</td><td>9400</td><td>9100</td><td>1</td><td>97%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="manage-line-section" class="view-section hidden">
+                <h2>Manage Line Report Records</h2>
+                <div class="table-card">
+                    <div class="table-header"><h3>Saved Report Records</h3></div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead><tr><th>TEAM</th><th>MONTH</th><th>LINE</th><th>SHIFT</th><th>SKU COUNT</th><th>LIPAS %</th><th>VOLPAS %</th></tr></thead>
+                            <tbody>
+                                <tr><td>A</td><td>May</td><td>Line 1</td><td>1st</td><td>24</td><td>95%</td><td>93%</td></tr>
+                                <tr><td>A</td><td>May</td><td>Line 2</td><td>2nd</td><td>20</td><td>90%</td><td>96%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="manage-lv-section" class="view-section hidden">
+                <h2>Manage LIPAS & VOLPAS Records</h2>
+                <div class="table-card">
+                    <div class="table-header"><h3>LIPAS Summary</h3><span class="badge">Plan vs Actual SKUs</span></div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead><tr><th>TEAM</th><th>MONTH</th><th>LINE</th><th>TOTAL PLAN</th><th>TOTAL ACTUAL</th><th>%</th></tr></thead>
+                            <tbody>
+                                <tr><td>A</td><td>May</td><td>Line 1</td><td>120</td><td>114</td><td>95.0%</td></tr>
+                                <tr><td>A</td><td>May</td><td>Line 2</td><td>118</td><td>112</td><td>94.9%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="table-card">
+                    <div class="table-header"><h3>VOLPAS Summary</h3><span class="badge badge-green">Plan vs Actual Quantity</span></div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead><tr><th>TEAM</th><th>MONTH</th><th>LINE</th><th>TOTAL PLAN</th><th>TOTAL ACTUAL</th><th>%</th></tr></thead>
+                            <tbody>
+                                <tr><td>A</td><td>May</td><td>Line 1</td><td>125,000</td><td>119,800</td><td>95.8%</td></tr>
+                                <tr><td>A</td><td>May</td><td>Line 2</td><td>122,000</td><td>118,600</td><td>97.2%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer"><p>&copy; 2026 Production Monitoring System</p></footer>
+</div>
+
+</body>
+</html>

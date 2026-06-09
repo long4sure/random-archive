@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Apple Go Pirated · Manga & Watch</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a0c10;
+      font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, 'Roboto', sans-serif;
+      color: #f0f3fa;
+      line-height: 1.5;
+    }
+
+    /* header / brand */
+    .header {
+      background: linear-gradient(135deg, #0f212e 0%, #0a121c 100%);
+      border-bottom: 2px solid #ffb347;
+      padding: 1rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    .logo h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffb347, #ff8c42);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 3px rgba(0,0,0,0.2);
+    }
+
+    .logo p {
+      font-size: 0.75rem;
+      color: #9aaebf;
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    .mode-switch {
+      display: flex;
+      gap: 1rem;
+      background: #1e2a32;
+      padding: 0.4rem 1rem;
+      border-radius: 60px;
+    }
+
+    .mode-btn {
+      background: none;
+      border: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 0.4rem 1.2rem;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #bbd4f0;
+    }
+
+    .mode-btn.active {
+      background: #ff8c42;
+      color: #0a0c10;
+      box-shadow: 0 4px 12px rgba(255,140,66,0.5);
+    }
+
+    /* main container */
+    .container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* search + library header */
+    .library-header {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      align-items: center;
+    }
+
+    .library-header h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      border-left: 5px solid #ffb347;
+      padding-left: 1rem;
+    }
+
+    .search-box {
+      display: flex;
+      background: #1e2a32;
+      border-radius: 48px;
+      overflow: hidden;
+      border: 1px solid #2e3e48;
+    }
+
+    .search-box input {
+      background: transparent;
+      border: none;
+      padding: 0.7rem 1.2rem;
+      width: 220px;
+      color: white;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .search-box button {
+      background: #ff8c42;
+      border: none;
+      padding: 0 1.2rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+      color: #111;
+    }
+
+    /* content grid */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.8rem;
+      margin: 2rem 0;
+    }
+
+    /* card styling */
+    .card {
+      background: #141e26;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      border: 1px solid #2c3a44;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 28px rgba(0,0,0,0.5);
+      border-color: #ffb347;
+    }
+
+    .card-img {
+      width: 100%;
+      height: 180px;
+      background-size: cover;
+      background-position: center;
+      background-color: #1f2e38;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+    }
+
+    .badge {
+      background: #ff8c42cc;
+      backdrop-filter: blur(4px);
+      padding: 0.2rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      margin: 12px;
+      color: #111;
+    }
+
+    .card-info {
+      padding: 1rem;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .card-desc {
+      font-size: 0.8rem;
+      color: #b9d0e3;
+      margin-top: 6px;
+    }
+
+    /* viewer panel (reader / player) */
+    .viewer-panel {
+      background: #0f171f;
+      border-radius: 2rem;
+      margin-top: 2.5rem;
+      border: 1px solid #2c3e4e;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    .viewer-header {
+      background: #101e26;
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2f4558;
+      flex-wrap: wrap;
+    }
+
+    .viewer-title {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .close-viewer {
+      background: none;
+      border: none;
+      color: #ffb347;
+      font-size: 1.4rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .viewer-content {
+      padding: 1.8rem;
+      min-height: 480px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #03090e;
+    }
+
+    /* manga reader (image based) */
+    .manga-viewer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .manga-page {
+      max-width: 100%;
+      max-height: 70vh;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px black;
+    }
+
+    .page-nav {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .page-nav button, .watch-btn {
+      background: #2c3f4c;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+
+    .page-nav button:active, .watch-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* anime video player */
+    .video-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    video {
+      width: 100%;
+      max-width: 900px;
+      border-radius: 24px;
+      outline: none;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+    }
+
+    .episode-selector {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .ep-btn {
+      background: #1e2f3a;
+      border: none;
+      padding: 0.3rem 1rem;
+      border-radius: 30px;
+      color: #f0e6d0;
+      cursor: pointer;
+    }
+
+    .ep-btn.active-ep {
+      background: #ff8c42;
+      color: black;
+      font-weight: bold;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 3rem;
+      color: #9aaebf;
+    }
+
+    footer {
+      text-align: center;
+      margin: 3rem 0 1rem;
+      font-size: 0.75rem;
+      color: #4a6272;
+    }
+
+    @media (max-width: 650px) {
+      .header {
+        flex-direction: column;
+        gap: 0.8rem;
+        align-items: center;
+      }
+      .viewer-content {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">
+    <h1>🍎 Apple Go Pirated</h1>
+    <p>stream • read • sail the high seas</p>
+  </div>
+  <div class="mode-switch">
+    <button class="mode-btn active" data-mode="manga">📚 MANGA</button>
+    <button class="mode-btn" data-mode="anime">🎬 ANIME</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="library-header">
+    <h2 id="libraryLabel">📖 Manga Library</h2>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search title...">
+      <button id="searchBtn">🔍</button>
+    </div>
+  </div>
+
+  <!-- dynamic grid -->
+  <div id="mediaGrid" class="media-grid"></div>
+
+  <!-- viewer panel (hidden by default) -->
+  <div id="viewerPanel" class="viewer-panel" style="display: none;">
+    <div class="viewer-header">
+      <span class="viewer-title" id="viewerTitle">Now Playing</span>
+      <button class="close-viewer" id="closeViewerBtn">✕ CLOSE</button>
+    </div>
+    <div class="viewer-content" id="viewerContent">
+      <!-- dynamic content: manga pages or video -->
+    </div>
+  </div>
+  <footer>⚓ For otakus & pirates — all content is fan-made preview. Support official releases.</footer>
+</div>
+
+<script>
+  // ---------- DATA (Manga & Anime) ----------
+  const mangaCollection = [
+    { id: 1, title: "Naruto Shippuden", cover: "https://i.imgur.com/YpHHy5C.jpeg", description: "The tale of Naruto Uzumaki, ninja way!", pages: 12, genre: "action" },
+    { id: 2, title: "One Piece", cover: "https://i.imgur.com/aCgBtmZ.jpeg", description: "Monkey D. Luffy's journey to become Pirate King.", pages: 15, genre: "adventure" },
+    { id: 3, title: "Attack on Titan", cover: "https://i.imgur.com/8Hvh7qF.jpeg", description: "Humanity vs Titans, dark fantasy.", pages: 10, genre: "dark" },
+    { id: 4, title: "Jujutsu Kaisen", cover: "https://i.imgur.com/vjGgkCV.jpeg", description: "Curses & sorcery at full throttle.", pages: 8, genre: "supernatural" },
+    { id: 5, title: "Demon Slayer", cover: "https://i.imgur.com/dF9sODS.jpeg", description: "Tanjiro's path to save his sister.", pages: 14, genre: "action" }
+  ];
+
+  const animeCollection = [
+    { id: 101, title: "Spy x Family", cover: "https://i.imgur.com/p0iCmzW.jpeg", description: "Secret agent + telepath + assassin = family fun!", episodes: 3, currentEp: 1 },
+    { id: 102, title: "Chainsaw Man", cover: "https://i.imgur.com/OyP4zD3.jpeg", description: "Devil hunter Denji with chainsaw powers.", episodes: 2, currentEp: 1 },
+    { id: 103, title: "Vinland Saga", cover: "https://i.imgur.com/TCwr3Rb.jpeg", description: "Viking epic about revenge and peace.", episodes: 2, currentEp: 1 },
+    { id: 104, title: "My Hero Academia", cover: "https://i.imgur.com/XdZP7lT.jpeg", description: "Quirks, heroes, and One For All.", episodes: 3, currentEp: 1 }
+  ];
+
+  // helper: placeholder image if any cover fails, but we use reliable imgur demo images, 
+  // extra fallback: for pages we generate dummy manga images using placeholder images for each page.
+  // For realism: manga reading uses generated images (numbered pages) but with consistent style.
+  // anime uses local video blobs? But we use online sample videos (open source test clips or big buck bunny). 
+  // For simplicity & safety, we use short anime clips from "sample-videos.com" or similar public domain clips.
+  // We'll map anime episodes to short public domain/creative commons videos.
+  // Because we need actual video playback, I'll use sample videos from "storage.googleapis.com" test.
+  // But to ensure cross origin, we'll use videos from "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" etc.
+  // For manga pages, we'll generate images from placeholder kitties? Actually we'll use unsplash-like? but simpler: use a consistent manga mock png generator: 
+  // We'll create manga image array with inline data urls to guarantee offline look. But we need nice display: use "https://picsum.photos/800/1100?random=page" but differentiate per manga.
+  // For reliable manga reading we generate dynamic image URLs from picsum with different seeds per manga+page.
+  // That way it feels like reading a real manga with different art each page. Good for demo.
+  
+  // Helper to get manga page image for specific manga id and page number (1-indexed)
+  function getMangaPageUrl(mangaId, pageNum) {
+    // unique seed using mangaId and page => different images but consistent style
+    let seed = (mangaId * 77 + pageNum * 33) % 9999;
+    // Using placeholder images from picsum with random, but nice size
+    return `https://picsum.photos/id/${seed % 200 + 10}/800/1100?grayscale&seed=${mangaId}-${pageNum}`;
+  }
+
+  // For anime episodes we use safe sample video URLs (mp4) (big buck bunny, sintel, etc)
+  // Different episodes get different small clips to simulate variety.
+  function getEpisodeVideoUrl(animeId, episodeNumber) {
+    // use some publicly available videos (Google's test videos / creative commons)
+    const videoPool = [
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFunflies.mp4",
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"
+    ];
+    let idx = (animeId * 7 + episodeNumber) % videoPool.length;
+    return videoPool[idx];
+  }
+
+  // ---------- Global State ----------
+  let currentMode = "manga";    // 'manga' or 'anime'
+  let searchQuery = "";
+  let activeViewerItem = null;   // { type, data, currentPageOrEp }
+  let currentMangaPagesData = null; // store current manga pages count
+  let currentAnimeEpData = null;
+
+  // DOM elements
+  const mediaGrid = document.getElementById("mediaGrid");
+  const libraryLabel = document.getElementById("libraryLabel");
+  const searchInput = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
+  const viewerPanel = document.getElementById("viewerPanel");
+  const viewerTitleSpan = document.getElementById("viewerTitle");
+  const viewerContentDiv = document.getElementById("viewerContent");
+  const closeViewerBtn = document.getElementById("closeViewerBtn");
+  const modeBtns = document.querySelectorAll(".mode-btn");
+
+  // Helper: filter items by search (title)
+  function filterItems(items, mode) {
+    if (!searchQuery.trim()) return items;
+    return items.filter(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()));
+  }
+
+  // Render grid according to currentMode + search
+  function renderGrid() {
+    if (currentMode === "manga") {
+      const filtered = filterItems(mangaCollection, "manga");
+      libraryLabel.innerText = "📖 Manga Library";
+      if (filtered.length === 0) {
+        mediaGrid.innerHTML = `<div class="no-data">🏴‍☠️ No manga found for "${searchQuery}"</div>`;
+        return;
+      }
+      mediaGrid.innerHTML = filtered.map(manga => `
+        <div class="card" data-id="${manga.id}" data-type="manga" data-title="${escapeHtml(manga.title)}" data-pages="${manga.pages}" data-desc="${escapeHtml(manga.description)}" data-cover="${manga.cover}">
+          <div class="card-img" style="background-image: url('${manga.cover}'); background-size: cover;">
+            <span class="badge">📘 ${manga.pages} pages</span>
+          </div>
+          <div class="card-info">
+            <div class="card-title">${escapeHtml(manga.title)}</div>
+            <div class="card-desc">${escapeHtml(manga.description)}</div>
+          </div>
+        </div>
+      `).join('');
+    } 
+    else { // anime mode
+      const filtered = filterItems(animeCollection, "anime");
+      libraryLabel.innerText = "🎬 Anime Library";
+      if (filtered.length === 0) {
+        mediaGrid.innerHTML = `<div class="no-data">💀 No anime found for "${searchQuery}"</div>`;
+        return;
+      }
+      mediaGrid.innerHTML = filtered.map(anime => `
+        <div class="card" data-id="${anime.id}" data-type="anime" data-title="${escapeHtml(anime.title)}" data-episodes="${anime.episodes}" data-desc="${escapeHtml(anime.description)}" data-cover="${anime.cover}">
+          <div class="card-img" style="background-image: url('${anime.cover}'); background-size: cover;">
+            <span class="badge">🎞️ ${anime.episodes} eps</span>
+          </div>
+          <div class="card-info">
+            <div class="card-title">${escapeHtml(anime.title)}</div>
+            <div class="card-desc">${escapeHtml(anime.description)}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+    attachCardEvents();
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+      return c;
+    });
+  }
+
+  function attachCardEvents() {
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        const type = card.dataset.type;
+        const id = parseInt(card.dataset.id);
+        const title = card.dataset.title;
+        if (type === "manga") {
+          const pages = parseInt(card.dataset.pages);
+          const mangaItem = mangaCollection.find(m => m.id === id);
+          if (mangaItem) {
+            openMangaViewer(mangaItem, pages);
+          } else {
+            // fallback: use dataset
+            openMangaViewer({ id, title, pages, description: card.dataset.desc }, pages);
+          }
+        } else if (type === "anime") {
+          const episodes = parseInt(card.dataset.episodes);
+          const animeItem = animeCollection.find(a => a.id === id);
+          if (animeItem) {
+            openAnimeViewer(animeItem, episodes);
+          } else {
+            openAnimeViewer({ id, title, episodes, description: card.dataset.desc }, episodes);
+          }
+        }
+      });
+    });
+  }
+
+  // MANGA VIEWER
+  function openMangaViewer(manga, totalPages) {
+    activeViewerItem = {
+      type: "manga",
+      data: manga,
+      totalPages: totalPages,
+      currentPage: 1
+    };
+    viewerTitleSpan.innerText = `📖 ${manga.title} - reading mode`;
+    viewerPanel.style.display = "block";
+    renderMangaContent(manga, activeViewerItem.currentPage, totalPages);
+  }
+
+  function renderMangaContent(manga, pageNum, totalPages) {
+    const pageUrl = getMangaPageUrl(manga.id, pageNum);
+    viewerContentDiv.innerHTML = `
+      <div class="manga-viewer">
+        <img class="manga-page" src="${pageUrl}" alt="Manga page ${pageNum}" onerror="this.src='https://picsum.photos/id/1/800/1100?grayscale';">
+        <div class="page-nav">
+          <button id="prevPageBtn" ${pageNum === 1 ? 'disabled' : ''}>◀ PREV</button>
+          <span style="background:#1e2f3a; padding:0.3rem 1rem; border-radius:30px;">Page ${pageNum} / ${totalPages}</span>
+          <button id="nextPageBtn" ${pageNum === totalPages ? 'disabled' : ''}>NEXT ▶</button>
+        </div>
+      </div>
+    `;
+    const prevBtn = document.getElementById("prevPageBtn");
+    const nextBtn = document.getElementById("nextPageBtn");
+    if (prevBtn) prevBtn.onclick = () => {
+      if (activeViewerItem.currentPage > 1) {
+        activeViewerItem.currentPage--;
+        renderMangaContent(manga, activeViewerItem.currentPage, totalPages);
+      }
+    };
+    if (nextBtn) nextBtn.onclick = () => {
+      if (activeViewerItem.currentPage < totalPages) {
+        activeViewerItem.currentPage++;
+        renderMangaContent(manga, activeViewerItem.currentPage, totalPages);
+      }
+    };
+  }
+
+  // ANIME VIEWER with episode selector
+  function openAnimeViewer(anime, totalEpisodes) {
+    activeViewerItem = {
+      type: "anime",
+      data: anime,
+      totalEpisodes: totalEpisodes,
+      currentEpisode: 1
+    };
+    viewerTitleSpan.innerText = `🎬 ${anime.title} - streaming`;
+    viewerPanel.style.display = "block";
+    renderAnimeContent(anime, activeViewerItem.currentEpisode, totalEpisodes);
+  }
+
+  function renderAnimeContent(anime, episodeNum, totalEpisodes) {
+    const videoSrc = getEpisodeVideoUrl(anime.id, episodeNum);
+    // create episode buttons array
+    let epsButtons = '';
+    for (let i = 1; i <= totalEpisodes; i++) {
+      epsButtons += `<button class="ep-btn ${i === episodeNum ? 'active-ep' : ''}" data-ep="${i}">Ep ${i}</button>`;
+    }
+    viewerContentDiv.innerHTML = `
+      <div style="width:100%; text-align:center;">
+        <div class="video-container">
+          <video controls autoplay key="${videoSrc}" width="100%">
+            <source src="${videoSrc}" type="video/mp4">
+            Your browser does not support the video tag. But you're pirating, upgrade!
+          </video>
+        </div>
+        <div class="episode-selector" id="episodeSelector">
+          ${epsButtons}
+        </div>
+        <p style="margin-top:12px; font-size:0.8rem;">⚡ Episode ${episodeNum} · streaming free</p>
+      </div>
+    `;
+    // attach episode listeners
+    const epsContainer = document.getElementById("episodeSelector");
+    if (epsContainer) {
+      const allEpBtns = epsContainer.querySelectorAll(".ep-btn");
+      allEpBtns.forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const newEp = parseInt(btn.dataset.ep);
+          if (!isNaN(newEp) && newEp !== activeViewerItem.currentEpisode) {
+            activeViewerItem.currentEpisode = newEp;
+            renderAnimeContent(anime, newEp, totalEpisodes);
+          }
+        });
+      });
+    }
+    // force video element load, but added autoplay may work partially, fine.
+    const videoElem = viewerContentDiv.querySelector("video");
+    if (videoElem) {
+      videoElem.load();
+      videoElem.play().catch(e => console.log("autoplay blocked"));
+    }
+  }
+
+  // close viewer
+  function closeViewer() {
+    viewerPanel.style.display = "none";
+    viewerContentDiv.innerHTML = "";
+    activeViewerItem = null;
+  }
+
+  // mode switch
+  function setMode(mode) {
+    currentMode = mode;
+    modeBtns.forEach(btn => {
+      if (btn.dataset.mode === mode) btn.classList.add("active");
+      else btn.classList.remove("active");
+    });
+    // reset search maybe not reset but re-render
+    renderGrid();
+    // if viewer open, close because mode changed
+    if (viewerPanel.style.display === "block") closeViewer();
+  }
+
+  // search handler
+  function performSearch() {
+    searchQuery = searchInput.value.trim();
+    renderGrid();
+    if (viewerPanel.style.display === "block") closeViewer();
+  }
+
+  // Event listeners
+  modeBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      setMode(btn.dataset.mode);
+    });
+  });
+
+  searchBtn.addEventListener("click", performSearch);
+  searchInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") performSearch();
+  });
+  closeViewerBtn.addEventListener("click", closeViewer);
+
+  // initial render
+  renderGrid();
+</script>
+</body>
+</html>

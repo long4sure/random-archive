@@ -1,0 +1,58 @@
+/* report-management.css — page-specific only */
+
+/* ── Sub-nav ── */
+.sub-nav { display:flex; gap:0; background:var(--white); border-bottom:1px solid var(--border); padding:0 28px; }
+.sub-nav-btn { padding:11px 20px; border:none; border-bottom:2px solid transparent; margin-bottom:-1px; background:transparent; font-family:'Inter',sans-serif; font-size:13px; font-weight:600; color:var(--text-secondary); cursor:pointer; transition:all .15s; display:flex; align-items:center; gap:6px; }
+.sub-nav-btn:hover  { color:var(--pioneer-blue); background:var(--accent-faint); }
+.sub-nav-btn.active { color:var(--pioneer-blue); border-bottom-color:var(--pioneer-blue); background:var(--pioneer-blue-light); }
+
+/* ── Input panel ── */
+.input-panel { background:var(--white); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-sm); margin-bottom:20px; overflow:hidden; }
+.input-panel-head { padding:12px 20px; border-bottom:1px solid var(--border); background:var(--bg); font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.6px; display:flex; align-items:center; gap:8px; }
+.input-panel-head::before { content:''; width:3px; height:12px; background:var(--pioneer-red); border-radius:2px; flex-shrink:0; }
+.input-controls { display:flex; gap:14px; padding:14px 20px; border-bottom:1px solid var(--border); background:var(--bg); flex-wrap:wrap; align-items:flex-end; }
+.filter-hint { padding:8px 20px 10px; font-size:12px; color:var(--text-muted); }
+
+/* ── Shift checkboxes ── */
+.shift-checks { display:flex; gap:10px; flex-wrap:wrap; padding-top:4px; }
+.shift-check-label { display:flex; align-items:center; gap:5px; font-size:13px; cursor:pointer; color:var(--text-secondary); font-weight:500; }
+
+/* ── Report table card ── */
+.report-table-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-sm); margin-bottom:20px; overflow:hidden; }
+.report-table-head { padding:10px 16px; border-bottom:1px solid var(--border); background:var(--bg); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+.report-table-head-title { font-size:12px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.5px; }
+
+/* ── Summary stats bar ── */
+.summary-stats { display:flex; flex-wrap:wrap; gap:10px; padding:12px 16px; background:var(--bg); border-top:1px solid var(--border); }
+.stat-item { display:flex; flex-direction:column; gap:3px; }
+.stat-label { font-size:9px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.8px; }
+.stat-input { padding:5px 10px; border:1px solid var(--border); border-radius:var(--radius-sm); font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--text-primary); background:var(--white); width:110px; }
+.lipas-inputs { display:flex; align-items:center; gap:4px; }
+.lipas-div { color:var(--text-muted); font-weight:700; }
+
+/* ── Save bar ── */
+.save-bar { display:flex; gap:12px; flex-wrap:wrap; padding:16px; background:var(--green-light); border:1px solid rgba(21,128,61,.2); border-radius:var(--radius); margin-top:20px; }
+
+/* ── LV totals grid ── */
+.lv-total-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius); padding:16px 20px; box-shadow:var(--shadow-sm); }
+.lv-total-card.lipas  { border-left:3px solid var(--pioneer-blue); }
+.lv-total-card.volpas { border-left:3px solid var(--pioneer-red); }
+.lv-total-card .card-title { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--text-secondary); margin-bottom:6px; }
+.lv-total-card .card-value { font-family:'JetBrains Mono',monospace; font-size:26px; font-weight:600; color:var(--text-primary); line-height:1; }
+.lv-pct { font-size:13px; font-weight:700; margin-top:4px; }
+.pct-green { color:var(--green); }
+.pct-red   { color:var(--pioneer-red); }
+
+/* ── Week radio ── */
+.week-radio-group { display:flex; flex-direction:column; gap:10px; }
+.week-radio { display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer; color:var(--text-secondary); font-weight:500; }
+
+/* ── btn-purple ── */
+.btn-purple { background:#ede9fe; color:#5b21b6; border-color:rgba(91,33,182,.2); }
+.btn-purple:hover { background:#7c3aed; color:#fff; }
+
+@media (max-width:768px) {
+    .sub-nav { padding:0 14px; overflow-x:auto; }
+    .sub-nav-btn { padding:10px 14px; font-size:12px; white-space:nowrap; }
+    .input-controls { flex-direction:column; }
+}

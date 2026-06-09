@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DEADSTOCK — Underground Thrift</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- Grain overlay for that vintage texture -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════ -->
+  <nav class="navbar navbar-expand-lg sticky-top ds-nav" id="mainNav">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand ds-brand" href="#" onclick="App.showView('home')">
+        <span class="brand-dead">DEAD</span><span class="brand-stock">STOCK</span>
+        <span class="brand-tag">est. 1994</span>
+      </a>
+      <button class="navbar-toggler ds-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link ds-link" href="#" onclick="App.showView('home')">SHOP</a></li>
+          <li class="nav-item"><a class="nav-link ds-link" href="#" onclick="App.showView('sell')">SELL</a></li>
+          <li class="nav-item"><a class="nav-link ds-link" href="#" onclick="App.showView('admin')">ADMIN</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link ds-link dropdown-toggle" href="#" data-bs-toggle="dropdown">FILTER</a>
+            <ul class="dropdown-menu ds-dropdown">
+              <li><a class="dropdown-item" href="#" onclick="App.filterCategory('All')">— ALL PIECES</a></li>
+              <li><a class="dropdown-item" href="#" onclick="App.filterCategory('Tops')">— TOPS</a></li>
+              <li><a class="dropdown-item" href="#" onclick="App.filterCategory('Bottoms')">— BOTTOMS</a></li>
+              <li><a class="dropdown-item" href="#" onclick="App.filterCategory('Outerwear')">— OUTERWEAR</a></li>
+              <li><a class="dropdown-item" href="#" onclick="App.filterCategory('Dresses')">— DRESSES</a></li>
+              <li><a class="dropdown-item" href="#" onclick="App.filterCategory('Accessories')">— ACCESSORIES</a></li>
+            </ul>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center gap-3">
+          <div class="ds-search-wrap">
+            <span class="search-icon">⌕</span>
+            <input type="text" id="searchInput" class="ds-search" placeholder="search the rack..." oninput="App.search(this.value)"/>
+          </div>
+          <button class="ds-cart-btn" onclick="App.showView('cart')">
+            BAG <span class="ds-badge" id="cartCount">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════ -->
+  <section class="ds-hero" id="heroSection">
+    <div class="hero-tape hero-tape-top">
+      DEADSTOCK · PRE-LOVED · ONE OF A KIND · SUSTAINABLE FASHION · DEADSTOCK · PRE-LOVED · ONE OF A KIND ·&nbsp;
+    </div>
+    <div class="container-fluid px-4 h-100 d-flex align-items-center">
+      <div class="hero-inner">
+        <p class="hero-sub-top">[ underground thrift collective ]</p>
+        <h1 class="hero-title">
+          <span class="title-line-1">WORN</span>
+          <span class="title-line-2">NOT</span>
+          <span class="title-line-3">WASTED</span>
+        </h1>
+        <div class="hero-divider"></div>
+        <p class="hero-copy">Handpicked deadstock &amp; pre-loved pieces.<br/>Every thread has a story. Find yours.</p>
+        <button class="ds-btn-primary mt-4" onclick="App.scrollToShop()">DIG THE RACK →</button>
+      </div>
+    </div>
+    <div class="hero-tape hero-tape-bottom">
+      DEADSTOCK · PRE-LOVED · ONE OF A KIND · SUSTAINABLE FASHION · DEADSTOCK · PRE-LOVED · ONE OF A KIND ·&nbsp;
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       MAIN APP CONTENT
+  ═══════════════════════════════════════ -->
+  <div class="container-fluid px-4 py-5" id="appContent">
+
+    <!-- ── SHOP VIEW ── -->
+    <div id="view-home">
+      <div class="ds-section-header mb-4">
+        <div>
+          <h2 class="ds-section-title" id="shopHeading">THE RACK</h2>
+          <p class="ds-section-sub" id="shopSubtitle">All pieces · sorted by freshness</p>
+        </div>
+        <div class="d-flex gap-3 align-items-center flex-wrap">
+          <select class="ds-select" id="sortSelect" onchange="App.sort(this.value)">
+            <option value="default">SORT: DEFAULT</option>
+            <option value="price-asc">PRICE: LOW → HIGH</option>
+            <option value="price-desc">PRICE: HIGH → LOW</option>
+            <option value="name-asc">NAME: A → Z</option>
+          </select>
+          <span class="ds-count" id="itemCount">0 pieces</span>
+        </div>
+      </div>
+      <div class="row g-3" id="productGrid"></div>
+      <div id="emptyState" class="ds-empty d-none">
+        <p class="ds-empty-icon">[ — ]</p>
+        <h4>NOTHING HERE.</h4>
+        <p>Try a different search or category.</p>
+      </div>
+    </div>
+
+    <!-- ── PRODUCT DETAIL VIEW ── -->
+    <div id="view-detail" class="d-none">
+      <button class="ds-back-btn mb-4" onclick="App.showView('home')">← BACK TO RACK</button>
+      <div class="row g-5" id="detailContent"></div>
+    </div>
+
+    <!-- ── CART VIEW ── -->
+    <div id="view-cart" class="d-none">
+      <h2 class="ds-section-title mb-1">YOUR BAG</h2>
+      <p class="ds-section-sub mb-4">Review before you cop</p>
+      <div id="cartContent"></div>
+    </div>
+
+    <!-- ── SELL VIEW (user submit listing) ── -->
+    <div id="view-sell" class="d-none">
+      <h2 class="ds-section-title mb-1">DROP YOUR PIECE</h2>
+      <p class="ds-section-sub mb-4">Submit for admin review — approved items go live</p>
+      <div class="row justify-content-center">
+        <div class="col-lg-7">
+          <div class="ds-form-card">
+            <div class="form-stamp">PENDING REVIEW</div>
+            <div class="row g-3 mt-2">
+              <div class="col-md-6">
+                <label class="ds-label">Item Name *</label>
+                <input type="text" class="ds-input" id="s-name" placeholder="e.g. Vintage Levi's 501"/>
+              </div>
+              <div class="col-md-6">
+                <label class="ds-label">Category *</label>
+                <select class="ds-input" id="s-category">
+                  <option value="">— Select —</option>
+                  <option>Tops</option><option>Bottoms</option>
+                  <option>Outerwear</option><option>Dresses</option><option>Accessories</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="ds-label">Price (₱) *</label>
+                <input type="number" class="ds-input" id="s-price" placeholder="350"/>
+              </div>
+              <div class="col-md-4">
+                <label class="ds-label">Size</label>
+                <select class="ds-input" id="s-size">
+                  <option>One Size</option><option>XS</option><option>S</option>
+                  <option>M</option><option>L</option><option>XL</option><option>XXL</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="ds-label">Condition</label>
+                <select class="ds-input" id="s-condition">
+                  <option>Like New</option><option>Good</option><option>Fair</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label class="ds-label">Image URL</label>
+                <input type="text" class="ds-input" id="s-image" placeholder="https://..."/>
+              </div>
+              <div class="col-12">
+                <label class="ds-label">Your Name *</label>
+                <input type="text" class="ds-input" id="s-seller" placeholder="your handle or name"/>
+              </div>
+              <div class="col-12">
+                <label class="ds-label">Description</label>
+                <textarea class="ds-input" id="s-desc" rows="3" placeholder="Tell us the story of this piece..."></textarea>
+              </div>
+            </div>
+            <div class="alert ds-alert d-none mt-3" id="sellError"></div>
+            <button class="ds-btn-primary w-100 mt-4" onclick="App.submitListing()">SUBMIT FOR REVIEW →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADMIN VIEW ── -->
+    <div id="view-admin" class="d-none">
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+          <h2 class="ds-section-title mb-1">ADMIN PANEL</h2>
+          <p class="ds-section-sub">Review · Approve · Reject · Manage inventory</p>
+        </div>
+        <button class="ds-btn-primary" onclick="App.openModal()">+ ADD PIECE</button>
+      </div>
+
+      <!-- Admin tabs -->
+      <div class="ds-tabs mb-4">
+        <button class="ds-tab active" id="tab-pending" onclick="App.adminTab('pending')">PENDING <span id="pendingCount" class="ds-tab-badge">0</span></button>
+        <button class="ds-tab" id="tab-inventory" onclick="App.adminTab('inventory')">INVENTORY</button>
+      </div>
+
+      <!-- Pending review queue -->
+      <div id="admin-pending">
+        <div id="pendingGrid"></div>
+        <div id="pendingEmpty" class="ds-empty d-none">
+          <p class="ds-empty-icon">[ ✓ ]</p>
+          <h4>ALL CLEAR.</h4>
+          <p>No pending submissions.</p>
+        </div>
+      </div>
+
+      <!-- Inventory table -->
+      <div id="admin-inventory" class="d-none">
+        <div id="adminStats" class="row g-3 mb-4"></div>
+        <div class="ds-table-wrap">
+          <table class="table ds-table">
+            <thead>
+              <tr>
+                <th>IMG</th><th>NAME</th><th>CAT</th><th>SIZE</th>
+                <th>COND</th><th>PRICE</th><th>STOCK</th><th>STATUS</th><th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="adminTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SUCCESS VIEW ── -->
+    <div id="view-success" class="d-none text-center py-5">
+      <p class="success-stamp">ORDER PLACED</p>
+      <h2 class="ds-section-title mt-2">YOU'RE GOOD.</h2>
+      <p class="ds-section-sub">Thanks for copping from DEADSTOCK.</p>
+      <button class="ds-btn-primary mt-4" onclick="App.showView('home')">BACK TO THE RACK →</button>
+    </div>
+
+    <!-- ── SUBMIT SUCCESS VIEW ── -->
+    <div id="view-submitted" class="d-none text-center py-5">
+      <p class="success-stamp">SUBMITTED</p>
+      <h2 class="ds-section-title mt-2">PIECE DROPPED.</h2>
+      <p class="ds-section-sub">Admin will review your submission. You'll be notified.</p>
+      <button class="ds-btn-primary mt-4" onclick="App.showView('home')">BACK TO THE RACK →</button>
+    </div>
+
+  </div><!-- /appContent -->
+
+  <!-- ═══════════════════════════════════════
+       MODALS
+  ═══════════════════════════════════════ -->
+
+  <!-- Add / Edit Product Modal -->
+  <div class="modal fade" id="productModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content ds-modal">
+        <div class="modal-header">
+          <h5 class="modal-title ds-modal-title" id="modalTitle">ADD PIECE</h5>
+          <button type="button" class="ds-modal-close" data-bs-dismiss="modal">✕</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="editId"/>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="ds-label">Name *</label>
+              <input type="text" class="ds-input" id="f-name"/>
+            </div>
+            <div class="col-md-6">
+              <label class="ds-label">Category *</label>
+              <select class="ds-input" id="f-category">
+                <option value="">— Select —</option>
+                <option>Tops</option><option>Bottoms</option>
+                <option>Outerwear</option><option>Dresses</option><option>Accessories</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="ds-label">Price (₱) *</label>
+              <input type="number" class="ds-input" id="f-price" min="0"/>
+            </div>
+            <div class="col-md-4">
+              <label class="ds-label">Size</label>
+              <select class="ds-input" id="f-size">
+                <option>One Size</option><option>XS</option><option>S</option>
+                <option>M</option><option>L</option><option>XL</option><option>XXL</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="ds-label">Stock *</label>
+              <input type="number" class="ds-input" id="f-stock" min="0"/>
+            </div>
+            <div class="col-md-6">
+              <label class="ds-label">Condition</label>
+              <select class="ds-input" id="f-condition">
+                <option>Like New</option><option>Good</option><option>Fair</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="ds-label">Image URL</label>
+              <input type="text" class="ds-input" id="f-image"/>
+            </div>
+            <div class="col-12">
+              <label class="ds-label">Description</label>
+              <textarea class="ds-input" id="f-desc" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="alert ds-alert d-none mt-3" id="formError"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="ds-btn-ghost" data-bs-dismiss="modal">CANCEL</button>
+          <button class="ds-btn-primary" onclick="App.saveProduct()">SAVE PIECE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content ds-modal text-center p-4">
+        <p class="success-stamp" style="color:#ff4444">DELETE</p>
+        <h5 class="ds-modal-title mt-2">SURE ABOUT THAT?</h5>
+        <p class="ds-section-sub mb-3">This can't be undone.</p>
+        <div class="d-flex gap-2 justify-content-center">
+          <button class="ds-btn-ghost" data-bs-dismiss="modal">CANCEL</button>
+          <button class="ds-btn-danger" id="confirmDeleteBtn">DELETE IT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="appToast" class="toast ds-toast" role="alert">
+      <div class="d-flex align-items-center">
+        <div class="toast-body ds-toast-body" id="toastMsg"></div>
+        <button type="button" class="ds-toast-close" data-bs-dismiss="toast">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="ds-footer">
+    <div class="container-fluid px-4">
+      <div class="footer-tape">
+        DEADSTOCK · UNDERGROUND THRIFT · EST. 1994 · WORN NOT WASTED · DEADSTOCK · UNDERGROUND THRIFT ·&nbsp;
+      </div>
+      <div class="footer-bottom">
+        <span class="ds-brand" style="font-size:1.1rem"><span class="brand-dead">DEAD</span><span class="brand-stock">STOCK</span></span>
+        <span class="ds-section-sub">Frontend OOP Demo · Bootstrap 5 · Supabase-ready</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

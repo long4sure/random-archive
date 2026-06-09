@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management — Production Monitoring System</title>
+    <link rel="icon" href="../images/p_icon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="manage-users.css">
+    <script src="manage-users.js" defer></script>
+</head>
+<body>
+<div class="app-shell">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="sidebar-brand-logo"><img src="../images/pioneerlogo.png" alt="Pioneer"></div>
+            <div><div class="sidebar-brand-title">Pioneer</div><div class="sidebar-brand-sub">Production Monitor</div></div>
+        </div>
+        <nav class="sidebar-nav">
+            <a class="nav-item" href="dashboard.html"><span class="nav-icon">◈</span><span class="nav-label">Dashboard</span></a>
+            <a class="nav-item" href="production-records.html"><span class="nav-icon">◈</span><span class="nav-label">Production Records</span></a>
+            <a class="nav-item" href="report-management.html"><span class="nav-icon">◈</span><span class="nav-label">Line Report &amp; LIPAS VOLPAS</span></a>
+            <div class="nav-section-label">Admin Access</div>
+            <a class="nav-item active" href="manage-users.html"><span class="nav-icon">◈</span><span class="nav-label">User Management <span class="nav-badge" id="navBadge">2</span></span></a>
+        </nav>
+        <div class="sidebar-footer">© 2026 Pioneer Corp.</div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <div class="main" id="mainArea">
+        <header class="topbar">
+            <div class="topbar-inner">
+                <div class="topbar-left"><button class="hamburger-btn" id="hamburgerBtn">&#9776;</button></div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:1px;">
+                    <div class="topbar-title" id="topbarTitle">User Approval</div>
+                    <div class="topbar-breadcrumb">User Management &rsaquo; <span id="topbarSub">Approval</span></div>
+                </div>
+                <div class="topbar-right">
+                    <span class="topbar-period">May 2026</span>
+                    <span class="topbar-dot"></span>
+                    <span class="role-badge system_admin">System Admin</span>
+                    <button class="logout-btn" onclick="openLogout()">&#x2192; Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="sub-nav">
+            <button class="sub-nav-btn" id="btn-approval"  onclick="showView('approval')"><span>✓</span> Approval</button>
+            <button class="sub-nav-btn" id="btn-all-users" onclick="showView('all-users')"><span>☰</span> All Users</button>
+            <button class="sub-nav-btn" id="btn-add-user"  onclick="showView('add-user')"><span>＋</span> Add User</button>
+        </div>
+
+        <div class="content">
+
+            <!-- ===== APPROVAL VIEW ===== -->
+            <div id="approval-view" class="mu-view hidden">
+                <div class="section-title">User Approval Management <span class="section-chip">Pending registrations</span></div>
+
+                <div class="kpi-grid" id="overviewGrid"></div>
+
+                <div class="sa-tabs" id="approvalTabs">
+                    <button class="sa-tab active" onclick="switchTab('pending',this)">Pending <span class="sa-tab-badge" id="badge-pending">0</span></button>
+                    <button class="sa-tab" onclick="switchTab('approved',this)">Approved <span class="sa-tab-badge" id="badge-approved">0</span></button>
+                    <button class="sa-tab" onclick="switchTab('rejected',this)">Rejected <span class="sa-tab-badge" id="badge-rejected">0</span></button>
+                    <button class="sa-tab" onclick="switchTab('all',this)">All <span class="sa-tab-badge" id="badge-all">0</span></button>
+                </div>
+
+                <div class="table-wrap" id="approvalTableWrap">
+                    <div class="table-scroll"><table><thead></thead><tbody></tbody></table></div>
+                </div>
+            </div>
+
+            <!-- ===== ALL USERS VIEW ===== -->
+            <div id="all-users-view" class="mu-view hidden">
+                <div class="section-title">All Users</div>
+                <div class="sa-search-wrap">
+                    <span class="sa-search-icon">⌕</span>
+                    <input class="sa-search-input" type="text" id="userSearch" placeholder="Search by username or name…" oninput="renderAllUsers()">
+                </div>
+                <div class="table-wrap" id="allUsersTableWrap">
+                    <div class="table-scroll"><table><thead></thead><tbody></tbody></table></div>
+                </div>
+            </div>
+
+            <!-- ===== ADD USER VIEW ===== -->
+            <div id="add-user-view" class="mu-view hidden">
+                <div class="section-title">Add New User</div>
+                <div id="addUserAlert" class="alert hidden"></div>
+                <div class="input-panel">
+                    <div class="input-panel-head">User Details</div>
+                    <form id="addUserForm" onsubmit="submitAddUser(event)" style="padding:20px;">
+                        <div class="form-row">
+                            <div class="form-group"><label class="form-label">First Name *</label><input class="form-input" type="text" id="au-first" required></div>
+                            <div class="form-group"><label class="form-label">Last Name *</label><input class="form-input" type="text" id="au-last" required></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label class="form-label">Username *</label><input class="form-input" type="text" id="au-username" required></div>
+                            <div class="form-group"><label class="form-label">Password *</label>
+                                <div class="pw-wrap"><input class="form-input" type="password" id="au-password" required minlength="6"><button type="button" class="pw-eye" onclick="togglePw('au-password',this)">👁</button></div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label class="form-label">Role *</label>
+                                <select class="form-select" id="au-role" required onchange="onRoleChange()">
+                                    <option value="">— Select Role —</option>
+                                    <option value="system_admin">System Administrator</option>
+                                    <option value="admin">Admin (Full Data Access)</option>
+                                    <option value="data_entry">Data Entry (Restricted)</option>
+                                    <option value="viewer">Viewer</option>
+                                </select>
+                            </div>
+                            <div class="form-group hidden" id="au-team-group"><label class="form-label">Team *</label>
+                                <select class="form-select" id="au-team" onchange="onTeamChange()">
+                                    <option value="">— Select Team —</option>
+                                    <option value="A">Team A</option><option value="B">Team B</option><option value="C">Team C</option>
+                                </select>
+                            </div>
+                            <div class="form-group hidden" id="au-line-group"><label class="form-label">Line *</label>
+                                <select class="form-select" id="au-line"><option value="">— Select Line —</option></select>
+                            </div>
+                        </div>
+                        <div class="input-panel-actions" style="padding:0;border:none;background:transparent;margin-top:8px;">
+                            <button type="submit" class="btn btn-primary">＋ Create User</button>
+                            <button type="button" class="btn btn-secondary" onclick="showView('approval')">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal-box" style="max-width:520px;">
+        <div class="modal-head"><span class="modal-title">✎ Edit User</span><button class="modal-close" onclick="closeEditModal()">✕</button></div>
+        <div class="modal-body">
+            <input type="hidden" id="edit-uid">
+            <div class="form-row">
+                <div class="form-group"><label class="form-label">Username</label><input class="form-input" id="edit-username" readonly></div>
+                <div class="form-group"><label class="form-label">Role *</label>
+                    <select class="form-select" id="edit-role" onchange="onEditRoleChange()">
+                        <option value="system_admin">System Administrator</option>
+                        <option value="admin">Admin</option>
+                        <option value="data_entry">Data Entry</option>
+                        <option value="viewer">Viewer</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row hidden" id="edit-team-row">
+                <div class="form-group"><label class="form-label">Team *</label>
+                    <select class="form-select" id="edit-team" onchange="onEditTeamChange()">
+                        <option value="">— Select Team —</option>
+                        <option value="A">Team A</option><option value="B">Team B</option><option value="C">Team C</option>
+                    </select>
+                </div>
+                <div class="form-group"><label class="form-label">Line *</label>
+                    <select class="form-select" id="edit-line"><option value="">— Select Line —</option></select>
+                </div>
+            </div>
+            <div class="form-group"><label class="form-label">New Password <span style="color:var(--text-muted);font-weight:400;">(leave blank to keep)</span></label>
+                <div class="pw-wrap"><input class="form-input" type="password" id="edit-password" minlength="6" placeholder="Leave blank to keep current"><button type="button" class="pw-eye" onclick="togglePw('edit-password',this)">👁</button></div>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+            <button class="btn btn-primary"   onclick="saveEditUser()">✓ Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete / Approve / Reject dialogs -->
+<div class="cdlg-overlay" id="deleteDlg">
+    <div class="cdlg-box">
+        <div class="cdlg-icon"><span style="font-size:22px;">✕</span></div>
+        <div class="cdlg-title">Delete User?</div>
+        <div class="cdlg-msg">Permanently delete <strong id="deleteUsername"></strong>? This cannot be undone.</div>
+        <div class="cdlg-actions">
+            <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+            <button class="btn btn-danger"    onclick="confirmDelete()">Delete</button>
+        </div>
+    </div>
+</div>
+
+<div class="cdlg-overlay" id="approveDlg">
+    <div class="cdlg-box">
+        <div class="cdlg-icon success"><span style="font-size:22px;">✓</span></div>
+        <div class="cdlg-title">Approve User?</div>
+        <div class="cdlg-msg"><strong id="approveUsername"></strong> will be able to log in immediately.</div>
+        <div class="cdlg-actions">
+            <button class="btn btn-secondary" onclick="closeApproveModal()">Cancel</button>
+            <button class="btn btn-primary"   onclick="confirmApprove()">Approve</button>
+        </div>
+    </div>
+</div>
+
+<div class="cdlg-overlay" id="rejectDlg">
+    <div class="cdlg-box">
+        <div class="cdlg-icon"><span style="font-size:22px;">✕</span></div>
+        <div class="cdlg-title">Reject User?</div>
+        <div class="cdlg-msg">Reject registration for <strong id="rejectUsername"></strong>?</div>
+        <div class="cdlg-actions">
+            <button class="btn btn-secondary" onclick="closeRejectModal()">Cancel</button>
+            <button class="btn btn-danger"    onclick="confirmReject()">Reject</button>
+        </div>
+    </div>
+</div>
+
+<div class="cdlg-overlay" id="logoutDlg">
+    <div class="cdlg-box">
+        <div class="cdlg-icon"><span>&#x2192;</span></div>
+        <div class="cdlg-title">Sign Out?</div>
+        <div class="cdlg-msg">You'll be returned to the login screen.</div>
+        <div class="cdlg-actions">
+            <button class="btn btn-secondary" onclick="closeLogout()">Cancel</button>
+            <button class="btn btn-danger" onclick="window.location.href='auth-login.html'">Sign Out</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+</body>
+</html>

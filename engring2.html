@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utilities & R&M Dashboard | FY26 Performance</title>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+    
+    body {
+      background: #f0f4f8;
+      padding: 24px 20px;
+    }
+    
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    /* header */
+    .header {
+      margin-bottom: 28px;
+    }
+    
+    .header h1 {
+      font-size: 1.9rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #1a3c34, #2c5e4f);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+    
+    .header p {
+      color: #4a627a;
+      margin-top: 6px;
+      font-weight: 500;
+    }
+    
+    /* KPI cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    
+    .kpi-card {
+      background: white;
+      border-radius: 28px;
+      padding: 20px 18px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s;
+      border: 1px solid #e9edf2;
+    }
+    
+    .kpi-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 25px -12px rgba(0,0,0,0.1);
+    }
+    
+    .kpi-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      color: #5f7f9c;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .kpi-value {
+      font-size: 2.3rem;
+      font-weight: 800;
+      color: #1e2f3e;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    
+    .kpi-sub {
+      font-size: 0.8rem;
+      color: #6c86a3;
+      border-top: 1px solid #eef2f7;
+      padding-top: 8px;
+      margin-top: 6px;
+    }
+    
+    .badge-neg {
+      color: #d9534f;
+      background: #ffe8e6;
+      padding: 4px 8px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-block;
+    }
+    
+    .badge-pos {
+      color: #2c7a4d;
+      background: #e0f3e9;
+      padding: 4px 8px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    
+    /* two column layout */
+    .row-charts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    
+    .chart-card {
+      flex: 1 1 45%;
+      background: white;
+      border-radius: 28px;
+      padding: 18px 20px 20px 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      border: 1px solid #e9edf2;
+    }
+    
+    .chart-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+      color: #1f3b4a;
+      border-left: 5px solid #2c7a4d;
+      padding-left: 14px;
+    }
+    
+    canvas {
+      max-height: 280px;
+      width: 100%;
+    }
+    
+    .table-responsive {
+      background: white;
+      border-radius: 24px;
+      padding: 10px 0;
+      margin-bottom: 28px;
+      border: 1px solid #eef2f8;
+      overflow-x: auto;
+    }
+    
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 24px 0 12px 0;
+      color: #1f3b4a;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    
+    th {
+      text-align: left;
+      padding: 14px 12px;
+      background-color: #f8fafd;
+      color: #2c5a6e;
+      font-weight: 600;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f0f2f5;
+      color: #2c3e4e;
+    }
+    
+    .alert-box {
+      background: #fff8e7;
+      border-left: 6px solid #e6a017;
+      border-radius: 20px;
+      padding: 14px 20px;
+      margin: 20px 0;
+      font-size: 0.9rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .alert-text i {
+      color: #e6a017;
+      margin-right: 8px;
+    }
+    
+    .footer-note {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #7b8c9e;
+      margin-top: 30px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 20px;
+    }
+    
+    @media (max-width: 780px) {
+      .kpi-value { font-size: 1.8rem; }
+      .chart-card { flex: 1 1 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="dashboard-container">
+  <div class="header">
+    <h1><i class="fas fa-charging-station" style="color:#2c7a4d;"></i> Utility & R&M Performance</h1>
+    <p>FY26 Actual vs OB (Oct - Apr) • Cost per kg analysis & variance alerts</p>
+  </div>
+
+  <!-- KPI Cards: derived from actual data OB vs Act (Oct-Apr) -->
+  <div class="kpi-grid" id="kpiContainer"></div>
+
+  <!-- CHARTS ROW -->
+  <div class="row-charts">
+    <div class="chart-card">
+      <div class="chart-title"><i class="fas fa-chart-line"></i> Monthly Cost per kg (Utilities + R&M)</div>
+      <canvas id="costPerKgChart" width="400" height="240" style="max-height:260px"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title"><i class="fas fa-chart-bar"></i> Utilities & R&M Cost Trend (Actual)</div>
+      <canvas id="costTrendChart" width="400" height="240" style="max-height:260px"></canvas>
+    </div>
+  </div>
+  
+  <!-- Monthly details table -->
+  <div class="section-title"><i class="fas fa-table-list"></i> Monthly Breakdown (FY26 Actual)</div>
+  <div class="table-responsive">
+    <table id="monthlyTable">
+      <thead>
+        <tr><th>Month</th><th>Volume (kg)</th><th>Utilities ($)</th><th>R&M ($)</th><th>Util $/kg</th><th>R&M $/kg</th><th>Total $/kg</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Variance Summary OB vs ACT -->
+  <div class="section-title"><i class="fas fa-balance-scale"></i> Variance Analysis: OB vs Actual (Oct–Apr)</div>
+  <div class="table-responsive">
+    <table id="varianceTable">
+      <thead><tr><th>Category</th><th>Actual (Oct-Apr)</th><th>OB (Oct-Apr)</th><th>Variance ($)</th><th>% of OB</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Alert & Recommendations -->
+  <div class="alert-box">
+    <div class="alert-text"><i class="fas fa-exclamation-triangle"></i> <strong>Critical alerts</strong><br>Utilities +28% over OB | R&M +43% over OB | April R&M spike ($0.84/kg)</div>
+    <div><i class="fas fa-lightbulb"></i> Investigate Apr maintenance event & Feb inefficiency</div>
+  </div>
+  
+  <div class="footer-note">
+    📊 Data based on ACT26 (Oct'25–Apr'26) vs OB26 target | Volume from provided production | Engg CC (total cost/vol) variance +0.21 $/kg vs OB
+  </div>
+</div>
+
+<script>
+  // ------ DATA EXTRACTED FROM EXCEL (ACT26 & OB26) ------
+  // months: Oct, Nov, Dec, Jan, Feb, Mar, Apr
+  const months = ["OCT", "NOV", "DEC", "JAN", "FEB", "MAR", "APR"];
+  
+  // Actual FY26 values (from Sheet1 rows)
+  const actUtilities = [1419.39561, 1774.36129, 969.30035, 1402.33593, 1610.77519, 1823.86679, 1761.20857];
+  const actRMM = [627.40839, 534.58459, 592.59748, 413.5354, 782.00714, 720.1057, 1510.80286];
+  const actVolume = [1235.077205, 1604.295205, 1116.660513, 1610.185069, 1401.683754, 1923.820731, 1795.408962];
+  
+  // OB26 (budget) for Oct-Apr (matching same months: O3:U3 for utilities, O9:U9 for R&M, O4:U4 for volume)
+  // from file: OB26 OCT -> APR values given
+  const obUtilities = [1360.920885, 1360.920885, 1360.920885, 1360.920885, 1360.920885, 1098.063756, 1098.063756];
+  const obRMM = [147.667, 167.667, 467.667, 1707.667, 232.667, 608.667, 897.667];
+  const obVolume = [1221.865597, 1414.924444, 1090.696846, 1561.422665, 1557.403537, 1735.500296, 1562.843035];
+  
+  // Compute per kg
+  function costPerKg(util, rm, vol) {
+    if (!vol || vol === 0) return 0;
+    return (util + rm) / vol;
+  }
+  
+  // prepare monthly data for chart
+  const totalCostPerKg = [];
+  const utilPerKg = [];
+  const rmPerKg = [];
+  for (let i = 0; i < months.length; i++) {
+    const utilKg = actUtilities[i] / actVolume[i];
+    const rmKg = actRMM[i] / actVolume[i];
+    utilPerKg.push(utilKg);
+    rmPerKg.push(rmKg);
+    totalCostPerKg.push(utilKg + rmKg);
+  }
+  
+  // totals for variance (Oct-Apr)
+  const sumActUtil = actUtilities.reduce((a,b)=>a+b,0);
+  const sumActRmm = actRMM.reduce((a,b)=>a+b,0);
+  const sumActVol = actVolume.reduce((a,b)=>a+b,0);
+  const sumObUtil = obUtilities.reduce((a,b)=>a+b,0);
+  const sumObRmm = obRMM.reduce((a,b)=>a+b,0);
+  const sumObVol = obVolume.reduce((a,b)=>a+b,0);
+  
+  const totalActCost = sumActUtil + sumActRmm;
+  const totalObCost = sumObUtil + sumObRmm;
+  const actEnggCC = totalActCost / sumActVol;
+  const obEnggCC = totalObCost / sumObVol;
+  
+  // variance table rows
+  const varianceRows = [
+    { cat: "Utilities ($)", actual: sumActUtil, ob: sumObUtil, variance: sumActUtil - sumObUtil, pct: (sumActUtil/sumObUtil)*100 },
+    { cat: "R&M ($)", actual: sumActRmm, ob: sumObRmm, variance: sumActRmm - sumObRmm, pct: (sumActRmm/sumObRmm)*100 },
+    { cat: "Volume (kg)", actual: sumActVol, ob: sumObVol, variance: sumActVol - sumObVol, pct: (sumActVol/sumObVol)*100 },
+    { cat: "Engg CC ($/kg)", actual: actEnggCC, ob: obEnggCC, variance: actEnggCC - obEnggCC, pct: (actEnggCC/obEnggCC)*100 }
+  ];
+  
+  // KPI cards data
+  const kpis = [
+    { title: "Total Utilities (ACT)", value: `$${sumActUtil.toLocaleString(undefined, {minimumFractionDigits:0, maximumFractionDigits:0})}`, sub: `OB: $${sumObUtil.toLocaleString()}`, icon: "fa-bolt", highlight: sumActUtil > sumObUtil ? "over" : "under" },
+    { title: "Total R&M (ACT)", value: `$${sumActRmm.toLocaleString(undefined, {minimumFractionDigits:0, maximumFractionDigits:0})}`, sub: `OB: $${sumObRmm.toLocaleString()}`, icon: "fa-wrench", highlight: sumActRmm > sumObRmm ? "over" : "under" },
+    { title: "Total Volume", value: `${sumActVol.toLocaleString(undefined, {maximumFractionDigits:0})} kg`, sub: `OB volume: ${sumObVol.toLocaleString()} kg`, icon: "fa-cubes", highlight: sumActVol > sumObVol ? "positive" : "negative" },
+    { title: "Engg CC (Act)", value: `$${actEnggCC.toFixed(2)}/kg`, sub: `OB target: $${obEnggCC.toFixed(2)}/kg · ${((actEnggCC/obEnggCC-1)*100).toFixed(1)}% Δ`, icon: "fa-chart-simple", highlight: actEnggCC > obEnggCC ? "over" : "under" }
+  ];
+  
+  // Render KPI cards
+  const kpiContainer = document.getElementById('kpiContainer');
+  function renderKPI() {
+    kpis.forEach(k => {
+      let badgeHtml = '';
+      if (k.highlight === 'over') badgeHtml = `<span class="badge-neg">↑ over OB</span>`;
+      else if (k.highlight === 'under') badgeHtml = `<span class="badge-pos">↓ under OB</span>`;
+      else if (k.highlight === 'positive') badgeHtml = `<span class="badge-pos">+${((sumActVol/sumObVol-1)*100).toFixed(0)}%</span>`;
+      else if (k.highlight === 'negative') badgeHtml = `<span class="badge-neg">↓ variance</span>`;
+      
+      const cardDiv = document.createElement('div');
+      cardDiv.className = 'kpi-card';
+      cardDiv.innerHTML = `
+        <div class="kpi-title"><i class="fas ${k.icon}"></i> ${k.title}</div>
+        <div class="kpi-value">${k.value}</div>
+        <div class="kpi-sub">${k.sub} ${badgeHtml ? badgeHtml : ''}</div>
+      `;
+      kpiContainer.appendChild(cardDiv);
+    });
+  }
+  renderKPI();
+  
+  // monthly table rendering
+  const monthlyTbody = document.querySelector('#monthlyTable tbody');
+  for (let i=0; i<months.length; i++) {
+    const utilK = (actUtilities[i]/actVolume[i]).toFixed(3);
+    const rmK = (actRMM[i]/actVolume[i]).toFixed(3);
+    const totalK = ( (actUtilities[i]+actRMM[i])/actVolume[i] ).toFixed(3);
+    const row = `<tr>
+      <td><strong>${months[i]}</strong></td>
+      <td>${actVolume[i].toFixed(0)}</td>
+      <td>$${actUtilities[i].toFixed(2)}</td>
+      <td>$${actRMM[i].toFixed(2)}</td>
+      <td>$${utilK}</td>
+      <td>$${rmK}</td>
+      <td><strong>$${totalK}</strong></td>
+    </tr>`;
+    monthlyTbody.insertAdjacentHTML('beforeend', row);
+  }
+  
+  // variance table
+  const varianceTbody = document.querySelector('#varianceTable tbody');
+  varianceRows.forEach(row => {
+    let colorClass = row.variance > 0 ? 'badge-neg' : (row.variance < 0 ? 'badge-pos' : '');
+    let varianceFormatted = (row.variance > 0 ? '+' : '') + row.variance.toFixed(2);
+    if (row.cat.includes("Volume")) varianceFormatted = (row.variance > 0 ? '+' : '') + row.variance.toFixed(0);
+    if (row.cat.includes("Engg CC")) varianceFormatted = (row.variance > 0 ? '+' : '') + row.variance.toFixed(3);
+    const percentFormatted = row.pct.toFixed(1) + '%';
+    const rowHtml = `<tr>
+      <td>${row.cat}</td>
+      <td>${row.cat.includes("Volume") ? row.actual.toFixed(0) : (row.cat.includes("Engg CC") ? '$'+row.actual.toFixed(3) : '$'+row.actual.toFixed(2))}</td>
+      <td>${row.cat.includes("Volume") ? row.ob.toFixed(0) : (row.cat.includes("Engg CC") ? '$'+row.ob.toFixed(3) : '$'+row.ob.toFixed(2))}</td>
+      <td style="font-weight:600; ${row.variance > 0 ? 'color:#c0392b' : (row.variance<0 ? '#2c7a4d' : '')}">${varianceFormatted}</td>
+      <td>${percentFormatted}</td>
+    </tr>`;
+    varianceTbody.insertAdjacentHTML('beforeend', rowHtml);
+  });
+  
+  // ----- CHARTS -----
+  // Chart 1: total cost per kg (utilities + R&M per kg) monthly
+  const ctxLine = document.getElementById('costPerKgChart').getContext('2d');
+  new Chart(ctxLine, {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [
+        {
+          label: 'Total Cost per kg ($/kg)',
+          data: totalCostPerKg,
+          borderColor: '#e67e22',
+          backgroundColor: 'rgba(230,126,34,0.05)',
+          borderWidth: 3,
+          tension: 0.2,
+          fill: true,
+          pointBackgroundColor: '#e67e22',
+          pointRadius: 5,
+          pointHoverRadius: 7
+        },
+        {
+          label: 'Utilities $/kg',
+          data: utilPerKg,
+          borderColor: '#3498db',
+          borderWidth: 2,
+          borderDash: [5,5],
+          tension: 0.2,
+          pointRadius: 3,
+          fill: false
+        },
+        {
+          label: 'R&M $/kg',
+          data: rmPerKg,
+          borderColor: '#2c7a4d',
+          borderWidth: 2,
+          borderDash: [3,6],
+          tension: 0.2,
+          pointRadius: 3,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        tooltip: { mode: 'index', intersect: false },
+        legend: { position: 'top' }
+      },
+      scales: { y: { title: { display: true, text: '$ per kilogram', font: {weight:'bold'} } } }
+    }
+  });
+  
+  // Chart 2: Utilities & R&M cost (actual $) bar chart
+  const ctxBar = document.getElementById('costTrendChart').getContext('2d');
+  new Chart(ctxBar, {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [
+        {
+          label: 'Utilities Cost ($)',
+          data: actUtilities,
+          backgroundColor: '#f39c12',
+          borderRadius: 8,
+          barPercentage: 0.65
+        },
+        {
+          label: 'R&M Cost ($)',
+          data: actRMM,
+          backgroundColor: '#2ecc71',
+          borderRadius: 8,
+          barPercentage: 0.65
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { position: 'top' },
+        tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: $${ctx.raw.toFixed(2)}` } }
+      },
+      scales: { y: { title: { display: true, text: 'Cost (USD)' }, beginAtZero: true } }
+    }
+  });
+  
+  // Additional small annotation for OB vs actual summary (text)
+  const addComparisonNote = () => {
+    const container = document.querySelector('.alert-box');
+    const varianceUtil = ((sumActUtil/sumObUtil)-1)*100;
+    const varianceRMM = ((sumActRmm/sumObRmm)-1)*100;
+    if(container) {
+      const extraSpan = document.createElement('div');
+      extraSpan.style.fontSize = '0.8rem';
+      extraSpan.style.marginTop = '6px';
+      extraSpan.innerHTML = `<i class="fas fa-chart-line"></i> Utilities over OB by ${varianceUtil.toFixed(0)}% · R&M over OB by ${varianceRMM.toFixed(0)}% · Volume higher (+${((sumActVol/sumObVol)-1)*100}%) partially explains usage.`;
+      container.appendChild(extraSpan);
+    }
+  };
+  addComparisonNote();
+  
+  // also add mini FY25 reference note (benchmark from excel)
+  const footerNote = document.querySelector('.footer-note');
+  if(footerNote) {
+    const fY25Note = document.createElement('div');
+    fY25Note.style.marginTop = '8px';
+    fY25Note.style.fontSize = '0.7rem';
+    fY25Note.innerHTML = '📆 FY25 full year (Oct-Sep) Utilities: $15,572 | R&M: $7,910 | Volume reported irregular — check data consistency. Current FY26 pace suggests annual utilities >$18k if trend continues.';
+    footerNote.appendChild(fY25Note);
+  }
+  
+  // Add extra OB comparison sparkline note to highlight April R&M spike
+  const highRMMonth = months[rmPerKg.indexOf(Math.max(...rmPerKg))];
+  const worstUtilMonth = months[utilPerKg.indexOf(Math.max(...utilPerKg))];
+  const recommendationMsg = document.createElement('div');
+  recommendationMsg.style.background = '#fef5e8';
+  recommendationMsg.style.padding = '10px 18px';
+  recommendationMsg.style.borderRadius = '28px';
+  recommendationMsg.style.marginTop = '12px';
+  recommendationMsg.style.fontSize = '0.85rem';
+  recommendationMsg.innerHTML = `<i class="fas fa-clipboard-list"></i> <strong>Action items:</strong> April R&M ($${actRMM[6].toFixed(0)}) is highest – review maintenance logs. February & October show high utilities per kg >1.14 $/kg – investigate energy efficiency. OB R&M for Jan was unusually high ($1707) vs actual low R&M in Jan (good performance).`;
+  document.querySelector('.alert-box').parentNode.insertBefore(recommendationMsg, document.querySelector('.alert-box').nextSibling);
+</script>
+</body>
+</html>

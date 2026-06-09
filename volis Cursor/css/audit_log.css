@@ -1,0 +1,282 @@
+/* ================================================================
+   audit_log.css — Audit Trail page
+   Supplements mainpage.css. Do not redefine shared layout tokens.
+================================================================ */
+
+/* ── Filter Card ──────────────────────────────────────────────── */
+.filter-card {
+    background: var(--c-white);
+    border-radius: var(--r-xl);
+    padding: 26px 28px 20px;
+    margin-bottom: 26px;
+    box-shadow: var(--sh-sm);
+    border: 1px solid var(--c-slate-200);
+}
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+}
+/* Re-declare filter-group for audit_log since it has slightly different
+   label styling (uppercase, bolder) from the mainpage version */
+.filter-card .filter-group {
+    flex: 1;
+    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+}
+.filter-card .filter-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 700;
+    color: var(--c-slate-800);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.filter-card .filter-group select,
+.filter-card .filter-group input {
+    width: 100%;
+    padding: 10px 13px;
+    border: 2px solid var(--c-slate-200);
+    border-radius: var(--r-md);
+    font-size: 14px;
+    background: var(--c-white);
+    color: var(--c-slate-700);
+    transition: border-color var(--t-fast), box-shadow var(--t-fast);
+    -webkit-appearance: none;
+    appearance: none;
+}
+.filter-card .filter-group select:hover,
+.filter-card .filter-group input:hover { border-color: var(--c-slate-400); }
+.filter-card .filter-group select:focus,
+.filter-card .filter-group input:focus {
+    outline: none;
+    border-color: var(--c-blue);
+    box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
+}
+
+/* ── Filter actions ───────────────────────────────────────────── */
+.filter-card .filter-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-left: auto;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────── */
+.btn-apply {
+    background: linear-gradient(135deg, var(--c-blue), var(--c-blue-dark));
+    color: var(--c-white);
+    border: none;
+    padding: 10px 22px;
+    border-radius: var(--r-pill);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: transform var(--t-fast), box-shadow var(--t-fast);
+    box-shadow: 0 4px 12px rgba(59,130,246,0.26);
+    min-height: 40px;
+    white-space: nowrap;
+}
+.btn-apply:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(59,130,246,0.36);
+    background: linear-gradient(135deg, var(--c-blue-dark), var(--c-blue-deeper));
+}
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--c-slate-300);
+    color: var(--c-slate-500);
+    padding: 10px 22px;
+    border-radius: var(--r-pill);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: var(--t-fast);
+    min-height: 40px;
+    white-space: nowrap;
+}
+.btn-outline:hover { background: var(--c-slate-100); border-color: var(--c-slate-400); color: var(--c-slate-800); }
+.btn-success {
+    background: linear-gradient(135deg, var(--c-green), var(--c-green-dark));
+    color: var(--c-white);
+    padding: 10px 22px;
+    border-radius: var(--r-pill);
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(16,185,129,0.26);
+    transition: transform var(--t-fast), box-shadow var(--t-fast);
+    min-height: 40px;
+    white-space: nowrap;
+}
+.btn-success:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,0.36); }
+
+/* ── KPI cards (audit-specific colour overrides) ──────────────── */
+.audit-kpis { margin-bottom: 26px; }
+.audit-kpis .kpi-card {
+    border-radius: var(--r-xl);
+    padding: 20px 22px;
+    box-shadow: var(--sh-sm);
+    border: 1px solid var(--c-slate-200);
+    border-left-width: 5px;
+}
+.audit-kpis .kpi-card .value  { font-size: clamp(1.6rem, 3vw, 2rem); font-weight: 700; color: var(--c-slate-900); margin: 8px 0 4px; }
+.audit-kpis .kpi-card .label  { color: var(--c-slate-500); text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; font-weight: 700; }
+
+/* ── Table container ──────────────────────────────────────────── */
+.table-container {
+    background: var(--c-white);
+    border-radius: var(--r-xl);
+    box-shadow: var(--sh-sm);
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-bottom: 20px;
+    border: 1px solid var(--c-slate-300);
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ── Audit table ──────────────────────────────────────────────── */
+.audit-table {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: separate;
+    border-spacing: 0;
+    white-space: nowrap;
+    font-size: 14px;
+    background: var(--c-white);
+}
+.audit-table thead th {
+    background: linear-gradient(135deg, var(--c-slate-900) 0%, var(--c-slate-800) 100%);
+    color: var(--c-white);
+    padding: 13px 15px;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-right: 1px solid rgba(255,255,255,0.07);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    text-align: left;
+}
+.audit-table thead th:last-child { border-right: none; }
+.audit-table tbody td {
+    padding: 11px 15px;
+    border-bottom: 1px solid var(--c-slate-200);
+    color: var(--c-slate-700);
+    background: var(--c-white);
+    vertical-align: middle;
+}
+.audit-table tbody tr:last-child td { border-bottom: none; }
+.audit-table tbody tr:nth-child(even) td { background: var(--c-slate-50); }
+.audit-table tbody tr:hover td {
+    background: #e0f2fe;
+    transition: background var(--t-fast);
+}
+
+/* Sortable header links */
+.audit-table thead th a {
+    color: inherit;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color var(--t-fast);
+}
+.audit-table thead th a:hover { color: #bfdbfe; }
+
+/* ── Status badges ────────────────────────────────────────────── */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+.badge-login    { background: #dcfce7; color: #166534; }
+.badge-logout   { background: #fee2e2; color: #991b1b; }
+.badge-add      { background: #dbeafe; color: #1d4ed8; }
+.badge-edit     { background: #fef3c7; color: #92400e; }
+.badge-delete   { background: #fce7f3; color: #9d174d; }
+.badge-import   { background: #ede9fe; color: #5b21b6; }
+.badge-approve  { background: #d1fae5; color: #065f46; }
+.badge-reject   { background: #fee2e2; color: #991b1b; }
+.badge-default  { background: var(--c-slate-200); color: var(--c-slate-700); }
+
+/* ── Empty state ──────────────────────────────────────────────── */
+.no-data {
+    text-align: center;
+    padding: 44px 20px;
+    color: var(--c-slate-500);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* ── Pagination ───────────────────────────────────────────────── */
+.pagination {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 16px;
+}
+.pagination a,
+.pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: var(--r-sm);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--t-fast);
+    border: 1.5px solid var(--c-slate-200);
+    color: var(--c-slate-700);
+    background: var(--c-white);
+    cursor: pointer;
+}
+.pagination a:hover { background: var(--c-blue); color: var(--c-white); border-color: var(--c-blue); }
+.pagination .current {
+    background: var(--c-blue);
+    color: var(--c-white);
+    border-color: var(--c-blue);
+    cursor: default;
+}
+.pagination .disabled { opacity: 0.38; cursor: not-allowed; pointer-events: none; }
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .filter-row { flex-direction: column; align-items: stretch; }
+    .filter-card .filter-actions { margin-left: 0; width: 100%; flex-wrap: wrap; }
+    .filter-card .filter-actions > * { flex: 1; justify-content: center; }
+    .audit-table { min-width: 1000px; }
+    .pagination a,
+    .pagination span { min-width: 40px; height: 40px; font-size: 15px; }
+}
+
+@media (max-width: 480px) {
+    .filter-card { padding: 18px 16px; }
+    .btn-apply, .btn-outline, .btn-success { width: 100%; justify-content: center; }
+}

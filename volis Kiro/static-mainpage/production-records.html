@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Records — Production Monitoring System</title>
+    <link rel="icon" href="../images/p_icon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="production-records.css">
+    <script src="production-records.js" defer></script>
+</head>
+<body>
+<div class="app-shell">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="sidebar-brand-logo"><img src="../images/pioneerlogo.png" alt="Pioneer"></div>
+            <div><div class="sidebar-brand-title">Pioneer</div><div class="sidebar-brand-sub">Production Monitor</div></div>
+        </div>
+        <nav class="sidebar-nav">
+            <a class="nav-item" href="dashboard.html"><span class="nav-icon">◈</span><span class="nav-label">Dashboard</span></a>
+            <a class="nav-item active" href="production-records.html"><span class="nav-icon">◈</span><span class="nav-label">Production Records</span></a>
+            <a class="nav-item" href="report-management.html"><span class="nav-icon">◈</span><span class="nav-label">Line Report &amp; LIPAS VOLPAS</span></a>
+            <div class="nav-section-label">Admin Access</div>
+            <a class="nav-item" href="manage-users.html"><span class="nav-icon">◈</span><span class="nav-label">User Management <span class="nav-badge">2</span></span></a>
+        </nav>
+        <div class="sidebar-footer">© 2026 Pioneer Corp.</div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <div class="main" id="mainArea">
+        <header class="topbar">
+            <div class="topbar-inner">
+                <div class="topbar-left">
+                    <button class="hamburger-btn" id="hamburgerBtn">&#9776;</button>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:1px;">
+                    <div class="topbar-title" id="topbarTitle">Add Production Record</div>
+                    <div class="topbar-breadcrumb">Production Records &rsaquo; <span id="topbarSub">Add</span></div>
+                </div>
+                <div class="topbar-right">
+                    <span class="topbar-period">May 2026</span>
+                    <span class="topbar-dot"></span>
+                    <span class="role-badge data_entry">Data Entry · Team A · Line 1</span>
+                    <button class="logout-btn" onclick="openLogout()">&#x2192; Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sub-nav -->
+        <div class="sub-nav">
+            <button class="sub-nav-btn" id="btn-add"    onclick="switchView('add')">
+                <span>＋</span> Add Record
+            </button>
+            <button class="sub-nav-btn" id="btn-manage" onclick="switchView('manage')">
+                <span>☰</span> Manage Records
+            </button>
+        </div>
+
+        <div class="content">
+
+            <!-- ===== ADD SECTION ===== -->
+            <div id="add-section" class="view-section hidden">
+                <div class="section-title">Add Line Production Record <span class="section-chip" id="addFormChip">Team A · Line 1</span></div>
+
+                <div id="formAlert" class="alert hidden"></div>
+
+                <div class="input-panel">
+                    <div class="input-panel-head">Record Details</div>
+                    <form id="productionForm" autocomplete="off">
+                        <div style="padding:20px;">
+                            <div class="form-row">
+                                <div class="form-group" id="teamSelectGroup">
+                                    <label class="form-label">Target Team *</label>
+                                    <select class="form-select" id="f-target-table" onchange="onTeamTableChange()">
+                                        <option value="">— Select Team —</option>
+                                        <option value="a_summary_line">Team A</option>
+                                        <option value="b_summary_line">Team B</option>
+                                        <option value="c_summary_line">Team C</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="lineSelectGroup">
+                                    <label class="form-label">Line *</label>
+                                    <select class="form-select" id="f-line-select" disabled onchange="onLineChange()">
+                                        <option value="">— Select Line —</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Month *</label>
+                                    <select class="form-select" id="f-month" required>
+                                        <option value="">— Select Month —</option>
+                                        <option value="JANUARY">January</option><option value="FEBRUARY">February</option>
+                                        <option value="MARCH">March</option><option value="APRIL">April</option>
+                                        <option value="MAY" selected>May</option><option value="JUNE">June</option>
+                                        <option value="JULY">July</option><option value="AUGUST">August</option>
+                                        <option value="SEPTEMBER">September</option><option value="OCTOBER">October</option>
+                                        <option value="NOVEMBER">November</option><option value="DECEMBER">December</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Year *</label>
+                                    <input class="form-input" type="text" id="f-year" value="2026" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Operating Days Start *</label>
+                                    <input class="form-input" type="date" id="f-ops-start" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Operating Days End *</label>
+                                    <input class="form-input" type="date" id="f-ops-end" readonly required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group" style="position:relative;">
+                                    <label class="form-label">SKU Code *</label>
+                                    <div class="sku-combo">
+                                        <input class="form-input" type="text" id="f-sku" placeholder="Type or select SKU…" autocomplete="off" required disabled>
+                                        <button type="button" class="sku-combo-btn" id="skuDropBtn" disabled>▾</button>
+                                        <ul class="sku-dropdown" id="skuList"></ul>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">SKU Description</label>
+                                    <input class="form-input" type="text" id="f-desc" placeholder="Auto-filled" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Quantity</label>
+                                    <input class="form-input" type="number" id="f-qty" min="0" placeholder="0">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">UOM</label>
+                                    <input class="form-input" type="text" id="f-uom" placeholder="Auto-filled" readonly>
+                                </div>
+                            </div>
+
+                            <div id="dupWarning" class="alert alert-warn hidden">
+                                ⚠ A record for this SKU and operating days range already exists. Use Edit to update it.
+                            </div>
+
+                            <div class="cum-preview">
+                                <span class="cum-label">Cumulative Output (Live Total)</span>
+                                <span class="cum-value mono" id="liveTotal">0</span>
+                            </div>
+                        </div>
+
+                        <div id="shiftSection" class="hidden">
+                            <div class="input-panel-head">Shift Production Quantities <span id="shiftDayLabel" style="font-weight:400;color:var(--text-muted);font-size:11px;margin-left:8px;"></span></div>
+                            <div style="padding:16px;overflow-x:auto;">
+                                <table class="shift-table">
+                                    <thead><tr><th>Day</th><th>1st Shift</th><th>2nd Shift</th><th>3rd Shift</th></tr></thead>
+                                    <tbody id="shiftTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="input-panel-actions">
+                            <button type="submit" class="btn btn-primary" id="submitBtn" disabled>＋ Add Record</button>
+                            <button type="button" class="btn btn-secondary" onclick="resetForm()">↺ Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ===== MANAGE SECTION ===== -->
+            <div id="manage-section" class="view-section hidden">
+                <div class="section-title">Manage Line Production Records</div>
+
+                <div class="filter-toolbar">
+                    <div class="filter-group">
+                        <span class="filter-label">Team</span>
+                        <select class="filter-select" id="mg-team" onchange="applyManageFilters()">
+                            <option value="">All Teams</option>
+                            <option value="A">Team A</option><option value="B">Team B</option><option value="C">Team C</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Month</span>
+                        <select class="filter-select" id="mg-month" onchange="applyManageFilters()">
+                            <option value="">All</option>
+                            <option value="JANUARY">January</option><option value="FEBRUARY">February</option>
+                            <option value="MARCH">March</option><option value="APRIL">April</option>
+                            <option value="MAY" selected>May</option><option value="JUNE">June</option>
+                            <option value="JULY">July</option><option value="AUGUST">August</option>
+                            <option value="SEPTEMBER">September</option><option value="OCTOBER">October</option>
+                            <option value="NOVEMBER">November</option><option value="DECEMBER">December</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Line</span>
+                        <select class="filter-select" id="mg-line" onchange="applyManageFilters()">
+                            <option value="">All Lines</option>
+                            <option value="Line 1">Line 1</option><option value="Line 2">Line 2</option>
+                            <option value="Line 3">Line 3</option><option value="Line 4">Line 4</option>
+                        </select>
+                    </div>
+                    <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;">
+                        <button class="btn btn-secondary" onclick="applyManageFilters()">Filter</button>
+                        <button class="btn btn-success"   onclick="exportCSV()">↓ Export CSV</button>
+                        <button class="btn btn-primary"   id="editBtn"   onclick="openEditModal()"   disabled>✎ Edit</button>
+                        <button class="btn btn-danger"    id="deleteBtn" onclick="openDeleteModal()" disabled>✕ Delete</button>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <div class="table-head">
+                        <span>Production Records</span>
+                        <span class="table-total-pill" id="recordCount">0 records</span>
+                    </div>
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Team</th><th>Month</th><th>Year</th><th>Line</th>
+                                    <th>SKU Code</th><th>SKU Description</th>
+                                    <th>Quantity</th><th>UOM</th><th>Cumulative</th>
+                                    <th>Ops Start</th><th>Ops End</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recordsTbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal-box" style="max-width:720px;">
+        <div class="modal-head">
+            <span class="modal-title">✎ Edit Record</span>
+            <button class="modal-close" onclick="closeEditModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="edit-id">
+            <div class="form-row">
+                <div class="form-group"><label class="form-label">Team</label><input class="form-input" id="edit-team" readonly></div>
+                <div class="form-group"><label class="form-label">Month</label>
+                    <select class="form-select" id="edit-month">
+                        <option>JANUARY</option><option>FEBRUARY</option><option>MARCH</option><option>APRIL</option>
+                        <option>MAY</option><option>JUNE</option><option>JULY</option><option>AUGUST</option>
+                        <option>SEPTEMBER</option><option>OCTOBER</option><option>NOVEMBER</option><option>DECEMBER</option>
+                    </select>
+                </div>
+                <div class="form-group"><label class="form-label">Year</label><input class="form-input" type="number" id="edit-year"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label class="form-label">Line</label><input class="form-input" id="edit-line" readonly></div>
+                <div class="form-group"><label class="form-label">SKU Code</label><input class="form-input" id="edit-sku" readonly></div>
+                <div class="form-group"><label class="form-label">Quantity</label><input class="form-input" type="number" id="edit-qty" min="0"></div>
+                <div class="form-group"><label class="form-label">UOM</label><input class="form-input" id="edit-uom" readonly></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label class="form-label">Ops Start</label><input class="form-input" type="date" id="edit-ops-start"></div>
+                <div class="form-group"><label class="form-label">Ops End</label><input class="form-input" type="date" id="edit-ops-end"></div>
+            </div>
+            <div class="cum-preview" style="margin:12px 0;">
+                <span class="cum-label">Cumulative Output</span>
+                <span class="cum-value mono" id="editLiveTotal">0</span>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="shift-table"><thead><tr><th>Day</th><th>1st Shift</th><th>2nd Shift</th><th>3rd Shift</th></tr></thead>
+                    <tbody id="editShiftBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+            <button class="btn btn-primary"   onclick="saveEdit()">✓ Update</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirm -->
+<div class="cdlg-overlay" id="deleteDlg">
+    <div class="cdlg-box">
+        <div class="cdlg-icon"><span style="font-size:22px;">✕</span></div>
+        <div class="cdlg-title">Delete Record?</div>
+        <div class="cdlg-msg">This action cannot be undone.</div>
+        <div class="cdlg-actions">
+            <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+            <button class="btn btn-danger"    onclick="executeDelete()">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Logout Confirm -->
+<div class="cdlg-overlay" id="logoutDlg">
+    <div class="cdlg-box">
+        <div class="cdlg-icon"><span>&#x2192;</span></div>
+        <div class="cdlg-title">Sign Out?</div>
+        <div class="cdlg-msg">You'll be returned to the login screen.</div>
+        <div class="cdlg-actions">
+            <button class="btn btn-secondary" onclick="closeLogout()">Cancel</button>
+            <button class="btn btn-danger" onclick="window.location.href='auth-login.html'">Sign Out</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+</body>
+</html>

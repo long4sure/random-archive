@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Static</title>
+    <link rel="icon" href="../images/p_icon.png" type="image/png">
+    <link rel="stylesheet" href="auth-login.css">
+    <script src="auth-login.js" defer></script>
+</head>
+<body>
+    <div class="login-card">
+        <h2 class="login-heading">
+            <img src="../images/login3.png" alt="Login icon" class="login-icon">
+            Sign In
+        </h2>
+
+        <div class="error hidden" id="loginError">Please enter both username and password.</div>
+
+        <form id="loginForm">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" placeholder="Enter your username" required autocomplete="username">
+
+            <label for="password">Password</label>
+            <div class="pw-field">
+                <input type="password" name="password" id="password" placeholder="Enter your password" required autocomplete="current-password">
+                <button type="button" class="pw-eye" id="pwToggle" title="Show/hide password">&#x1F441;</button>
+            </div>
+
+            <button type="submit" class="submit-btn">Sign In</button>
+        </form>
+
+        <p class="note">Static prototype mode. Click sign in to continue.</p>
+        <p class="note"><a href="auth-register.html">Create account</a> | <a href="dashboard.html">Go to dashboard</a></p>
+    </div>
+</body>
+</html>

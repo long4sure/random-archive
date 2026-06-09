@@ -1,0 +1,770 @@
+/* ================================================================
+   manage_users.css — User Management page
+   Supplements mainpage.css. Owns everything specific to user
+   management: approval tabs, user table, role badges, modals,
+   add/edit forms, toast notifications.
+================================================================ */
+
+/* ── @keyframes (manage_users-specific) ──────────────────────── */
+@keyframes modalSlideIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to   { opacity: 1; transform: scale(1); }
+}
+@keyframes pendingPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(239,68,68,0.10); }
+    50%       { box-shadow: 0 4px 20px rgba(239,68,68,0.30); }
+}
+@keyframes toastIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ALERT BANNERS
+════════════════════════════════════════════════════════════════ */
+.mu-alert {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-radius: var(--r-lg);
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    animation: slideDown 0.3s var(--ease) both;
+}
+.mu-alert-success {
+    background: rgba(16,185,129,0.08);
+    border-color: rgba(16,185,129,0.28);
+    color: #065f46;
+}
+.mu-alert-error {
+    background: rgba(239,68,68,0.08);
+    border-color: rgba(239,68,68,0.28);
+    color: #991b1b;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   KPI CARDS — role-specific colour overrides
+   (base .kpi-card from mainpage.css)
+════════════════════════════════════════════════════════════════ */
+.kpi-card.kpi-total     { border-left-color: var(--c-blue); }
+.kpi-card.kpi-total .value   { color: #1e40af; }
+.kpi-card.kpi-sysadmin  { border-left-color: var(--c-red); }
+.kpi-card.kpi-sysadmin .value { color: #b91c1c; }
+.kpi-card.kpi-admin     { border-left-color: var(--c-purple); }
+.kpi-card.kpi-admin .value   { color: #5b21b6; }
+.kpi-card.kpi-dataentry { border-left-color: var(--c-orange); }
+.kpi-card.kpi-dataentry .value { color: #c2410c; }
+.kpi-card.kpi-viewer    { border-left-color: var(--c-green); }
+.kpi-card.kpi-viewer .value  { color: #15803d; }
+
+.mu-card-pending        { border-left-color: var(--c-orange) !important; animation: pendingPulse 2.2s infinite; }
+.mu-card-pending .value { color: #92400e; }
+.mu-card-pending-alert  { border-left-color: var(--c-red) !important; animation: pendingPulse 1.8s infinite; }
+
+/* ════════════════════════════════════════════════════════════════
+   SECTION CARD
+════════════════════════════════════════════════════════════════ */
+.section-card {
+    background: var(--c-white);
+    border-radius: var(--r-xl);
+    box-shadow: var(--sh-sm);
+    margin-bottom: 26px;
+    overflow: visible;
+    border: 1px solid var(--c-slate-200);
+    animation: slideUp 0.45s var(--ease) 0.1s both;
+}
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--c-slate-200);
+    background: var(--c-slate-50);
+    flex-wrap: wrap;
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+}
+.section-header h3 {
+    margin: 0;
+    color: var(--c-slate-800);
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   APPROVAL TABS
+════════════════════════════════════════════════════════════════ */
+.approval-tabs {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    padding: 14px 22px 0;
+    border-bottom: 2px solid var(--c-slate-200);
+    background: var(--c-slate-50);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.approval-tab {
+    padding: 9px 18px;
+    border: none;
+    border-radius: var(--r-sm) var(--r-sm) 0 0;
+    background: transparent;
+    color: var(--c-slate-500);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: var(--t-fast);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-height: 40px;
+}
+.approval-tab:hover {
+    color: var(--c-blue);
+    background: rgba(59,130,246,0.06);
+}
+.approval-tab.active {
+    color: var(--c-blue);
+    border-bottom-color: var(--c-blue);
+    background: var(--c-white);
+}
+.approval-section { display: none; padding: 18px 22px; }
+.approval-section.active { display: block; }
+
+/* ════════════════════════════════════════════════════════════════
+   ADD USER FORM
+════════════════════════════════════════════════════════════════ */
+.add-user-form {
+    padding: 22px;
+    border-top: 1px solid var(--c-slate-200);
+    background: var(--c-white);
+    animation: slideDown 0.22s var(--ease);
+}
+.add-user-form.hidden { display: none; }
+
+.user-form .form-row,
+.form-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-bottom: 14px;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 180px;
+}
+.form-group label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--c-slate-800);
+    margin-bottom: 7px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group select {
+    width: 100%;
+    padding: 10px 13px;
+    border: 2px solid var(--c-slate-200);
+    border-radius: var(--r-md);
+    font-size: 14px;
+    color: var(--c-slate-700);
+    background: var(--c-white);
+    transition: border-color var(--t-fast), box-shadow var(--t-fast);
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+    min-height: 42px;
+}
+.form-group input:hover,
+.form-group select:hover { border-color: var(--c-slate-400); }
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--c-blue);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.10);
+}
+.input-readonly {
+    background: var(--c-slate-50) !important;
+    color: var(--c-slate-400) !important;
+    cursor: default;
+    border-color: var(--c-slate-200) !important;
+}
+.optional {
+    font-weight: 400;
+    color: var(--c-slate-400);
+    font-size: 11px;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+/* ── Filter header ────────────────────────────────────────────── */
+.mu-filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--c-slate-200);
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+.mu-filter-header span { font-weight: 700; color: var(--c-slate-800); font-size: 15px; }
+.mu-filter-header i    { color: var(--c-blue); margin-right: 5px; }
+
+/* ── Filter action buttons row ────────────────────────────────── */
+.filter-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 6px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   BUTTONS
+════════════════════════════════════════════════════════════════ */
+.btn-apply,
+.btn-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: var(--r-pill);
+    background: linear-gradient(135deg, var(--c-blue), var(--c-blue-dark));
+    color: var(--c-white);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
+    box-shadow: 0 4px 12px rgba(59,130,246,0.26);
+    white-space: nowrap;
+    text-decoration: none;
+    min-height: 40px;
+}
+.btn-apply:hover,
+.btn-toggle:hover {
+    background: linear-gradient(135deg, var(--c-blue-dark), var(--c-blue-deeper));
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(59,130,246,0.36);
+}
+.btn-apply:active,
+.btn-toggle:active { transform: translateY(0); }
+
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 20px;
+    border: 2px solid var(--c-slate-300);
+    border-radius: var(--r-pill);
+    background: transparent;
+    color: var(--c-slate-500);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: var(--t-fast);
+    white-space: nowrap;
+    min-height: 40px;
+}
+.btn-outline:hover {
+    border-color: var(--c-blue);
+    color: var(--c-blue);
+    background: rgba(59,130,246,0.06);
+}
+
+.mu-btn-danger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: var(--r-md);
+    background: var(--c-red);
+    color: var(--c-white);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
+    box-shadow: 0 4px 10px rgba(239,68,68,0.28);
+    white-space: nowrap;
+    min-height: 40px;
+}
+.mu-btn-danger:hover {
+    background: var(--c-red-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(239,68,68,0.36);
+}
+
+.mu-btn-approve {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border: 1.5px solid var(--c-green);
+    border-radius: var(--r-md);
+    background: var(--c-white);
+    color: #065f46;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: var(--t-fast);
+    white-space: nowrap;
+    min-height: 36px;
+}
+.mu-btn-approve:hover {
+    background: var(--c-green);
+    color: var(--c-white);
+    box-shadow: 0 3px 8px rgba(16,185,129,0.28);
+}
+
+/* Table row action buttons */
+.mu-btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 13px;
+    border-radius: var(--r-sm);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: var(--t-fast);
+    border: 1.5px solid transparent;
+    white-space: nowrap;
+    min-height: 34px;
+}
+.mu-btn-edit {
+    background: var(--c-white);
+    border-color: var(--c-blue);
+    color: var(--c-blue);
+    margin-right: 5px;
+}
+.mu-btn-edit:hover { background: var(--c-blue); color: var(--c-white); box-shadow: var(--sh-xs); }
+.mu-btn-delete {
+    background: var(--c-white);
+    border-color: var(--c-red);
+    color: var(--c-red);
+}
+.mu-btn-delete:hover:not(:disabled) { background: var(--c-red); color: var(--c-white); box-shadow: var(--sh-xs); }
+.mu-btn-delete:disabled {
+    opacity: 0.32;
+    cursor: not-allowed;
+    border-color: var(--c-slate-300);
+    color: var(--c-slate-400);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PASSWORD WRAP
+════════════════════════════════════════════════════════════════ */
+.mu-pw-wrap,
+.password-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.mu-pw-wrap input,
+.password-wrap input { flex: 1; padding-right: 46px !important; }
+.mu-btn-eye,
+.btn-eye {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+    line-height: 1;
+    color: var(--c-slate-400);
+    transition: color var(--t-fast);
+    min-width: 34px;
+    min-height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+}
+.mu-btn-eye:hover,
+.btn-eye:hover { color: var(--c-slate-700); }
+
+/* ════════════════════════════════════════════════════════════════
+   ROLE BADGES
+════════════════════════════════════════════════════════════════ */
+.mu-role-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: var(--r-pill);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+.mu-role-system_admin { background: #fee2e2; color: #991b1b; }
+.mu-role-admin        { background: #ede9fe; color: #5b21b6; }
+.mu-role-data_entry   { background: #ffedd5; color: #9a3412; }
+.mu-role-viewer       { background: #dcfce7; color: #166534; }
+
+/* 'You' badge */
+.mu-badge-you {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 8px;
+    border-radius: var(--r-pill);
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   NAVBAR PENDING BADGE
+════════════════════════════════════════════════════════════════ */
+.mu-nav-badge {
+    display: inline-block;
+    background: var(--c-red);
+    color: var(--c-white);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: var(--r-pill);
+    margin-left: 5px;
+    vertical-align: middle;
+    animation: pendingPulse 2.2s infinite;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SEARCH INPUT
+════════════════════════════════════════════════════════════════ */
+.mu-search-input {
+    padding: 9px 14px;
+    border: 2px solid var(--c-slate-200);
+    border-radius: var(--r-md);
+    font-size: 14px;
+    width: 240px;
+    max-width: 100%;
+    color: var(--c-slate-700);
+    background: var(--c-white);
+    transition: border-color var(--t-fast), box-shadow var(--t-fast);
+    box-sizing: border-box;
+    min-height: 40px;
+}
+.mu-search-input:focus {
+    outline: none;
+    border-color: var(--c-blue);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.10);
+}
+.mu-username { font-weight: 600; color: var(--c-slate-800); }
+
+/* ════════════════════════════════════════════════════════════════
+   USER TABLE
+════════════════════════════════════════════════════════════════ */
+.table-responsive-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--r-lg);
+    scrollbar-width: thin;
+}
+.user-table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--c-white);
+    border: 1px solid var(--c-slate-200);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--sh-xs);
+}
+.user-table thead th {
+    background: linear-gradient(135deg, var(--c-slate-900) 0%, var(--c-slate-800) 100%);
+    color: var(--c-white);
+    padding: 13px 15px;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid rgba(255,255,255,0.08);
+    text-align: left;
+    white-space: nowrap;
+}
+.user-table tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--c-slate-200);
+    color: var(--c-slate-700);
+    font-size: 14px;
+    vertical-align: middle;
+}
+.user-table tbody tr:last-child td { border-bottom: none; }
+.user-table tbody tr:nth-child(even) { background: var(--c-slate-50); }
+.user-table tbody tr:hover {
+    background: rgba(59,130,246,0.04);
+    box-shadow: inset 4px 0 0 var(--c-blue);
+    transition: var(--t-fast);
+}
+.user-table .td-actions { white-space: nowrap; text-align: right; }
+
+/* ════════════════════════════════════════════════════════════════
+   MODAL OVERLAY (Edit modal)
+════════════════════════════════════════════════════════════════ */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.50);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity var(--t-base);
+    overflow-y: auto;
+    padding: 24px 16px;
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+    align-items: center;
+    justify-content: center;
+}
+.modal-overlay.active { display: flex; opacity: 1; }
+
+.modal {
+    position: relative;
+    background: var(--c-white);
+    border-radius: var(--r-2xl);
+    box-shadow: var(--sh-lg);
+    border: 1px solid rgba(255,255,255,0.4);
+    width: 100%;
+    max-width: 680px;
+    margin: auto;
+    animation: modalSlideIn 0.25s var(--ease);
+    overflow: hidden;
+}
+.mu-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--c-slate-200);
+    background: linear-gradient(135deg, var(--c-slate-900) 0%, var(--c-slate-800) 100%);
+}
+.mu-modal-header h3 {
+    margin: 0;
+    color: var(--c-white);
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.mu-modal-close {
+    background: rgba(255,255,255,0.10);
+    border: none;
+    color: rgba(255,255,255,0.55);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    border-radius: var(--r-sm);
+    min-width: 34px;
+    min-height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--t-fast), color var(--t-fast);
+}
+.mu-modal-close:hover { background: rgba(255,255,255,0.22); color: var(--c-white); }
+.modal form { padding: 22px; }
+.modal .form-row { margin-bottom: 14px; }
+.delete-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--c-slate-200);
+    padding-top: 16px;
+    margin-top: 18px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   DELETE / APPROVE / REJECT MODAL (small centred dialog)
+════════════════════════════════════════════════════════════════ */
+.delete-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.50);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 1002;
+    opacity: 0;
+    transition: opacity var(--t-base);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+}
+.delete-modal-overlay.active { display: flex; opacity: 1; }
+
+.delete-modal-box {
+    background: var(--c-white);
+    border-radius: var(--r-xl);
+    max-width: 440px;
+    width: 100%;
+    padding: 26px 26px 22px;
+    box-shadow: var(--sh-lg);
+    animation: modalSlideIn 0.22s var(--ease);
+}
+.delete-modal-box h3 {
+    margin: 0 0 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--c-slate-900);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.delete-modal-box p {
+    color: var(--c-slate-600);
+    font-size: 14px;
+    line-height: 1.65;
+    margin: 0;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TOAST
+════════════════════════════════════════════════════════════════ */
+#mu-toast {
+    position: fixed;
+    bottom: 26px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 12px 24px;
+    border-radius: var(--r-lg);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--c-white);
+    box-shadow: var(--sh-md);
+    animation: toastIn 0.28s var(--ease);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   RESPONSIVE — tablet (max 900px)
+════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+    .section-header { padding: 13px 16px; gap: 10px; }
+    .approval-tabs  { padding: 10px 16px 0; }
+    .approval-tab   { padding: 8px 14px; font-size: 13px; }
+    .approval-section { padding: 14px 16px; }
+    .add-user-form  { padding: 16px; }
+    .mu-search-input { width: 200px; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   RESPONSIVE — mobile (max 768px)
+   mainpage.css handles .wrapper / .sidebar / .main-content.
+   This block owns only manage_users-specific overrides.
+════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+    /* KPI grid: 2 cols */
+    .mu-kpi-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+
+    .section-card  { border-radius: var(--r-lg); }
+    .section-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+    /* Approval tabs: scrollable, no wrap */
+    .approval-tabs { flex-wrap: nowrap; padding-bottom: 1px; gap: 2px; }
+    .approval-tab  { font-size: 12px; padding: 8px 11px; }
+
+    /* Form: single column */
+    .form-row, .user-form .form-row { flex-direction: column; gap: 10px; }
+    .form-group { min-width: unset; width: 100%; }
+
+    .mu-filter-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .mu-search-input  { width: 100%; }
+
+    .filter-actions { flex-direction: column; gap: 8px; }
+    .filter-actions .btn-apply,
+    .filter-actions .btn-outline,
+    .filter-actions .btn-toggle { width: 100%; justify-content: center; }
+
+    /* Table: scroll */
+    .user-table { min-width: 500px; font-size: 13px; }
+    .user-table thead th { padding: 10px 11px; font-size: 12px; }
+    .user-table tbody td { padding: 10px 11px; }
+
+    /* Hide action button labels on narrow screens */
+    .mu-btn-action .btn-label { display: none; }
+    .mu-btn-action { padding: 8px 10px; }
+    .mu-btn-edit   { margin-right: 3px; }
+
+    /* Edit modal: bottom sheet */
+    .modal-overlay { padding: 0; align-items: flex-end; }
+    .modal {
+        max-width: 100%;
+        border-radius: var(--r-xl) var(--r-xl) 0 0;
+        animation: slideUp 0.3s var(--ease);
+        max-height: 92dvh;
+        overflow-y: auto;
+    }
+    .modal form { padding: 18px 16px; }
+    .mu-modal-header { padding: 15px 18px; }
+
+    /* Small dialogs: bottom sheet */
+    .delete-modal-overlay { padding: 0; align-items: flex-end; }
+    .delete-modal-box {
+        max-width: 100%;
+        border-radius: var(--r-xl) var(--r-xl) 0 0;
+        padding: 20px 18px 16px;
+        padding-bottom: max(16px, env(safe-area-inset-bottom));
+    }
+    .delete-modal-actions { flex-direction: column-reverse; gap: 8px; }
+    .delete-modal-actions .btn-apply,
+    .delete-modal-actions .btn-outline,
+    .delete-modal-actions .mu-btn-danger,
+    .delete-modal-actions .mu-btn-approve { width: 100%; justify-content: center; }
+
+    .mu-role-badge { font-size: 11px; padding: 3px 9px; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   RESPONSIVE — very small (max 480px)
+════════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+    .mu-kpi-grid { grid-template-columns: 1fr !important; }
+
+    /* Minimum 44px tap targets on all buttons */
+    .btn-apply, .btn-outline, .mu-btn-danger, .mu-btn-approve {
+        padding: 12px 20px;
+        font-size: 15px;
+        min-height: 46px;
+    }
+
+    /* Tabs: icon-only */
+    .approval-tab .tab-label { display: none; }
+    .approval-tab { padding: 10px 13px; }
+
+    /* Modal: full-screen */
+    .modal { max-height: 100dvh; border-radius: 0; }
+    .modal-overlay { padding: 0; }
+
+    .add-user-form { padding: 14px; }
+}
