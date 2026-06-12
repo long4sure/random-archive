@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POS — BizSuite</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <header class="app-header"><nav id="app-nav"></nav></header>
+  <main class="container">
+    <h1 class="page-title">POS — Point of Sale</h1>
+    <div class="stats-row" id="pos-stats"></div>
+
+    <section class="panel">
+      <h2 id="h-checkout"></h2>
+      <form class="inline-form" id="form-checkout">
+        <div style="grid-column: 1 / -1">
+          <label>Product</label>
+          <select name="product_id" id="checkout-product" required></select>
+        </div>
+        <div><label>Quantity</label><input name="qty" type="number" min="1" value="1" required /></div>
+        <div><label>Payment</label>
+          <select name="payment_method">
+            <option value="cash">Cash</option>
+            <option value="card">Card</option>
+            <option value="transfer">Transfer</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn--primary" id="btn-checkout"></button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header"><h2 id="h-products"></h2></div>
+      <form class="inline-form" id="form-product">
+        <div><label>Name</label><input name="name" required /></div>
+        <div><label>Price</label><input name="price" type="number" min="0" step="0.01" required /></div>
+        <div><label>Stock</label><input name="stock" type="number" min="0" value="0" /></div>
+        <button type="submit" class="btn btn--primary" id="btn-add-product"></button>
+      </form>
+      <div id="products-table" style="margin-top:1rem"></div>
+    </section>
+
+    <section class="panel">
+      <h2 id="h-sales"></h2>
+      <div id="sales-table"></div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/paths.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/icons.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="pos.js"></script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register — BizSuite</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="auth-page">
+  <div class="auth-card">
+    <a href="login.html" class="back-link" id="back-login"></a>
+    <div class="badge-system" id="system-badge" hidden></div>
+    <h1>Create account</h1>
+    <p class="subtitle">We will email you a 6-digit code to verify your account.</p>
+
+    <form id="form-register">
+      <div class="form-group">
+        <label for="full_name">Full name</label>
+        <div class="input-wrap">
+          <input type="text" id="full_name" required placeholder="Jane Doe" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-wrap">
+          <span class="icon" id="i-mail"></span>
+          <input type="email" id="email" required autocomplete="email" placeholder="you@company.com" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrap">
+          <span class="icon" id="i-lock"></span>
+          <input type="password" id="password" required minlength="8" autocomplete="new-password" placeholder="Min. 8 characters" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password2">Confirm password</label>
+        <div class="input-wrap">
+          <span class="icon" id="i-lock2"></span>
+          <input type="password" id="password2" required minlength="8" placeholder="Repeat password" />
+        </div>
+      </div>
+      <button type="submit" class="btn btn--primary" id="btn-register"></button>
+    </form>
+
+    <p class="auth-footer">
+      Have an account? <a href="#" id="link-login">Sign in</a>
+    </p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/paths.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const system = params.get("system") || getSelectedSystem();
+    if (system) {
+      setSelectedSystem(system);
+      const badge = document.getElementById("system-badge");
+      badge.hidden = false;
+      badge.innerHTML = `${icon(system)} Register for ${systemLabel(system)}`;
+    }
+
+    document.getElementById("back-login").innerHTML = `${icon("arrowLeft")} Back to sign in`;
+    document.getElementById("back-login").href =
+      appUrl(`login.html${system ? `?system=${system}` : ""}`);
+    document.getElementById("i-mail").innerHTML = BizIcons.mail;
+    document.getElementById("i-lock").innerHTML = BizIcons.lock;
+    document.getElementById("i-lock2").innerHTML = BizIcons.lock;
+    document.getElementById("btn-register").innerHTML = `${icon("userPlus")} Send verification code`;
+    document.getElementById("link-login").href =
+      appUrl(`login.html${system ? `?system=${system}` : ""}`);
+
+    document.getElementById("form-register").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const full_name = document.getElementById("full_name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const password2 = document.getElementById("password2").value;
+
+      if (password !== password2) {
+        showToast("Passwords do not match", "error");
+        return;
+      }
+
+      const btn = document.getElementById("btn-register");
+      btn.disabled = true;
+      try {
+        const result = await signUpWithPassword(email, password, full_name);
+        if (result.session) {
+          await markProfileVerified(full_name);
+          showToast("Account created!", "success");
+          await redirectAfterAuth();
+          return;
+        }
+        await sendAuthOtp(email);
+        savePendingRegistration({ full_name, email, password });
+        location.href = appUrl(`verify-otp.html?purpose=register${system ? `&system=${system}` : ""}`);
+      } catch (err) {
+        const msg = err.message || String(err);
+        showToast(
+          msg.includes("500") || msg.includes("Database")
+            ? msg + " — Run 003_fix_signup_500.sql in Supabase SQL Editor"
+            : msg,
+          "error"
+        );
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BizSuite — ERP, POS & CRM</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <p class="badge-system" style="margin: 0 auto 1rem; width: fit-content;">
+        <span class="icon icon--sm" aria-hidden="true"></span>
+        Unified business platform
+      </p>
+      <h1>BizSuite</h1>
+      <p>Choose a system to get started. You will sign in or create an account before accessing your workspace.</p>
+    </section>
+
+    <div class="system-grid">
+      <a href="#" class="system-card system-card--erp" data-system="erp">
+        <div class="card-icon" id="icon-erp"></div>
+        <h2>ERP System</h2>
+        <p>Inventory, purchase orders, and supply chain management for your business.</p>
+      </a>
+      <a href="#" class="system-card system-card--pos" data-system="pos">
+        <div class="card-icon" id="icon-pos"></div>
+        <h2>POS System</h2>
+        <p>Point of sale — products, checkout, receipts, and daily sales tracking.</p>
+      </a>
+      <a href="#" class="system-card system-card--crm" data-system="crm">
+        <div class="card-icon" id="icon-crm"></div>
+        <h2>CRM System</h2>
+        <p>Contacts, deals pipeline, and customer relationships in one place.</p>
+      </a>
+    </div>
+
+    <p style="text-align: center; margin-top: 2rem; color: var(--text-muted); font-size: 0.9rem;">
+      Already signed in? <a href="dashboard.html">Go to dashboard</a>
+    </p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/paths.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.getElementById("icon-erp").innerHTML = BizIcons.erp;
+    document.getElementById("icon-pos").innerHTML = BizIcons.pos;
+    document.getElementById("icon-crm").innerHTML = BizIcons.crm;
+    document.querySelector(".hero .icon").innerHTML = BizIcons.shield;
+
+    document.querySelectorAll("[data-system]").forEach((card) => {
+      card.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const system = card.dataset.system;
+        setSelectedSystem(system);
+
+        const session = await getSession();
+        if (session) {
+          location.href = systemDashboardPath(system);
+        } else {
+          location.href = appUrl(`login.html?system=${system}`);
+        }
+      });
+    });
+
+    getSession().then((s) => {
+      if (s) location.href = appUrl("dashboard.html");
+    });
+  </script>
+</body>
+</html>

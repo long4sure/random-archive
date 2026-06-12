@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify code — BizSuite</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="auth-page">
+  <div class="auth-card">
+    <h1>Enter verification code</h1>
+    <p class="subtitle" id="subtitle">Check your email for the 6-digit code.</p>
+
+    <form id="form-verify">
+      <div class="otp-inputs" id="otp-boxes">
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 1" />
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 2" />
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 3" />
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 4" />
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 5" />
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 6" />
+      </div>
+      <button type="submit" class="btn btn--primary" id="btn-verify"></button>
+      <button type="button" class="btn btn--ghost" style="width:100%;margin-top:0.5rem" id="btn-resend">Resend code</button>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/paths.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const purpose = params.get("purpose") || "register";
+
+    document.getElementById("btn-verify").innerHTML = `${icon("check")} Verify`;
+
+    let email = "";
+    let pending = null;
+
+    if (purpose === "register") {
+      pending = getPendingRegistration();
+      if (!pending) {
+        location.href = appUrl("register.html");
+      } else {
+        email = pending.email;
+        document.getElementById("subtitle").textContent =
+          `Code sent to ${email}. Enter it below.`;
+      }
+    } else {
+      email = sessionStorage.getItem("biz_otp_login_email") || "";
+      if (!email) location.href = appUrl("login.html");
+      document.getElementById("subtitle").textContent = `Code sent to ${email}.`;
+    }
+
+    const inputs = [...document.querySelectorAll("#otp-boxes input")];
+    inputs.forEach((inp, i) => {
+      inp.addEventListener("input", () => {
+        inp.value = inp.value.replace(/\D/g, "").slice(0, 1);
+        if (inp.value && i < inputs.length - 1) inputs[i + 1].focus();
+      });
+      inp.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace" && !inp.value && i > 0) inputs[i - 1].focus();
+      });
+    });
+
+    function getOtpValue() {
+      return inputs.map((i) => i.value).join("");
+    }
+
+    document.getElementById("btn-resend").addEventListener("click", async () => {
+      try {
+        await sendAuthOtp(email);
+        showToast("New code sent", "success");
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    });
+
+    document.getElementById("form-verify").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const otp = getOtpValue();
+      if (otp.length !== 6) {
+        showToast("Enter all 6 digits", "error");
+        return;
+      }
+
+      const btn = document.getElementById("btn-verify");
+      btn.disabled = true;
+      try {
+        await verifyEmailOtp(email, otp);
+        if (purpose === "register" && pending) {
+          await markProfileVerified(pending.full_name);
+          clearPendingRegistration();
+        }
+        sessionStorage.removeItem("biz_otp_login_email");
+        showToast("Verified!", "success");
+        await redirectAfterAuth();
+      } catch (err) {
+        showToast(err.message, "error");
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

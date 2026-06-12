@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — BizSuite</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="app-header"><nav id="app-nav"></nav></header>
+  <main class="container">
+    <h1 class="page-title">Your workspace</h1>
+    <p style="color: var(--text-muted); margin-bottom: 2rem;">
+      Select a system below. Your data is private to your account and stored in our shared Supabase database.
+    </p>
+    <div class="system-grid">
+      <a href="erp/index.html" class="system-card system-card--erp">
+        <div class="card-icon" id="d-erp"></div>
+        <h2>ERP</h2>
+        <p>Products & orders</p>
+      </a>
+      <a href="pos/index.html" class="system-card system-card--pos">
+        <div class="card-icon" id="d-pos"></div>
+        <h2>POS</h2>
+        <p>Sales & checkout</p>
+      </a>
+      <a href="crm/index.html" class="system-card system-card--crm">
+        <div class="card-icon" id="d-crm"></div>
+        <h2>CRM</h2>
+        <p>Contacts & deals</p>
+      </a>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/paths.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.getElementById("d-erp").innerHTML = BizIcons.erp;
+    document.getElementById("d-pos").innerHTML = BizIcons.pos;
+    document.getElementById("d-crm").innerHTML = BizIcons.crm;
+    initAppShell(null);
+  </script>
+</body>
+</html>

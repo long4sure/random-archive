@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CRM — BizSuite</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <header class="app-header"><nav id="app-nav"></nav></header>
+  <main class="container">
+    <h1 class="page-title">CRM — Contacts & Deals</h1>
+    <div class="stats-row" id="crm-stats"></div>
+
+    <section class="panel">
+      <h2 id="h-contacts"></h2>
+      <form class="inline-form" id="form-contact">
+        <div><label>Name</label><input name="name" required /></div>
+        <div><label>Email</label><input name="email" type="email" /></div>
+        <div><label>Phone</label><input name="phone" /></div>
+        <div><label>Company</label><input name="company" /></div>
+        <div><label>Status</label>
+          <select name="status">
+            <option value="lead">Lead</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn--primary" id="btn-add-contact"></button>
+      </form>
+      <div id="contacts-table" style="margin-top:1rem"></div>
+    </section>
+
+    <section class="panel">
+      <h2 id="h-deals"></h2>
+      <form class="inline-form" id="form-deal">
+        <div><label>Title</label><input name="title" required /></div>
+        <div><label>Contact</label><select name="contact_id" id="deal-contact"></select></div>
+        <div><label>Value</label><input name="value" type="number" min="0" step="0.01" value="0" /></div>
+        <div><label>Stage</label>
+          <select name="stage">
+            <option value="prospect">Prospect</option>
+            <option value="proposal">Proposal</option>
+            <option value="negotiation">Negotiation</option>
+            <option value="won">Won</option>
+            <option value="lost">Lost</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn--primary" id="btn-add-deal"></button>
+      </form>
+      <div id="deals-table" style="margin-top:1rem"></div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/paths.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/icons.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="crm.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "bizsuite",
+  "private": true,
+  "scripts": {
+    "dev": "npx --yes serve . -p 3000",
+    "start": "npm run dev"
+  }
+}

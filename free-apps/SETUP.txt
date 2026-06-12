@@ -1,0 +1,19 @@
+BIZSUITE SETUP
+
+WHY YOU SAW THE "file://" ERROR
+  Opening index.html by double-click uses file:/// in the browser.
+  That breaks login and Supabase. You must use http://localhost instead.
+
+HOW TO RUN THE SITE
+  Double-click:  START.bat
+  Wait for the black window to stay open.
+  Browser opens http://localhost:3000 automatically.
+
+SETUP (Supabase website only)
+  1. SQL Editor - run 002_rerun_safe.sql
+  2. SQL Editor - run 003_fix_signup_500.sql  (fixes 500 on register)
+  3. Settings - API - paste URL + anon key into js/config.js
+  4. Authentication - Providers - Email ON
+
+ADMIN (optional)
+  update public.profiles set role = 'admin' where email = 'you@email.com';
